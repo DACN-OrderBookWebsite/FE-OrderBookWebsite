@@ -35,13 +35,52 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    'bootstrap-vue/nuxt'
   ],
-
+  router: {
+    routes: [
+      {
+        path: '/user/edit/:id',
+        name: 'UserEdit',
+        component: '~/pages/user/_id.vue'
+      },
+      {
+        name: 'UserList',
+        path: '/',
+        component: '~/pages/user/UserList.vue'
+      },
+      {
+        name: 'UserCreate',
+        path: '/user/create',
+        component: '~/pages/user/create.vue'
+      },
+      // Các route khác
+    ]
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    // Đặt cơ sở URL của API
+    baseURL: 'http://127.0.0.1:8000',
+
+    // Cấu hình tiêu đề mặc định (ví dụ: token xác thực)
+    headers: {
+      common: {
+        'Authorization': 'Bearer YOUR_TOKEN_HERE'
+      }
+    },
+    // Cấu hình interceptors nếu cần
+    requestInterceptor: (config, { store }) => {
+      // Thêm mã xác thực vào mọi request nếu cần
+      config.headers.common['Authorization'] = `Bearer ${store.state.auth.token}`;
+      return config;
+    },
+
+    responseInterceptor: (response) => {
+      // Xử lý mọi phản hồi từ API
+      return response;
+    }
   },
+
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

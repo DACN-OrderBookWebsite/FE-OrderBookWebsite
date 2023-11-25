@@ -1,12 +1,12 @@
 <template>
-  <User></User>
+  <UserList></UserList>
 </template>
 
 <script>
-import Error from '../../layout/error';
-import User from "../../layout/User";
+
+import UserList from "./user/UserList";
 export default {
   name: 'IndexPage',
-  components: {User, Error}
+  components: {UserList, Error}
 }
 </script>

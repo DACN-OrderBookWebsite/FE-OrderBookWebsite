@@ -54,22 +54,27 @@
 
       <!-- Giới Tính -->
       <b-form-group label="Giới Tính:" label-for="input-gender">
-        <b-form-input
-          id="input-gender"
-          v-model="user.GioiTinh"
-          placeholder="Nhập giới tính"
-        ></b-form-input>
+        <select v-model="user.GioiTinh">
+          <option value="0">Male</option>
+          <option value="1">Female</option>
+        </select>
       </b-form-group>
 
       <!-- Ảnh -->
-      <b-form-group label="Ảnh:" label-for="input-avatar">
-        <b-form-input
-          id="input-avatar"
-          v-model="user.Anh"
-          placeholder="Nhập URL ảnh"
-        ></b-form-input>
+      <b-form-group label="Ảnh hiện tại:" label-for="input-current-avatar">
+        <div>
+          <b-img :src="currentAvatarSrc" alt="Ảnh người dùng" fluid></b-img>
+        </div>
       </b-form-group>
-
+      <b-form-group label="Ảnh mới:" label-for="input-new-avatar">
+        <b-form-file
+          id="input-new-avatar"
+          v-model="newAvatar"
+          :state="Boolean(newAvatar)"
+          placeholder=""
+          accept="image/*"
+        ></b-form-file>
+      </b-form-group>
       <!-- Disabled -->
       <b-form-group label="Disabled:" label-for="input-disabled">
         <b-form-input
@@ -95,17 +100,24 @@
 
 <script>
 import userService from '~/services/api/userService';
+import Swal from 'sweetalert2';
 
 export default {
   name: "UserEdit",
   data() {
     return {
       user: {
-      }
+      },
+      newAvatar: null,
     };
   },
   created() {
     this.fetchUserData();
+  },
+  computed: {
+    currentAvatarSrc() {
+      return this.newAvatar ? URL.createObjectURL(this.newAvatar) : this.user.Anh;
+    }
   },
   methods: {
     async fetchUserData() {
@@ -135,19 +147,35 @@ export default {
     },
     onSubmit() {
       const userId = this.$route.params.id;
-      userService.updateUser(userId, this.user)
-        .then(() => {
-          Swal.fire(
-            'Cập nhật thành công!',
-            'Thông tin người dùng đã được cập nhật.',
-            'success'
-          );
-          this.$router.push({ name: 'UserList' }); // Điều hướng về danh sách người dùng sau khi cập nhật
-        })
-        .catch(error => {
-          console.error("Có lỗi xảy ra khi cập nhật thông tin:", error);
-          // Xử lý lỗi hoặc hiển thị thông báo
-        });
+      if (this.newAvatar) {
+        userService.uploadUserAvatar(this.$axios, this.newAvatar)
+          .then(response => {
+            // Cập nhật URL ảnh mới
+            this.user.Anh = response.data.newAvatarUrl; // Giả sử response trả về URL mới trong 'newAvatarUrl'
+            // Tiếp tục cập nhật thông tin người dùng khác
+            console.log("Gọi API updateUser với URL:", `/api/NguoiDung/${userId}`);
+            return userService.updateUser(this.$axios, userId, this.user);
+          })
+          .then(() => {
+            Swal.fire(
+              'Cập nhật thành công!',
+              'Thông tin người dùng đã được cập nhật.',
+              'success'
+            );
+            this.$router.push({ name: 'UserList' });
+          })
+          .catch(error => {
+            console.error("Có lỗi xảy ra khi cập nhật thông tin:", error);
+          });
+      } else {
+        userService.updateUser(this.$axios, userId, this.user)
+          .then(() => {
+            // Các xử lý sau khi cập nhật thành công
+          })
+          .catch(error => {
+            console.error("Có lỗi xảy ra khi cập nhật thông tin:", error);
+          });
+      }
     }
   }
 }
