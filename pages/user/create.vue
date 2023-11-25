@@ -18,7 +18,7 @@
           id="input-username"
           v-model="newUser.TenDangNhap"
           required
-          placeholder="Nhập tên đăng nhập"
+          placeholder="Nhập tên đăng nhậps"
         ></b-form-input>
       </b-form-group>
 
