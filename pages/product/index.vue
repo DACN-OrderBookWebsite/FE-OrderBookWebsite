@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- Header -->
-    <Header></Header>
-
     <!-- Secondary Header for Sorting -->
     <b-navbar type="light" variant="light">
       <b-form-select v-model="sortKey" @change="sortProducts" class="ml-auto" :options="sortOptions"></b-form-select>
@@ -68,6 +65,7 @@ import ProductCard from '~/components/ProductCard';
 import Header from "~/components/Header";
 
 export default {
+  name: 'Product',
   components: {
     Header,
     ProductCard
@@ -84,9 +82,9 @@ export default {
       },
       brands: ['Penguin', 'HarperCollins', 'Random House'],
       products: [
-        { id: 1, name: 'Book Title 1', price: 19.99, stock: 10, imageUrl: 'path-to-image-1.jpg', description: 'Description for book 1' },
-        { id: 2, name: 'Book Title 2', price: 29.99, stock: 5, imageUrl: 'path-to-image-2.jpg', description: 'Description for book 2' },
-        { id: 3, name: 'Book Title 3', price: 9.99, stock: 20, imageUrl: 'path-to-image-3.jpg', description: 'Description for book 3' }
+        { id: 1, name: 'Book Title 1', price: 19.99, stock: 10, imageUrl: 'path-to-image-1.jpg', description: 'Description for product 1' },
+        { id: 2, name: 'Book Title 2', price: 29.99, stock: 5, imageUrl: 'path-to-image-2.jpg', description: 'Description for product 2' },
+        { id: 3, name: 'Book Title 3', price: 9.99, stock: 20, imageUrl: 'path-to-image-3.jpg', description: 'Description for product 3' }
         // Add more books as needed
       ]
     };

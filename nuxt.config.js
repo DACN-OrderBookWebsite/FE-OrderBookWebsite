@@ -54,7 +54,40 @@ export default {
         path: '/user/create',
         component: '~/pages/user/create.vue'
       },
+      // Các route Admin
+      {
+        name: 'Admin',
+        path: '/admin',
+        component: '~/pages/admin/index.vue'
+      },
+      {
+        path: '/admin/product',
+        component: '~/pages/admin/product.vue'
+      },
+      {
+        path: '/admin/users',
+        component: '~/pages/admin/users.vue'
+      },
+      {
+        path: '/admin/importproduct',
+        component: '~/pages/admin/importproduct.vue'
+      },
+      {
+        path: '/admin/ordermanagement',
+        component: '~/pages/admin/ordermanagement.vue'
+      },
+      {
+        name: 'UserCreate',
+        path: '/admin/users/create',
+        component: '~/pages/admin/users/create.vue'
+      },
+      {
+        path: '/admin/users/edit/:id',
+        name: 'UserEdit',
+        component: '~/pages/admin/users/_id.vue'
+      },
       // Các route khác
+
     ]
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

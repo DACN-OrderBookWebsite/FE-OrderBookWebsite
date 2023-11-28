@@ -1,12 +1,23 @@
 <template>
-  <UserList></UserList>
+  <div>
+    <Header>
+
+    </Header>
+    <Login></Login>
+    <Footer>
+
+    </Footer>
+  </div>
 </template>
 
 <script>
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import User from "./user";
+import Login from "./loginkeycloak";
 
-import UserList from "./user/UserList";
 export default {
   name: 'IndexPage',
-  components: {UserList, Error}
+  components: {Login, User, Footer, Header, Error}
 }
 </script>
