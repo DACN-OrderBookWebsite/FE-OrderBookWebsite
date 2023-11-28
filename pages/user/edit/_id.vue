@@ -75,13 +75,16 @@
           accept="image/*"
         ></b-form-file>
       </b-form-group>
-      <!-- Disabled -->
-      <b-form-group label="Disabled:" label-for="input-disabled">
-        <b-form-input
+      <!-- Trạng Thái Hoạt Động -->
+      <b-form-group label="Trạng Thái Hoạt Động:" label-for="input-disabled">
+        <b-form-checkbox
           id="input-disabled"
           v-model="user.Disabled"
-          placeholder="Nhập Disabled"
-        ></b-form-input>
+          :true-value="1"
+          :false-value="0"
+        >
+          Disabled
+        </b-form-checkbox>
       </b-form-group>
 
       <!-- idChucVu -->
@@ -147,15 +150,8 @@ export default {
     },
     onSubmit() {
       const userId = this.$route.params.id;
-      if (this.newAvatar) {
-        userService.uploadUserAvatar(this.$axios, this.newAvatar)
-          .then(response => {
-            // Cập nhật URL ảnh mới
-            this.user.Anh = response.data.newAvatarUrl; // Giả sử response trả về URL mới trong 'newAvatarUrl'
-            // Tiếp tục cập nhật thông tin người dùng khác
-            console.log("Gọi API updateUser với URL:", `/api/NguoiDung/${userId}`);
-            return userService.updateUser(this.$axios, userId, this.user);
-          })
+      const updateUser = () => {
+        userService.updateUser(this.$axios, userId, this.user)
           .then(() => {
             Swal.fire(
               'Cập nhật thành công!',
@@ -167,14 +163,19 @@ export default {
           .catch(error => {
             console.error("Có lỗi xảy ra khi cập nhật thông tin:", error);
           });
-      } else {
-        userService.updateUser(this.$axios, userId, this.user)
-          .then(() => {
-            // Các xử lý sau khi cập nhật thành công
+      };
+
+      if (this.newAvatar) {
+        userService.uploadUserAvatar(this.$axios, this.newAvatar)
+          .then(response => {
+            this.user.Anh = response.data.newAvatarUrl; // Cập nhật URL ảnh mới
+            updateUser(); // Gọi cập nhật người dùng sau khi upload ảnh
           })
           .catch(error => {
-            console.error("Có lỗi xảy ra khi cập nhật thông tin:", error);
+            console.error("Có lỗi xảy ra khi upload ảnh:", error);
           });
+      } else {
+        updateUser(); // Gọi cập nhật người dùng nếu không có ảnh mới
       }
     }
   }

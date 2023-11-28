@@ -74,8 +74,48 @@
         ></b-form-input>
       </b-form-group>
 
-      <!-- Các trường thông tin khác tương tự -->
+      <!-- Giới Tính -->
+      <b-form-group label="Giới Tính:" label-for="input-gender">
+        <b-form-select
+          id="input-gender"
+          v-model="newUser.GioiTinh"
+          :options="[{ value: 0, text: 'Nam' }, { value: 1, text: 'Nữ' }, { value: 2, text: 'Khác' }]"
+          required
+        ></b-form-select>
+      </b-form-group>
 
+      <!-- Ảnh Đại Diện -->
+      <b-form-group label="Ảnh Đại Diện:" label-for="input-avatar">
+        <b-form-input
+          id="input-avatar"
+          v-model="newUser.Anh"
+          required
+          placeholder="Nhập URL ảnh"
+        ></b-form-input>
+      </b-form-group>
+
+      <!-- Trạng Thái Hoạt Động -->
+      <b-form-group label="Trạng Thái Hoạt Động:" label-for="input-disabled">
+        <b-form-checkbox
+          id="input-disabled"
+          v-model="newUser.Disabled"
+        >
+          Disabled
+        </b-form-checkbox>
+      </b-form-group>
+
+      <!-- Chức Vụ -->
+      <!-- Đây cần một danh sách chức vụ từ server hoặc dữ liệu tĩnh -->
+      <b-form-group label="Chức Vụ:" label-for="input-role">
+        <b-form-select
+          id="input-role"
+          v-model="newUser.idChucVu"
+          required
+          :options="roleOptions"
+        ></b-form-select>
+      </b-form-group>
+
+      <!-- Nút thêm người dùng -->
       <b-button type="submit" variant="primary">Thêm Người Dùng</b-button>
     </b-form>
   </div>
@@ -90,10 +130,10 @@ export default {
   data() {
     return {
       newUser: {
-        id: 4,
         name: "Elinor Gottlieb",
         TenDangNhap: "zackery24",
-        MatKhau: "$2y$10$2qCFQmWB.C6fKNOT/uPrj.TfxaoVV3PIBtbEKtDGCSNrNQAtXz28a",
+        MatKhau: "",
+        MatKhau_confirmation: "",
         SDT: "(769) 810-9054",
         DiaChi: "29166 Hirthe View Suite 457\nWest Glenmouth, IL 14806",
         Email: "sam.langworth@example.com",
@@ -103,7 +143,11 @@ export default {
         Anh: "https://via.placeholder.com/640x480.png/00dd00?text=eum",
         Disabled: 0,
         idChucVu: 14
-      }
+      },
+      roleOptions: [
+        { value: 1, text: 'Chức Vụ 1' },
+        { value: 2, text: 'Chức Vụ 2' },
+      ],
     };
   },
   methods: {
@@ -128,14 +172,14 @@ export default {
         await userService.createUser(this.$axios, this.newUser);
         Swal.fire(
           'Đã Xóa!',
-          'Người dùng đã được xóa.',
+          'Người dùng đã được thêm.',
           'success'
         );
       } catch (error) {
         console.error(error);
         Swal.fire(
-          'Xóa Thất Bại!',
-          'Đã có lỗi xảy ra khi xóa người dùng.',
+          'Thêm Thất Bại!',
+          'Đã có lỗi xảy ra khi thêm người dùng.',
           'error'
         );
       }

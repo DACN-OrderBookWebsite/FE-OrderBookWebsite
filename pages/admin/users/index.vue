@@ -1,78 +1,63 @@
 <template>
-  <div class="page-container">
-    <Header />
-    <div>
-      <b-table :items="users" :fields="fields" responsive>
+  <div>
+    <Header></Header>
+    <b-button @click="addUser">Thêm Người Dùng</b-button>
+    <div id="table_content">
+      <b-table :items="users" :fields="fields" >
         <template #cell(Anh)="data">
           <img :src="data.item.Anh" alt="Ảnh người dùng" style="width: 50px; height: auto;">
         </template>
-        <template #cell(GioiTinh)="data">
-          {{ formatGender(data.item.GioiTinh) }}
-        </template>
         <template #cell(actions)="data">
-          <nuxt-link :to="`/user/edit/${data.item.id}`">Sửa</nuxt-link>
-          <b-button variant="danger" @click="confirmAndRemoveUser(data.item.id)">Xóa</b-button>
+          <b-button size="sm" variant="primary" @click="editUser(data.item.id)">Sửa</b-button>
+          <b-button size="sm" variant="danger" @click="confirmAndRemoveUser(data.item.id)">Xóa</b-button>
         </template>
       </b-table>
-      <nuxt-link :to="`/user/create`"><b-button variant="success">Thêm Người Dùng</b-button></nuxt-link>
-
-
     </div>
-    <Footer />
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Header from '~/components/Header';
-import Footer from "~/components/Footer";
-import userService from '~/services/api/userService';
-import Swal from 'sweetalert2';
+import adminService from '~/services/api/adminService';
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
+import Swal from "sweetalert2";
 
 export default {
-  name: "User",
   components: {Footer, Header},
   data() {
     return {
       users: [],
       fields: [
         { key: 'name', label: 'Tên' },
-        { key: 'TenDangNhap', label: 'Tên Đăng Nhập' },
         { key: 'SDT', label: 'SĐT' },
         { key: 'DiaChi', label: 'Địa Chỉ' },
         { key: 'Email', label: 'Email' },
-        { key: 'NgayTao', label: 'Ngày Tạo' },
-        { key: 'NgayThayDoi', label: 'Ngày Thay Đổi' },
         { key: 'GioiTinh', label: 'Giới Tính' },
         { key: 'Anh', label: 'Ảnh' },
         { key: 'Disabled', label: 'Disabled' },
         { key: 'idChucVu', label: 'ID Chức Vụ' },
         { key: 'actions', label: 'Hành Động' }
       ]
-    }
+    };
+  },
+  async mounted() {
+    await this.fetchUsers();
   },
   methods: {
     async fetchUsers() {
       try {
-        this.users = await userService.getAllUsers(this.$axios);
+        const response = await adminService.getUsers(this.$axios);
+        this.users = response.data;
       } catch (error) {
         console.error(error);
       }
     },
-    async addUser(userData) {
-      try {
-        await userService.createUser(this.$axios, userData);
-        this.fetchUsers();
-      } catch (error) {
-        console.error(error);
-      }
+    addUser() {
+      this.$router.push('/admin/users/create');
     },
-    async editUser(userId, userData) {
-      try {
-        await userService.updateUser(this.$axios, userId, userData);
-        this.fetchUsers();
-      } catch (error) {
-        console.error(error);
-      }
+    editUser(id) {
+      this.$router.push(`/admin/users/edit/${id}`);
     },
     async confirmAndRemoveUser(userId) {
       const result = await Swal.fire({
@@ -95,8 +80,8 @@ export default {
     },
     async removeUser(userId) {
       try {
-        await userService.deleteUser(this.$axios, userId);
-        this.fetchUsers();
+        await adminService.deleteUser(this.$axios, userId);
+        await this.fetchUsers();
         Swal.fire(
           'Đã Xóa!',
           'Người dùng đã được xóa.',
@@ -110,14 +95,21 @@ export default {
           'error'
         );
       }
-    }
-  },
-  mounted() {
-    this.fetchUsers();
+    },
   }
-}
+};
 </script>
 
 <style scoped>
+#table_content {
+  padding: 0 60px; /* 30px padding on both sides */
+}
 
+/* Additional styling for the table */
+.b-table {
+  margin-top: 20px; /* Space above the table */
+  background-color: white; /* Background color for the table */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: Adds shadow to the table */
+  border-radius: 8px; /* Optional: Rounds the corners of the table */
+}
 </style>
