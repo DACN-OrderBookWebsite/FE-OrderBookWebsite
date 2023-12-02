@@ -24,4 +24,10 @@ export default {
       }
     });
   },
+  getCreateForm(axios){
+    return axios.$get('/api/NguoiDung/create');
+  },
+  checkLogin(axios, username, password){
+    return axios.$get(`/api/NguoiDung/${username}/${password}/checkLogin`);
+  }
 }

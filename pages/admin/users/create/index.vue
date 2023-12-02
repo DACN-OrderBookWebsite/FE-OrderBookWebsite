@@ -79,19 +79,24 @@
         <b-form-select
           id="input-gender"
           v-model="newUser.GioiTinh"
-          :options="[{ value: 0, text: 'Nam' }, { value: 1, text: 'Nữ' }, { value: 2, text: 'Khác' }]"
+          :options="[{ value: 0, text: 'Nam' }, { value: 1, text: 'Nữ' }]"
           required
         ></b-form-select>
       </b-form-group>
 
       <!-- Ảnh Đại Diện -->
-      <b-form-group label="Ảnh Đại Diện:" label-for="input-avatar">
+      <!-- <b-form-group label="Ảnh Đại Diện:" label-for="input-avatar">
         <b-form-input
           id="input-avatar"
           v-model="newUser.Anh"
           required
           placeholder="Nhập URL ảnh"
         ></b-form-input>
+      </b-form-group> -->
+
+      <b-form-group label="Ảnh:" label-for="image-input">
+        <b-form-file id="image-input" v-model="newAvatar" accept="image/*"></b-form-file>
+        <img :src="newUser.Anh" alt="Ảnh người dùng" style="width: 50px; height: auto;">
       </b-form-group>
 
       <!-- Trạng Thái Hoạt Động -->
@@ -130,24 +135,25 @@ export default {
   data() {
     return {
       newUser: {
-        name: "Elinor Gottlieb",
-        TenDangNhap: "zackery24",
+        name: "",
+        TenDangNhap: "",
         MatKhau: "",
         MatKhau_confirmation: "",
-        SDT: "(769) 810-9054",
-        DiaChi: "29166 Hirthe View Suite 457\nWest Glenmouth, IL 14806",
-        Email: "sam.langworth@example.com",
-        NgayTao: "2023-11-22 14:11:33",
-        NgayThayDoi: "2023-11-22 14:11:33",
+        SDT: "",
+        DiaChi: "",
+        Email: "",
+        NgayTao: new Date().toISOString().slice(0, 19).replace("T", " "), 
+        NgayThayDoi: new Date().toISOString().slice(0, 19).replace("T", " "),
         GioiTinh: 0,
-        Anh: "https://via.placeholder.com/640x480.png/00dd00?text=eum",
+        Anh: null,
         Disabled: 0,
-        idChucVu: 14
+        idChucVu: 1
       },
       roleOptions: [
-        { value: 1, text: 'Chức Vụ 1' },
-        { value: 2, text: 'Chức Vụ 2' },
+        // { value: 1, text: 'Chức Vụ 1' },
+        // { value: 2, text: 'Chức Vụ 2' },
       ],
+      newAvatar:null,
     };
   },
   methods: {
@@ -171,7 +177,7 @@ export default {
       try {
         await userService.createUser(this.$axios, this.newUser);
         Swal.fire(
-          'Đã Xóa!',
+          'Thêm thành công!',
           'Người dùng đã được thêm.',
           'success'
         );
@@ -183,8 +189,24 @@ export default {
           'error'
         );
       }
-    }
-  }
+    },
+    async create() {
+      try {
+          const response = await userService.getCreateForm(this.$axios);
+          this.roleOptions = response.ChucVu.map(item => {
+              return {
+                  value: item.value,
+                  text: item.text
+              };
+          });
+      } catch (error) {
+          console.error('Error while fetching create form:', error);
+      }
+   }
+  },
+  async mounted() {
+    await this.create();
+  },
 }
 </script>
 

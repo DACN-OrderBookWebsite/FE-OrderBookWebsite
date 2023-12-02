@@ -33,6 +33,9 @@
 </template>
 
 <script>
+import userService from '../../services/api/userService';
+import Swal from 'sweetalert2';
+
 export default {
   name: 'login',
   data() {
@@ -42,13 +45,30 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
-      if (this.username === '2001200087' && this.password === '123456') {
-        this.$router.push({ path: '/admin' }); // Navigate to the user page
-      } else {
-        this.$router.push({ path: '/user' });
+    async onSubmit() {
+      try {
+          const response = await userService.checkLogin(this.$axios, this.username,this.password);
+          if(response.success === true){
+            //kiểm tra phân quyền
+
+            this.$router.push({ path: '/admin' });
+          }else{
+            Swal.fire(
+              'Đăng nhập thất bại!',
+              'Sai thông tin tên đăng nhập hoặc mật khẩu.',
+              'error'
+            );
+          }
+      } catch (error) {
+          console.error('Error while fetching create form:', error);
       }
-    }
+
+      // if (this.username === '2001200087' && this.password === '123456') {
+      //   this.$router.push({ path: '/admin' }); // Navigate to the user page
+      // } else {
+      //   this.$router.push({ path: '/user' });
+      // }
+    },
   }
 };
 </script>

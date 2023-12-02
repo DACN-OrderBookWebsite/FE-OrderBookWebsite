@@ -55,9 +55,9 @@ export default {
   /* Add more styling for social icons here */
 }
 
-.phone-number {
-  /* Style for phone number */
-}
+/* .phone-number {
+   Style for phone number 
+} */
 
 .main-header {
   padding: 1rem;
