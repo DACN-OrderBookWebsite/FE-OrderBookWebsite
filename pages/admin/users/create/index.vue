@@ -79,7 +79,7 @@
         <b-form-select
           id="input-gender"
           v-model="newUser.GioiTinh"
-          :options="[{ value: 0, text: 'Nam' }, { value: 1, text: 'Nữ' }, { value: 2, text: 'Khác' }]"
+          :options="[{ value: 0, text: 'Nam' }, { value: 1, text: 'Nữ' }]"
           required
         ></b-form-select>
       </b-form-group>
@@ -123,6 +123,7 @@
 
 <script>
 import userService from '~/services/api/userService';
+import adminService from '~/services/api/adminService';
 import Swal from 'sweetalert2';
 
 export default {
@@ -130,25 +131,25 @@ export default {
   data() {
     return {
       newUser: {
-        name: "Elinor Gottlieb",
-        TenDangNhap: "zackery24",
+        name: "",
+        TenDangNhap: "",
         MatKhau: "",
         MatKhau_confirmation: "",
-        SDT: "(769) 810-9054",
-        DiaChi: "29166 Hirthe View Suite 457\nWest Glenmouth, IL 14806",
-        Email: "sam.langworth@example.com",
-        NgayTao: "2023-11-22 14:11:33",
-        NgayThayDoi: "2023-11-22 14:11:33",
+        SDT: "",
+        DiaChi: "",
+        Email: "",
+        NgayTao: "",
+        NgayThayDoi: "",
         GioiTinh: 0,
         Anh: "https://via.placeholder.com/640x480.png/00dd00?text=eum",
         Disabled: 0,
-        idChucVu: 14
+        idChucVu: null
       },
-      roleOptions: [
-        { value: 1, text: 'Chức Vụ 1' },
-        { value: 2, text: 'Chức Vụ 2' },
-      ],
+      roleOptions: [],
     };
+  },
+  async mounted() {
+    await this.getRolePermission();
   },
   methods: {
     async confirmAndCreateUser() {
@@ -183,7 +184,21 @@ export default {
           'error'
         );
       }
-    }
+    },
+    async getRolePermission() {
+      try {
+        const response = await adminService.getPermission(this.$axios);
+        console.log(response)
+        this.roleOptions = response.data.ChucVu.map((item) => {
+          return {
+            value: item.id,
+            text: item.name,
+          };
+        });
+      } catch (error) {
+        console.error("Error while fetching create form:", error);
+      }
+    },
   }
 }
 </script>

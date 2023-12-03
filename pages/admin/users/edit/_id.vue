@@ -57,7 +57,7 @@
               </b-form-group>
 
               <b-form-group label="Giới Tính:" label-for="gender-input">
-                <b-form-select id="gender-input" v-model="user.GioiTinh" :options="[{value: null, text: 'Chọn...'}, {value: 0, text: 'Nữ'}, {value: 1, text: 'Nam'}]"></b-form-select>
+                <b-form-select id="gender-input" v-model="user.GioiTinh" :options="[{value: 0, text: 'Nữ'}, {value: 1, text: 'Nam'}]"></b-form-select>
               </b-form-group>
 
               <b-form-group label="Ảnh:" label-for="image-input">
