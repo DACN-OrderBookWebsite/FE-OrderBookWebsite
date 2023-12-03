@@ -10,6 +10,7 @@
         <template #cell(actions)="data">
           <b-button size="sm" variant="primary" @click="editUser(data.item.id)">Sửa</b-button>
           <b-button size="sm" variant="danger" @click="confirmAndRemoveUser(data.item.id)">Xóa</b-button>
+          <b-button size="sm" variant="warning" @click="confirmResetPassword(data.item.id)">Đặt lại mật khẩu</b-button>
         </template>
       </b-table>
     </div>
@@ -28,6 +29,7 @@ export default {
   data() {
     return {
       users: [],
+      user: {},
       fields: [
         { key: 'name', label: 'Tên' },
         { key: 'SDT', label: 'SĐT' },
@@ -43,6 +45,8 @@ export default {
   },
   async mounted() {
     await this.fetchUsers();
+  },
+  computed: {
   },
   methods: {
     async fetchUsers() {
@@ -92,6 +96,46 @@ export default {
         Swal.fire(
           'Xóa Thất Bại!',
           'Đã có lỗi xảy ra khi xóa người dùng.',
+          'error'
+        );
+      }
+    },
+    async confirmResetPassword(userId) {
+      await this.getUserId(userId);
+      const result = await Swal.fire({
+        title: 'Bạn có chắc chắn muốn đặt lại mật khẩu?',
+        text: 'Bạn sẽ không thể hoàn nguyên hành động này!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Có, thay đổi!',
+        cancelButtonText: 'Không, hủy bỏ!'
+      });
+
+      if (result.isConfirmed) {
+        this.resetPassword(userId);
+      }
+    },
+    async getUserId (userId){
+      const response = await adminService.getUserById(this.$axios, userId);
+      this.user = response;
+      console.log(response)
+    },
+    async resetPassword(userId) {
+      try {
+        console.log(22222, this.user)
+        await adminService.resetPassword(this.$axios, userId, this.user.TenDangNhap, this.user.TenDangNhap);
+        Swal.fire(
+          'Đã Thay Đổi!',
+          'Mật khẩu mới là tên đăng nhập của tài khoản.',
+          'success'
+        );
+      } catch (error) {
+        console.error(error);
+        Swal.fire(
+          'Thay Đổi Thất Bại!',
+          'Đã có lỗi xảy ra khi đặt lại mật khẩu.',
           'error'
         );
       }
