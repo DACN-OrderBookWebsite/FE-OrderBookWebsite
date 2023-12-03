@@ -17,4 +17,10 @@ export default {
   changeUserPassword(axios, userId, newPassword) {
     return axios.put(`/api/NguoiDung/${userId}/change-password`, { newPassword });
   },
+  getPermission(axios) {
+    return axios.get('/api/NguoiDung/create');
+  },
+  resetPassword(axios, userId, MatKhau, MatKhau_confirmation) {
+    return axios.put(`/api/NguoiDung/${userId}/changePassword`, { MatKhau, MatKhau_confirmation });
+  },
 };

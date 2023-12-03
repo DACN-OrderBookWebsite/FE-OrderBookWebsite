@@ -18,18 +18,18 @@
               </b-form-group>
 
               <!-- Mật khẩu -->
-              <b-form-group>
-                <b-form-radio v-model="changePassword" name="changePassword" value="true">Thay đổi mật khẩu</b-form-radio>
-                <b-form-radio v-model="changePassword" name="changePassword" value="false">Không thay đổi mật khẩu</b-form-radio>
-              </b-form-group>
+<!--              <b-form-group>-->
+<!--                <b-form-radio v-model="changePassword" name="changePassword" value="true">Thay đổi mật khẩu</b-form-radio>-->
+<!--                <b-form-radio v-model="changePassword" name="changePassword" value="false">Không thay đổi mật khẩu</b-form-radio>-->
+<!--              </b-form-group>-->
 
-              <b-form-group label="Mật Khẩu:" label-for="password-input" v-if="changePassword === 'true'">
-                <b-form-input type="password" id="password-input" v-model="user.MatKhau" required></b-form-input>
-              </b-form-group>
+<!--              <b-form-group label="Mật Khẩu:" label-for="password-input" v-if="changePassword === 'true'">-->
+<!--                <b-form-input type="password" id="password-input" v-model="user.MatKhau" required></b-form-input>-->
+<!--              </b-form-group>-->
 
-              <b-form-group label="Xác Nhận Mật Khẩu:" label-for="confirm-password-input" v-if="changePassword === 'true'">
-                <b-form-input type="password" id="confirm-password-input" v-model="user.MatKhau_confirmation" required></b-form-input>
-              </b-form-group>
+<!--              <b-form-group label="Xác Nhận Mật Khẩu:" label-for="confirm-password-input" v-if="changePassword === 'true'">-->
+<!--                <b-form-input type="password" id="confirm-password-input" v-model="user.MatKhau_confirmation" required></b-form-input>-->
+<!--              </b-form-group>-->
 
               <b-form-group label="SĐT:" label-for="phone-input">
                 <b-form-input id="phone-input" v-model="user.SDT" required></b-form-input>
@@ -67,9 +67,15 @@
               <b-form-group label="Disabled:" label-for="disabled-input">
                 <b-form-checkbox id="disabled-input" v-model="user.Disabled"></b-form-checkbox>
               </b-form-group>
-
-              <b-form-group label="ID Chức Vụ:" label-for="role-id-input">
-                <b-form-input id="role-id-input" v-model="user.idChucVu" required></b-form-input>
+              <!-- Chức Vụ -->
+              <!-- Đây cần một danh sách chức vụ từ server hoặc dữ liệu tĩnh -->
+              <b-form-group label="Chức Vụ:" label-for="input-role">
+                <b-form-select
+                  id="input-role"
+                  v-model="user.idChucVu"
+                  required
+                  :options="roleOptions"
+                ></b-form-select>
               </b-form-group>
 
               <b-button type="submit" variant="primary" block>Cập Nhật</b-button>
@@ -99,10 +105,12 @@ export default {
       },
       newAvatar: null,
       changePassword: 'false', // Ban đầu không thay đổi mật khẩu
+      roleOptions: []
     };
   },
   async mounted() {
     await this.fetchUser();
+    await this.getRolePermission();
   },
   computed: {
     formattedModifiedDate() {
@@ -118,6 +126,20 @@ export default {
         console.error(error);
       }
     },
+    async getRolePermission() {
+      try {
+        const response = await adminService.getPermission(this.$axios);
+        console.log(response)
+        this.roleOptions = response.data.ChucVu.map((item) => {
+          return {
+            value: item.id,
+            text: item.name,
+          };
+        });
+      } catch (error) {
+        console.error("Error while fetching create form:", error);
+      }
+    },
     confirmUpdate() {
       Swal.fire({
         title: 'Xác nhận cập nhật',
@@ -129,15 +151,14 @@ export default {
         confirmButtonText: 'Có, cập nhật!'
       }).then((result) => {
         if (result.isConfirmed) {
+          console.log(123);
           this.updateUser();
         }
       });
     },
     async updateUser() {
       try {
-        // Kiểm tra xem người dùng đã chọn upload ảnh mới chưa
         if (this.newAvatar) {
-          // Xử lý tải ảnh mới lên server và lưu đường dẫn vào user
           const formData = new FormData();
           formData.append('avatar', this.newAvatar);
           const response = await adminService.uploadUserAvatar(this.$axios, formData);
