@@ -3,14 +3,20 @@
     <Header></Header>
     <b-button @click="addUser">Thêm Người Dùng</b-button>
     <div id="table_content">
-      <b-table :items="users" :fields="fields" >
+      <b-table :items="users" :fields="fields">
         <template #cell(Anh)="data">
           <img :src="data.item.Anh" alt="Ảnh người dùng" style="width: 50px; height: auto;">
+        </template>
+        <template #cell(GioiTinh)="data">
+          <label>{{ formatGender(data.item.GioiTinh) }}</label>
+        </template>
+        <template #cell(Disabled)="data">
+          <label>{{ formatDisabled(data.item.Disabled) }}</label>
         </template>
         <template #cell(actions)="data">
           <b-button size="sm" variant="primary" @click="editUser(data.item.id)">Sửa</b-button>
           <b-button size="sm" variant="danger" @click="confirmAndRemoveUser(data.item.id)">Xóa</b-button>
-          <b-button size="sm" variant="warning" @click="confirmResetPassword(data.item.id)">Đặt lại mật khẩu</b-button>
+          <b-button size="sm" variant="warning" @click="confirmResetPassword(data.item)">Đặt lại mật khẩu</b-button>
         </template>
       </b-table>
     </div>
@@ -25,7 +31,7 @@ import Footer from "../../../components/Footer";
 import Swal from "sweetalert2";
 
 export default {
-  components: {Footer, Header},
+  components: { Footer, Header },
   data() {
     return {
       users: [],
@@ -82,6 +88,9 @@ export default {
     formatGender(gender) {
       return gender === 1 ? 'Female' : 'Male';
     },
+    formatDisabled(disabled) {
+      return disabled === 1 ? true : false;
+    },
     async removeUser(userId) {
       try {
         await adminService.deleteUser(this.$axios, userId);
@@ -100,8 +109,7 @@ export default {
         );
       }
     },
-    async confirmResetPassword(userId) {
-      await this.getUserId(userId);
+    async confirmResetPassword(user) {
       const result = await Swal.fire({
         title: 'Bạn có chắc chắn muốn đặt lại mật khẩu?',
         text: 'Bạn sẽ không thể hoàn nguyên hành động này!',
@@ -114,18 +122,18 @@ export default {
       });
 
       if (result.isConfirmed) {
-        this.resetPassword(userId);
+        this.resetPassword(user);
       }
     },
-    async getUserId (userId){
+    async getUserId(userId) {
       const response = await adminService.getUserById(this.$axios, userId);
       this.user = response;
       console.log(response)
     },
-    async resetPassword(userId) {
+    async resetPassword(user) {
       try {
-        console.log(22222, this.user)
-        await adminService.resetPassword(this.$axios, userId, this.user.TenDangNhap, this.user.TenDangNhap);
+        // console.log(22222, this.user)
+        await adminService.resetPassword(this.$axios, user.id, user.TenDangNhap, user.TenDangNhap);
         Swal.fire(
           'Đã Thay Đổi!',
           'Mật khẩu mới là tên đăng nhập của tài khoản.',
@@ -146,14 +154,19 @@ export default {
 
 <style scoped>
 #table_content {
-  padding: 0 60px; /* 30px padding on both sides */
+  padding: 0 60px;
+  /* 30px padding on both sides */
 }
 
 /* Additional styling for the table */
 .b-table {
-  margin-top: 20px; /* Space above the table */
-  background-color: white; /* Background color for the table */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: Adds shadow to the table */
-  border-radius: 8px; /* Optional: Rounds the corners of the table */
+  margin-top: 20px;
+  /* Space above the table */
+  background-color: white;
+  /* Background color for the table */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Optional: Adds shadow to the table */
+  border-radius: 8px;
+  /* Optional: Rounds the corners of the table */
 }
 </style>
