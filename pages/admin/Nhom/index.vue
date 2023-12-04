@@ -1,9 +1,10 @@
 <template>
     <div>
       <Header></Header>
-      <b-button @click="add">Thêm</b-button>
       <div id="table_content">
-        <b-table :items="data" :fields="fields">
+        <div class="h1 text-center">Danh sách nhóm</div>
+        <b-button @click="add">Thêm</b-button>
+        <b-table :items="data" :fields="fields" class="text-center">
           <template #cell(actions)="data">
             <b-button size="sm" variant="primary" @click="edit(data.item.id)">Sửa</b-button>
             <b-button size="sm" variant="danger" @click="confirmAndRemove(data.item.id)">Xóa</b-button>

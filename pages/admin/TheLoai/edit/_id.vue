@@ -26,7 +26,7 @@
   
   <script>
   import Swal from 'sweetalert2';
-  import ChucVuService from '~/services/api/ChucVuService';
+  import TheLoaiService from '~/services/api/TheLoaiService';
   import Header from '~/components/Header';
   import Footer from '~/components/Footer';
   import moment from 'moment';
@@ -49,7 +49,7 @@
     methods: {
       async fetch() {
         try {
-          const response = await ChucVuService.getItem(this.$axios, this.$route.params.id);
+          const response = await TheLoaiService.getItem(this.$axios, this.$route.params.id);
           this.data = response;
         } catch (error) {
           console.error(error);
@@ -73,13 +73,13 @@
       },
       async update() {
         try {  
-          await ChucVuService.update(this.$axios, this.$route.params.id, this.data);
+          await TheLoaiService.update(this.$axios, this.$route.params.id, this.data);
           Swal.fire(
             'Cập nhật!',
             'Thông tin đã được cập nhật thành công.',
             'success'
           );
-          this.$router.push('/admin/ChucVu');
+          this.$router.push('/admin/TheLoai');
         } catch (error) {
           this.dataerror = error.response.data.errors;
           Swal.fire(

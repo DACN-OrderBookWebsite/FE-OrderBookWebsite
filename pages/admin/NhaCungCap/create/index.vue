@@ -2,11 +2,32 @@
     <div>
         <Header></Header>
         <div class="user-create-container border">
-            <h1 class="text-center">Thêm Chức vụ mới</h1>
+            <h1 class="text-center">Thêm nhà cung cấp mới</h1>
             <b-form @submit.prevent="confirmAndCreate">
-                <!-- Tên Người Dùng -->
+                <!-- Tên -->
                 <b-form-group label="Tên:" label-for="input-name">
                     <b-form-input id="input-name" v-model="data.name" required placeholder="Nhập tên"></b-form-input>
+                    <small v-if="dataerror.name" class="text-danger">{{ dataerror.name }}</small>
+                </b-form-group>
+
+                <!-- Số Điện Thoại -->
+                <b-form-group label="SĐT:" label-for="input-phone">
+                    <b-form-input id="input-phone" v-model="data.SDT" required
+                        placeholder="Nhập số điện thoại"></b-form-input>
+                    <small v-if="dataerror.SDT" class="text-danger">{{ dataerror.SDT }}</small>
+                </b-form-group>
+
+                <!-- Địa Chỉ -->
+                <b-form-group label="Địa Chỉ:" label-for="input-address">
+                    <b-form-input id="input-address" v-model="data.DiaChi" placeholder="Nhập địa chỉ"></b-form-input>
+                    <small v-if="dataerror.DiaChi" class="text-danger">{{ dataerror.DiaChi }}</small>
+                </b-form-group>
+
+                <!-- Email -->
+                <b-form-group label="Email:" label-for="input-email">
+                    <b-form-input id="input-email" v-model="data.Email" required placeholder="Nhập email"
+                        type="email"></b-form-input>
+                    <small v-if="dataerror.Email" class="text-danger">{{ dataerror.Email }}</small>
                 </b-form-group>
 
                 <!-- Nút thêm -->
@@ -18,7 +39,7 @@
 </template>
   
 <script>
-import NhomService from '~/services/api/NhomService';
+import NhaCungCapService from '~/services/api/NhaCungCapService';
 import Swal from 'sweetalert2';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
@@ -28,6 +49,15 @@ export default {
         return {
             data: {
                 name: "",
+                SDT:"",
+                DiaChi:"",
+                Email:""
+            },
+            dataerror: {
+                name: "",
+                SDT:"",
+                DiaChi:"",
+                Email:""
             },
             roleOptions: [],
         };
@@ -51,14 +81,14 @@ export default {
         },
         async create() {
             try {
-                await NhomService.insert(this.$axios, this.data);
+                await NhaCungCapService.insert(this.$axios, this.data);
                 Swal.fire(
                     'Thêm thành công!',
                     'Dữ liệu đã được thêm.',
                     'success'
                 );
             } catch (error) {
-                console.error(error);
+                this.dataerror = error.response.data.errors;
                 Swal.fire(
                     'Thêm Thất Bại!',
                     'Đã có lỗi xảy ra khi thêm dữ liệu.',

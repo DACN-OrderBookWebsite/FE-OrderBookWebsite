@@ -60,10 +60,6 @@
                 <b-form-select id="gender-input" v-model="user.GioiTinh" :options="[{value: 0, text: 'Nữ'}, {value: 1, text: 'Nam'}]"></b-form-select>
               </b-form-group>
 
-              <b-form-group label="Ảnh:" label-for="image-input">
-                <b-form-file id="image-input" v-model="newAvatar" accept="image/*"></b-form-file>
-              </b-form-group>
-
               <b-form-group label="Disabled:" label-for="disabled-input">
                 <b-form-checkbox id="disabled-input" v-model="user.Disabled"></b-form-checkbox>
               </b-form-group>
@@ -77,6 +73,11 @@
                   :options="roleOptions"
                 ></b-form-select>
               </b-form-group>
+
+              <b-form-group label="Ảnh:" label-for="image-input">
+                    <b-form-file id="image-input" v-model="user.Anh" accept="image/*"></b-form-file>
+                    <img :src="user.Anh" alt="Ảnh" class="max-width-height-picture" />
+                </b-form-group>
 
               <b-button type="submit" variant="primary" block>Cập Nhật</b-button>
             </b-form>

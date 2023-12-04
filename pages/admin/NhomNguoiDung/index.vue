@@ -2,7 +2,7 @@
     <div>
       <Header></Header>
       <div id="table_content">
-        <div class="h1 text-center">Danh sách chức vụ</div>
+        <div class="h1 text-center">Danh sách nhóm người dùng</div>
         <b-button @click="add">Thêm</b-button>
         <b-table :items="data" :fields="fields" class="text-center">
           <template #cell(actions)="data">
@@ -16,7 +16,7 @@
   </template>
   
   <script>
-  import ChucVuService from '~/services/api/ChucVuService';
+  import NhomNguoiDungService from '~/services/api/NhomNguoiDungService';
   import Header from "../../../components/Header";
   import Footer from "../../../components/Footer";
   import Swal from "sweetalert2";
@@ -27,7 +27,8 @@
       return {
         data: [],
         fields: [
-          { key: 'name', label: 'Tên' },
+          { key: 'idNhom', label: 'ID Nhóm' },
+          { key: 'idNguoiDung', label: 'ID Người Dùng' },
           { key: 'actions', label: 'Hành Động' }
         ]
       };
@@ -40,17 +41,17 @@
     methods: {
       async fetch() {
         try {
-          const response = await ChucVuService.getData(this.$axios);
+          const response = await NhomNguoiDungService.getData(this.$axios);
           this.data = response.data;
         } catch (error) {
           console.error(error);
         }
       },
       add() {
-        this.$router.push('/admin/ChucVu/create');
+        this.$router.push('/admin/NhomNguoiDung/create');
       },
       edit(id) {
-        this.$router.push(`/admin/ChucVu/edit/${id}`);
+        this.$router.push(`/admin/NhomNguoiDung/edit/${id}`);
       },
       async confirmAndRemove(id) {
         const result = await Swal.fire({
@@ -70,7 +71,7 @@
       },
       async remove(id) {
         try {
-          await ChucVuService.delete(this.$axios, id);
+          await NhomNguoiDungService.delete(this.$axios, id);
           await this.fetch();
           Swal.fire(
             'Đã Xóa!',

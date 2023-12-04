@@ -2,9 +2,15 @@
     <div>
       <Header></Header>
       <div id="table_content">
-        <div class="h1 text-center">Danh sách chức vụ</div>
+        <div class="h1 text-center">Danh sách Sách</div>
         <b-button @click="add">Thêm</b-button>
         <b-table :items="data" :fields="fields" class="text-center">
+            <template #cell(Anh)="data">
+          <img :src="data.item.Anh" alt="Ảnh người dùng" style="width: 50px; height: auto;">
+        </template>
+        <template #cell(Disabled)="data">
+          <label>{{ formatDisabled(data.item.Disabled) }}</label>
+        </template>
           <template #cell(actions)="data">
             <b-button size="sm" variant="primary" @click="edit(data.item.id)">Sửa</b-button>
             <b-button size="sm" variant="danger" @click="confirmAndRemove(data.item.id)">Xóa</b-button>
@@ -16,7 +22,7 @@
   </template>
   
   <script>
-  import ChucVuService from '~/services/api/ChucVuService';
+  import SachService from '~/services/api/SachService';
   import Header from "../../../components/Header";
   import Footer from "../../../components/Footer";
   import Swal from "sweetalert2";
@@ -28,6 +34,13 @@
         data: [],
         fields: [
           { key: 'name', label: 'Tên' },
+          { key: 'idTheLoai', label: 'Thể loại' },
+          { key: 'idNhaXuatBan', label: 'Nhà xuất bản' },
+          { key: 'idTacGia', label: 'Tác giả' },
+          { key: 'DonGia', label: 'Đơn giá' },
+          { key: 'SoLuongTon', label: 'Số lượng tồn' },
+          { key: 'Anh', label: 'Ảnh' },
+          { key: 'Disabled', label: 'Kinh doanh' },
           { key: 'actions', label: 'Hành Động' }
         ]
       };
@@ -40,17 +53,17 @@
     methods: {
       async fetch() {
         try {
-          const response = await ChucVuService.getData(this.$axios);
+          const response = await SachService.getData(this.$axios);
           this.data = response.data;
         } catch (error) {
           console.error(error);
         }
       },
       add() {
-        this.$router.push('/admin/ChucVu/create');
+        this.$router.push('/admin/Sach/create');
       },
       edit(id) {
-        this.$router.push(`/admin/ChucVu/edit/${id}`);
+        this.$router.push(`/admin/Sach/edit/${id}`);
       },
       async confirmAndRemove(id) {
         const result = await Swal.fire({
@@ -70,7 +83,7 @@
       },
       async remove(id) {
         try {
-          await ChucVuService.delete(this.$axios, id);
+          await SachService.delete(this.$axios, id);
           await this.fetch();
           Swal.fire(
             'Đã Xóa!',
@@ -86,6 +99,9 @@
           );
         }
       },
+      formatDisabled(disabled) {
+      return disabled === 1 ? "Ngừng kinh doanh" : "Đang kinh doanh";
+    },
     }
   };
   </script>
