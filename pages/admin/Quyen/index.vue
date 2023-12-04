@@ -2,7 +2,7 @@
     <div>
       <Header></Header>
       <div id="table_content">
-        <div class="h1 text-center">Danh sách chức vụ</div>
+        <div class="h1 text-center">Danh sách quyền</div>
         <b-button @click="add">Thêm</b-button>
         <b-table :items="data" :fields="fields" class="text-center">
           <template #cell(actions)="data">
@@ -16,7 +16,7 @@
   </template>
   
   <script>
-  import ChucVuService from '~/services/api/ChucVuService';
+  import QuyenService from '~/services/api/QuyenService';
   import Header from "../../../components/Header";
   import Footer from "../../../components/Footer";
   import Swal from "sweetalert2";
@@ -40,17 +40,17 @@
     methods: {
       async fetch() {
         try {
-          const response = await ChucVuService.getData(this.$axios);
+          const response = await QuyenService.getData(this.$axios);
           this.data = response.data;
         } catch (error) {
           console.error(error);
         }
       },
       add() {
-        this.$router.push('/admin/ChucVu/create');
+        this.$router.push('/admin/Quyen/create');
       },
       edit(id) {
-        this.$router.push(`/admin/ChucVu/edit/${id}`);
+        this.$router.push(`/admin/Quyen/edit/${id}`);
       },
       async confirmAndRemove(id) {
         const result = await Swal.fire({
@@ -70,7 +70,7 @@
       },
       async remove(id) {
         try {
-          await ChucVuService.delete(this.$axios, id);
+          await QuyenService.delete(this.$axios, id);
           await this.fetch();
           Swal.fire(
             'Đã Xóa!',

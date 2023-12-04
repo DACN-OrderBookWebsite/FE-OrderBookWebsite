@@ -2,11 +2,12 @@
     <div>
         <Header></Header>
         <div class="user-create-container border">
-            <h1>Thêm Chức vụ mới</h1>
+            <h1 class="text-center">Thêm Chức vụ mới</h1>
             <b-form @submit.prevent="confirmAndCreate">
                 <!-- Tên Người Dùng -->
                 <b-form-group label="Tên:" label-for="input-name">
                     <b-form-input id="input-name" v-model="data.name" required placeholder="Nhập tên"></b-form-input>
+                    <small v-if="dataerror.name" class="text-danger">{{ dataerror.name }}</small>
                 </b-form-group>
 
                 <!-- Nút thêm -->
@@ -28,6 +29,9 @@ export default {
         return {
             data: {
                 name: "",
+            },
+            dataerror:{
+                name:""
             },
             roleOptions: [],
         };
@@ -58,7 +62,7 @@ export default {
                     'success'
                 );
             } catch (error) {
-                console.error(error);
+                this.dataerror = error.response.data.errors;
                 Swal.fire(
                     'Thêm Thất Bại!',
                     'Đã có lỗi xảy ra khi thêm dữ liệu.',
