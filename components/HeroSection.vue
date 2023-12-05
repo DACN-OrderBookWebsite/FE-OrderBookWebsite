@@ -2,32 +2,12 @@
   <b-container fluid class="hero-section">
     <b-row class="hero-section-col" cols="1" cols-sm="2" cols-md="4" cols-lg="6">
       <b-col class="text-hero">TRANG CHỦ</b-col>
-      <b-col class="text-hero-support">|</b-col>
       <b-col class="text-hero">GIÁO TRÌNH ĐẠI CƯƠNG</b-col>
-      <b-col class="text-hero-support">|</b-col>
       <b-col class="text-hero">GIÁO TRÌNH THEO KHOA</b-col>
-      <b-col class="text-hero-support">|</b-col>
       <b-col class="text-hero">GIÁO TRÌNH ĐỀ THI</b-col>
-      <b-col class="text-hero-support">|</b-col>
       <b-col class="text-hero">LIÊN HỆ</b-col>
     </b-row>
-    <b-row>
-      <b-col md="6" class="text-section">
-        <h1>HUITZone EDU</h1>
-        <p class="subtitle">Góc giáo trình HUIT</p>
-        <p>Trọn bộ giáo trình Tân sinh viên Đại học không khó cùng HUITZone</p>
-        <b-button variant="primary" class="mt-3">Tìm hiểu thêm</b-button>
-        <b-carousel id="carousel-1" :interval="4000" controls indicators>
-          <!-- Slides with image content -->
-          <b-carousel-slide caption="Slide 1" img-src="path-to-your-image-1.jpg"></b-carousel-slide>
-          <!-- Add more slides as needed -->
-        </b-carousel>
-      </b-col>
-      <b-col md="6" class="image-section">
-        <!-- Image goes here, adjust path accordingly -->
-        <b-img src="path-to-your-building-image.jpg" alt="HUIT Building"></b-img>
-      </b-col>
-    </b-row>
+    
   </b-container>
 </template>
 
@@ -42,6 +22,7 @@ export default {
 .hero-section {
   padding: 40px 0;
   justify-content: center;
+  text-align: center;
   background-color: #f8f9fa; /* Or any other background color you prefer */
 }
 .text-hero {

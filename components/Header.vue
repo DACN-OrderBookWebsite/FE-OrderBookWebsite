@@ -70,6 +70,7 @@ export default {
   width: 385px;
   height: 86px; /* Adjust as per your logo's aspect ratio */
   margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 .university-info h1 {
