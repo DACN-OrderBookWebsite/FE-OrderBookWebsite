@@ -108,7 +108,7 @@
     </div>
     <b-row class="text-section-hero">
       <b-col md="6" class="text-section-container">
-        <h1 class="text-huit-hero">Vì sao nên mua giáo trình tại HUITZone ?</h1>
+        <h1 class="text-huit-hero">Vì sao nên mua giáo trình tại HUIT Zone ?</h1>
         <p class="subtitle">1. Chất lượng sách đảm bảo</p>
         <p class="subtitle">2. Sách chính hãng - Bản quyền</p>
         <p class="subtitle">3. Phân loại rõ ràng theo bậc học, khoa</p>
@@ -208,6 +208,8 @@ html {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow-x: hidden;
+
 }
 
 .text-huit {
@@ -252,7 +254,7 @@ html {
   margin-left: 320px;
 }
 .text-section {
-  width: 1553px;
+  width: 1447px;
   height: 558px;
   background: linear-gradient(
     79deg,
