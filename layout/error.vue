@@ -14,7 +14,7 @@
       </div>
       <div >
         <div class="image-403">
-          <img src="@/static/images/backgrounds/error403.jpg">
+          <img src="static/images/backgrounds/error403.jpg@/">
         </div>
         <div class="notify-404">
           <p class="medium-text">
