@@ -1,5 +1,6 @@
 <template>
-  <b-container>
+  <b-container class="container">
+    <Header></Header>
     <b-row class="justify-content-md-center">
       <b-col md="6">
         <b-card class="mt-5">
@@ -29,6 +30,7 @@
         </b-card>
       </b-col>
     </b-row>
+    <Footer></Footer>
   </b-container>
 </template>
 
@@ -54,5 +56,7 @@ export default {
 </script>
 
 <style scoped>
-/* Optional: Add your styling here */
+.container {
+  max-width: max-content;
+}
 </style>

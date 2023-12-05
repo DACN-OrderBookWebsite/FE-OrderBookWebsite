@@ -47,8 +47,8 @@ export default {
       },
       {
         name: 'UserList',
-        path: '/',
-        component: '~/pages/user/UserList.vue'
+        path: '/loginkeycloak',
+        component: '~/pages/loginkeycloak/index.vue'
       },
       {
         name: 'UserCreate',
