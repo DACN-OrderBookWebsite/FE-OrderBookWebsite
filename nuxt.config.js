@@ -87,6 +87,31 @@ export default {
         name: 'UserEdit',
         component: '~/pages/admin/users/_id.vue'
       },
+      {
+        path: '/generalCurriculum',
+        name: 'GeneralCurriculum',
+        component: '~/pages/generalCurriculum'
+      },
+      {
+        path: '/curriculumDepartment',
+        name: 'CurriculumDepartment',
+        component: '~/pages/curriculumDepartment'
+      },
+      {
+        path: '/examSyllabus',
+        name: 'ExamSyllabus',
+        component: '~/pages/examSyllabus'
+      },
+      {
+        path: '/contactUs',
+        name: 'ContactUs',
+        component: '~/pages/contactUs'
+      },
+      {
+        path: '/shoppingCart',
+        name: 'ShoppingCart',
+        component: '~/pages/ShoppingCart'
+      },
       // Các route khác
 
     ]
