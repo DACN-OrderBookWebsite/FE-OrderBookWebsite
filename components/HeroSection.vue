@@ -1,24 +1,46 @@
 <template>
-  <b-container fluid class="hero-section">
-    <b-row class="hero-section-col" cols="1" cols-sm="2" cols-md="4" cols-lg="6">
-      <b-col class="text-hero">TRANG CHỦ</b-col>
-      <b-col class="text-hero">GIÁO TRÌNH ĐẠI CƯƠNG</b-col>
-      <b-col class="text-hero">GIÁO TRÌNH THEO KHOA</b-col>
-      <b-col class="text-hero">GIÁO TRÌNH ĐỀ THI</b-col>
-      <b-col class="text-hero">LIÊN HỆ</b-col>
-    </b-row>
-    
-  </b-container>
+  <div>
+    <b-container fluid class="hero-section">
+      <b-row
+        class="hero-section-col"
+        cols="1"
+        cols-sm="2"
+        cols-md="4"
+        cols-lg="6"
+      >
+        <nuxt-link class="link-to" to="/">
+          <b-col class="text-hero">TRANG CHỦ</b-col>
+        </nuxt-link>
+        <nuxt-link class="link-to" to="/generalCurriculum">
+          <b-col class="text-hero">GIÁO TRÌNH ĐẠI CƯƠNG</b-col>
+        </nuxt-link>
+        <nuxt-link class="link-to" to="/curriculumDepartment">
+          <b-col class="text-hero">GIÁO TRÌNH THEO KHOA</b-col>
+        </nuxt-link>
+        <nuxt-link class="link-to" to="/examSyllabus">
+          <b-col class="text-hero">GIÁO TRÌNH ĐỀ THI</b-col>
+        </nuxt-link>
+        <nuxt-link class="link-to" to="contactUs">
+          <b-col class="text-hero">LIÊN HỆ</b-col>
+        </nuxt-link>
+      </b-row>
+    </b-container>
+    <section-bar :current-route="$route.path"></section-bar>
+  </div>
 </template>
-
 <script>
+import SectionBar from "./SectionBar.vue";
 export default {
-  name: 'HeroSection',
+  components: { SectionBar },
+  name: "HeroSection",
   // You can add your script here if needed
 };
 </script>
 
 <style scoped>
+.link-to {
+  text-decoration: none;
+}
 .hero-section {
   padding: 40px 0;
   justify-content: center;
@@ -42,7 +64,7 @@ export default {
   justify-content: center;
 }
 .text-hero-support {
-  color: #D1D1D1;
+  color: #d1d1d1;
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
@@ -93,7 +115,8 @@ export default {
     padding: 20px 0;
   }
 
-  .text-section, .image-section {
+  .text-section,
+  .image-section {
     text-align: center;
   }
 
