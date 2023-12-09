@@ -14,5 +14,8 @@ export default {
     delete(axios, id) {
       return axios.delete(`/api/TheLoai/${id}`);
     },
+    getFiveTheLoai(axios) {
+      return axios.get(`/api/TheLoai/getFiveTheLoai`);
+    },
   };
   

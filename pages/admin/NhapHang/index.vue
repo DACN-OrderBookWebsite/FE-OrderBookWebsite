@@ -81,6 +81,9 @@ export default {
                 TrangThai: "",
                 NhanVien: "",
                 NhaCungCap: ""
+            },
+            dataSanPham:{
+                SoLuongTon:0
             }
         };
     },
@@ -91,10 +94,13 @@ export default {
     computed: {
     },
     methods: {
-        async updateSoLuongSanPham(idSanPham) {
-            const response = SachService.getItem(this.$axios, idSanPham);
-            console.log(response);
-            // await SanPhamService.update(this.$axios, idSanPham, response);
+        async updateSoLuongSanPhamByPhieuNhap(idSanPham, SoLuong) {
+            const response = await SachService.getItem(this.$axios, idSanPham);
+            console.log("123",response);
+            this.dataSanPham.SoLuongTon = response.SoLuongTon;
+            this.dataSanPham.SoLuongTon += SoLuong;
+            console.log("456",this.dataSanPham);
+            await SachService.updateSoLuongSanPhamByPhieuNhap(this.$axios, idSanPham, this.dataSanPham);
         },
         formatTrangThai(idTrangThai) {
             return idTrangThai === 1 ? 'Chưa xác nhận' : idTrangThai === 2 ? 'Đã xác nhận' : idTrangThai === 3 ? 'Chưa thanh toán' : 'Hoàn thành';
@@ -189,15 +195,15 @@ export default {
             }
         },
         edit(item) {
-            if (item.idTrangThai === 1) {
-                this.$router.push(`/admin/NhapHang/edit/${item.id}`);
-            } else {
-                Swal.fire(
-                    'Thông báo!',
-                    'Phiếu nhập chỉ có thể cập nhật ở trạng thái chưa xác nhận!.',
-                    'warning'
-                )
-            }
+            // if (item.idTrangThai === 1) {
+            this.$router.push(`/admin/NhapHang/edit/${item.id}`);
+            // } else {
+            //     Swal.fire(
+            //         'Thông báo!',
+            //         'Phiếu nhập chỉ có thể cập nhật ở trạng thái chưa xác nhận!.',
+            //         'warning'
+            //     )
+            // }
         },
         async confirmAndRemove(item) {
             if (item.idTrangThai === 4) {
@@ -270,13 +276,13 @@ export default {
             try {
                 item.idTrangThai += 1;
                 await PhieuNhapService.update(this.$axios, item.id, item);
-                if (item.idTrangThai === 3) {
+                if (item.idTrangThai === 4) {
                     ChiTietPhieuNhapService.getDataByPhieuNhap(this.$axios, item.id)
                         .then(response => {
                             if (response && response.data && Array.isArray(response.data)) {
                                 response.data.forEach((element) => {
                                     console.log(element);
-                                    this.updateSoLuongSanPham(element.idSanPham);
+                                    this.updateSoLuongSanPhamByPhieuNhap(element.idSanPham, element.SoLuong);
                                 });
                             } else {
                                 console.error('Invalid or missing data in the response');
