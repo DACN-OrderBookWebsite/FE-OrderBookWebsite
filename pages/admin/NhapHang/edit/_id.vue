@@ -11,10 +11,10 @@
                     <!-- Ngày nhận hàng -->
                     <b-form-group label="Ngày nhận hàng:" label-for="input-NgayNhanHang" class="d-flex align-items-center">
                         <b-form-datepicker v-model="selectedDate" placeholder="Chọn ngày" class="mb-2"
-                            @input="handleDateChange"></b-form-datepicker>
+                            @input="handleDateChange" :value="selectedDate" :disabled="dataPhieuNhap.idTrangThai === 4"></b-form-datepicker>
 
                         <b-form-timepicker v-model="selectedTime" placeholder="Chọn giờ" class="mb-2"
-                            @input="handleDateChange"></b-form-timepicker>
+                            @input="handleDateChange" :value="selectedTime" :disabled="dataPhieuNhap.idTrangThai === 4"></b-form-timepicker>
                     </b-form-group>
 
                     <!-- Trạng thái -->
@@ -25,7 +25,7 @@
                     <!-- Nhà cung cấp -->
                     <b-form-group label="Nhà cung cấp:" label-for="input-NhaCungCap" class="d-flex align-items-center">
                         <b-form-select id="input-NhaCungCap" v-model="dataPhieuNhap.idNhaCungCap" required
-                            :options="NhaCungCapOption" class="max-width-select"></b-form-select>
+                            :options="NhaCungCapOption" class="max-width-select" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-select>
                     </b-form-group>
 
                     <!-- Tổng số lượng -->
@@ -38,7 +38,7 @@
                         <span small class="text-danger">{{ dataPhieuNhap.TongTien }}</span>
                     </b-form-group>
 
-                    <b-button type="submit" variant="primary">Cập nhật</b-button>
+                    <b-button type="submit" variant="primary" :disabled="dataPhieuNhap.idTrangThai === 4">Cập nhật</b-button>
                 </b-form>
             </div>
             <div class="horizontal-container">
@@ -53,7 +53,7 @@
                             <label>{{ formatDisabled(dataSanPham.item.Disabled) }}</label>
                         </template> -->
                         <template #cell(actions)="dataSanPham">
-                            <b-button size="sm" variant="primary" @click="insert(dataSanPham.item)">Thêm</b-button>
+                            <b-button size="sm" variant="primary" @click="insert(dataSanPham.item)" :disabled="dataPhieuNhap.idTrangThai !== 1">Thêm</b-button>
                         </template>
                     </b-table>
                 </div>
@@ -63,15 +63,15 @@
                     <b-table :items="dataChiTiet" :fields="fieldsChiTiet" class="text-center">
                         <template #cell(SoLuong)="dataChiTiet">
                             <b-form-input v-model="dataChiTiet.item.SoLuong" type="number" min="1"
-                                @blur="handleBlur(dataChiTiet.item)"></b-form-input>
+                                @blur="handleBlur(dataChiTiet.item)" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-input>
                         </template>
                         <template #cell(DonGiaNhap)="dataChiTiet">
                             <b-form-input v-model="dataChiTiet.item.DonGiaNhap" type="number" min="0"
-                                @blur="handleBlur(dataChiTiet.item)"></b-form-input>
+                                @blur="handleBlur(dataChiTiet.item)" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-input>
                         </template>
                         <template #cell(actions)="dataChiTiet">
                             <b-button size="sm" variant="danger"
-                                @click="confirmAndRemove(dataChiTiet.item.id)">Xóa</b-button>
+                                @click="confirmAndRemove(dataChiTiet.item.id)" :disabled="dataPhieuNhap.idTrangThai !== 1">Xóa</b-button>
                         </template>
                     </b-table>
                 </div>
@@ -141,11 +141,15 @@ export default {
         await this.fetchPhieuNhap();
         await this.fetch();
         await this.fetchChiTiet();
+        await this.getPhieuNhap();
     },
     computed: {
-
     },
     methods: {
+        async getPhieuNhap(){
+            const response = await PhieuNhapService.getItem(this.$axios, this.$route.params.id);
+            this.dataPhieuNhap = response;
+        },
         async updateTongSoLuong_TongTien(){
             const response = await ChiTietPhieuNhapService.sumSoLuongOfPhieuNhap(this.$axios, this.$route.params.id);
             this.dataPhieuNhap.TongSoLuong = response.data.TongSoLuong;
