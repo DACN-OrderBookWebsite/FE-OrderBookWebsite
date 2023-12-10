@@ -22,9 +22,9 @@ export default {
     mapRouteToSection(route) {
       // Define a mapping from route to section name
       const routeSectionMapping = {
-        "/generalCurriculum": "Giáo Trình Đại Cương",
-        "/curriculumDepartment": "Giáo Trình Theo Khoa",
-        "/examSyllabus": "Giáo Trình Đề Thi",
+        "/GiaoTrinhDaiCuong": "Giáo Trình Đại Cương",
+        "/GiaoTrinhTheoKhoa": "Giáo Trình Theo Khoa",
+        "/GiaoTrinhDeThi": "Giáo Trình Đề Thi",
         "/contactUs": "Liên Hệ",
         "/loginkeycloak": "Đăng Nhập",
         "/shoppingCart": "Giỏ Hàng Của Bạn",

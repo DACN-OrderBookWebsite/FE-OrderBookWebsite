@@ -39,6 +39,7 @@
 import HeroSection from "../../components/HeroSection";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import auth from "~/services/api/auth"; 
 export default {
   name: 'login',
   components: { HeroSection, Footer, Header },
@@ -49,15 +50,26 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
-      if (this.username === '2001200087' && this.password === '123456') {
-        this.$router.push({ path: '/admin' }); // Navigate to the user page
-      } else {
-        this.$router.push({ path: '/user' });
+    async onSubmit() {
+      try {
+        const credentials = {
+          TenDangNhap: this.username,
+          MatKhau: this.password,
+        };
+        const response = await auth.login(this.$axios,credentials );
+        console.error("111111111:", response);  
+        if (response.data.user.idChucVu === 1) {
+          this.$router.push('/admin');
+        } else {
+          this.$router.push('/');
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
       }
-    }
-  }
+    },
+  },
 };
+
 </script>
 
 <style scoped>

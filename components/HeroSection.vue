@@ -11,13 +11,13 @@
         <nuxt-link class="link-to" to="/">
           <b-col class="text-hero">TRANG CHỦ</b-col>
         </nuxt-link>
-        <nuxt-link class="link-to" to="/generalCurriculum">
+        <nuxt-link class="link-to" to="/GiaoTrinhDaiCuong">
           <b-col class="text-hero">GIÁO TRÌNH ĐẠI CƯƠNG</b-col>
         </nuxt-link>
-        <nuxt-link class="link-to" to="/curriculumDepartment">
+        <nuxt-link class="link-to" to="/GiaoTrinhTheoKhoa">
           <b-col class="text-hero">GIÁO TRÌNH THEO KHOA</b-col>
         </nuxt-link>
-        <nuxt-link class="link-to" to="/examSyllabus">
+        <nuxt-link class="link-to" to="/GiaoTrinhDeThi">
           <b-col class="text-hero">GIÁO TRÌNH ĐỀ THI</b-col>
         </nuxt-link>
         <nuxt-link class="link-to" to="contactUs">

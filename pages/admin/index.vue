@@ -36,6 +36,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 export default {
   name: 'Admin',
+  middleware: 'auth',
   components: {Footer, Header},
   // You may need to import additional components or functionality here
 };

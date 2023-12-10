@@ -12,7 +12,7 @@
   import HeroSection from "../../components/HeroSection";
   
   export default {
-    name: "ExamSyllabus",
+    name: "GiaoTrinhDeThi",
     components: { HeroSection, Footer, Header },
   };
   </script>
