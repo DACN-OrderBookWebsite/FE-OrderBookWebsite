@@ -2,64 +2,55 @@
   <div id="app">
     <Header> </Header>
     <HeroSection></HeroSection>
-    <div class="checkout-form-container">
-      <!-- Cart Items Table -->
-      <b-table striped hover :items="cartItems" class="mb-4">
-        <template v-slot:cell(name)="data">
-          {{ data.item.name }}
-        </template>
-        <template v-slot:cell(price)="data">
-          {{ data.item.price | currency }}
+    <div class="container">
+      <b-table striped hover :items="cartItems" :fields="fields">
+        <template v-slot:cell(image)="data">
+          <b-img :src="data.item.image" alt="Image" fluid></b-img>
         </template>
         <template v-slot:cell(quantity)="data">
-          {{ data.item.quantity }}
+          <b-input-group size="sm">
+            <b-button @click="decrement(data.index)" variant="outline-secondary"
+              >-</b-button
+            >
+            <b-form-input v-model="data.item.quantity" readonly></b-form-input>
+            <b-button @click="increment(data.index)" variant="outline-secondary"
+              >+</b-button
+            >
+          </b-input-group>
         </template>
         <template v-slot:cell(total)="data">
-          {{ (data.item.price * data.item.quantity) | currency }}
+          {{ data.item.price * data.item.quantity }}
         </template>
       </b-table>
 
-      <!-- User Information Form -->
-      <b-form @submit.prevent="onSubmit">
-        <b-form-group label="Full Name" label-for="input-name">
-          <b-form-input
-            id="input-name"
-            v-model="user.name"
-            required
-            placeholder="Enter your full name"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group label="Email" label-for="input-email">
-          <b-form-input
-            type="email"
-            id="input-email"
-            v-model="user.email"
-            required
-            placeholder="Enter your email"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group label="Address" label-for="input-address">
-          <b-form-input
-            id="input-address"
-            v-model="user.address"
-            required
-            placeholder="Enter your address"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group label="Phone" label-for="input-phone">
-          <b-form-input
-            id="input-phone"
-            v-model="user.phone"
-            required
-            placeholder="Enter your phone number"
-          ></b-form-input>
+      
+
+      <!-- Form Đặt Hàng -->
+      <b-form @submit="onSubmit">
+        <b-form-group label="Tên">
+          <b-form-input v-model="order.name"></b-form-input>
         </b-form-group>
 
-        <!-- Total Price -->
-        <div class="total-price">Total: {{ calculateTotal | currency }}</div>
+        <b-form-group label="Mã Số Sinh Viên">
+          <b-form-input v-model="order.studentId"></b-form-input>
+        </b-form-group>
 
-        <!-- Checkout Button -->
-        <b-button type="submit" variant="success" block>Checkout</b-button>
+        <b-form-group label="Số Điện Thoại">
+          <b-form-input v-model="order.phone"></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Nơi Lấy Sách">
+          <b-form-input v-model="order.pickupLocation"></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Ghi Chú">
+          <b-form-textarea v-model="order.notes"></b-form-textarea>
+        </b-form-group>
+
+        <!-- Tổng Tiền -->
+      <div class="total-price">Thành tiền: {{ totalPrice }}</div>
+
+        <b-button type="submit" variant="primary">Đặt Hàng</b-button>
       </b-form>
     </div>
     <Footer> </Footer>
@@ -77,53 +68,57 @@ export default {
   data() {
     return {
       cartItems: [
-        { id: 1, name: 'Product 1', price: 49.99, quantity: 1 },
-        { id: 2, name: 'Product 2', price: 12.99, quantity: 2 },
-        { id: 3, name: 'Product 3', price: 29.99, quantity: 1 },
+        // Mẫu dữ liệu, thay thế với dữ liệu thực tế
+        { image: 'link-to-image.jpg', title: 'Sách A', price: 100, quantity: 1 },
+        { image: 'link-to-image.jpg', title: 'Sách B', price: 150, quantity: 2 },
       ],
-      user: {
-        name: '',
-        email: '',
-        address: '',
-        phone: '',
+      fields: ['image', 'title', 'price', 'quantity', 'total'],
+      order: {
+        name: "",
+        studentId: "",
+        phone: "",
+        pickupLocation: "",
+        notes: "",
       },
     };
   },
-  methods: {
-    onSubmit() {
-      alert('Checkout complete!'); // Replace with actual checkout logic
-    },
-    calculateTotal() {
-      return this.cartItems.reduce((acc, item) => {
-        // Ensure that price and quantity are treated as numbers
-        const price = Number(item.price);
-        const quantity = Number(item.quantity);
-        return acc + price * quantity;
-      }, 0);
+  computed: {
+    totalPrice() {
+      return this.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
     }
   },
-  filters: {
-    currency(value) {
-      // Ensure the value is a number before calling toFixed
-      const number = Number(value);
-      if (isNaN(number)) {
-        return "Invalid number"; // Or any other error handling
+  methods: {
+    increment(index) {
+      this.cartItems[index].quantity++;
+    },
+    decrement(index) {
+      if (this.cartItems[index].quantity > 1) {
+        this.cartItems[index].quantity--;
       }
-      return `$${number.toFixed(2)}`;
+    },
+    onSubmit(evt) {
+      evt.preventDefault();
+      // Xử lý đặt hàng ở đây
+      // ...
     }
   }
 };
 </script>
-<style scoped>
-.checkout-form-container {
-  max-width: 800px;
-  margin: auto;
+<style>
+.container {
+  margin-top: 20px;
 }
 
 .total-price {
-  text-align: right;
+  margin-bottom: 20px;
+  font-size: 1.25em;
   font-weight: bold;
-  margin-top: 1rem;
 }
+
+.b-img {
+  width: 100px; /* Điều chỉnh kích thước ảnh */
+}
+
+
+/* Thêm các style khác nếu cần */
 </style>
-  

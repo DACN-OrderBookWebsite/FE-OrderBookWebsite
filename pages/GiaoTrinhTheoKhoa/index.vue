@@ -13,7 +13,7 @@ import Footer from "../../components/Footer";
 import HeroSection from "../../components/HeroSection";
 
 export default {
-  name: "IndexPage",
+  name: "GiaoTrinhTheoKhoa",
   components: { HeroSection, Footer, Header },
 };
 </script>

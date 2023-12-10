@@ -98,6 +98,7 @@ import moment from 'moment';
 
 export default {
   name: 'UserEdit',
+  middleware: 'auth',
   components: { Footer, Header },
   data() {
     return {

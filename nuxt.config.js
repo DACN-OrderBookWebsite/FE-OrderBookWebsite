@@ -23,6 +23,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/client-only.js', mode: 'client' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -36,6 +37,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     'bootstrap-vue/nuxt'
   ],
   router: {
@@ -89,23 +91,23 @@ export default {
       },
       {
         path: '/generalCurriculum',
-        name: 'GeneralCurriculum',
-        component: '~/pages/generalCurriculum'
+        name: 'GiaoTrinhDaiCuong',
+        component: '~/pages/GiaoTrinhDaiCuong/index.vue'
       },
       {
-        path: '/curriculumDepartment',
-        name: 'CurriculumDepartment',
-        component: '~/pages/curriculumDepartment'
+        path: '/GiaoTrinhTheoKhoa',
+        name: 'GiaoTrinhTheoKhoa',
+        component: '~/pages/GiaoTrinhTheoKhoa/index.vue'
       },
       {
         path: '/examSyllabus',
         name: 'ExamSyllabus',
-        component: '~/pages/examSyllabus'
+        component: '~/pages/GiaoTrinhDeThi/index.vue'
       },
       {
         path: '/contactUs',
         name: 'ContactUs',
-        component: '~/pages/contactUs'
+        component: '~/pages/contactUs/index.vue'
       },
       {
         path: '/shoppingCart',
@@ -120,11 +122,11 @@ export default {
   axios: {
     // Đặt cơ sở URL của API
     baseURL: 'http://127.0.0.1:8000',
-
+    withCredentials: true, // Quan trọng để gửi cookie qua các domain khác nhau
     // Cấu hình tiêu đề mặc định (ví dụ: token xác thực)
     headers: {
       common: {
-        'Authorization': 'Bearer YOUR_TOKEN_HERE'
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI3IiwianRpIjoiNTZlZWZhMGI5ZmE0MTQzNTQ2OTgzMWY0YTVlNWRhYjYxYTU3MGJmMzViM2NkMDM3Zjc1NGU3OTEyOWQxZmEzOGUwMzZmOGI2MDNlMDM5OGYiLCJpYXQiOjE3MDIxNDQ5NjAuNjM1MTk1LCJuYmYiOjE3MDIxNDQ5NjAuNjM1MTk5LCJleHAiOjE3MzM3NjczNjAuNjI3NTk3LCJzdWIiOiI1MyIsInNjb3BlcyI6W119.vnknSXIIFfvkpTRjQ79O7POtlNx1bAiaL5AD9NE1-KVU5ykfjsFKTBL6gRbXmNWBO9YyXsmKJDxnpQOx4grUVoyEp_qIbiBAClyMU6hSHveN4AplKiLR7mdkOMk2APKeviG3tEyYbVCnTtx-RRKUsdX1IbYbGwf96Hxm0pfzrnmeu7fPGrNSqbA6A6-vBjxVHy0nFCjerO4rgt5hDIhoMIRLJQ9upMX7goUjetrsX2Gzy9XgmwDjWr2rxakSmvMbuyq3x3uy8p-IIuQOtABFWM-kX_HkE9HdA0yVI4sgtkwQlS-zrKM7F1UAoXQy2WRiPsije-G__PVWSQRBKU6ACAphbs3IxG4M4fzogXW29bACcIhSm7_M7bcsgvvMJ5z2_youTjIUKXjKZr2YWRChkPJBM8zPIeJkuGST2OKPR4WWyCnpVv2LGPnzMpuFU4Z5L5xV-knvSB2EIoizn3ZsupCDg3jCH1FbRZGc2BktekRevpcWoiSpeXKeeeBJ_VEE4gwFVCXrIKUfkWT0ZLAfAeWeFsfX8GyIZhss9wuJ92XHoAbW35-Yatu8A42MWqIil8eGvHw7z6-u-e0NJewW4vO81pH52easbHdDyp73qvyvPUQQacrWzDYfDeSgR8TDgy_id-6Mch6HHaiZfHHh153puRx_7y2rz9iqMieqKS0'
       }
     },
     // Cấu hình interceptors nếu cần
@@ -139,8 +141,23 @@ export default {
       return response;
     }
   },
-
-
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/api/login', method: 'post', propertyName: 'token' },
+          logout: { url: '/api/logout', method: 'post' },
+        },
+        tokenRequired: true,
+        tokenType: 'Bearer'
+      }
+    },
+    redirect: {
+      login: '/loginkeycloak',
+      logout: '/',
+      home: '/'
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
