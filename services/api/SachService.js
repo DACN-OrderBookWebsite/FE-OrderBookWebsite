@@ -23,5 +23,11 @@ export default {
     updateSoLuongSanPhamByPhieuNhap(axios, id, data) {
       return axios.put(`/api/Sach/${id}/updateSoLuongSanPhamByPhieuNhap`, data);
     },
+    getDataSortByTheLoai(axios) {
+      return axios.get(`/api/Sach/getDataSortByTheLoai`);
+    },
+    showDataWithoutID(axios, id) {
+      return axios.get(`/api/Sach/${id}/showDataWithoutID`);
+    },
   };
   
