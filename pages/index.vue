@@ -2,23 +2,18 @@
   <div id="app">
     <Header> </Header>
     <hero-section></hero-section>
+
     <b-row class="text-section">
       <b-col md="6" class="text-section-container">
         <h1 class="text-huit">HUIT Zone EDU</h1>
         <p class="subtitle">Góc giáo trình HUIT</p>
         <p class="subtitle">Trọn bộ giáo trình Tân sinh viên</p>
         <p class="subtitle">Đại học không khó cùng HUITZone</p>
-        <b-button variant="outline-primary" class="mt-3"
-          >Tìm hiểu thêm</b-button
-        >
+        <b-button variant="outline-primary" class="mt-3">Tìm hiểu thêm</b-button>
       </b-col>
       <b-col md="6" class="image-container">
         <!-- Image goes here, adjust path accordingly -->
-        <b-img
-          class="image-section"
-          src="@/static/images/backgrounds/huitlibary.jpg"
-          alt="HUIT Building"
-        ></b-img>
+        <b-img class="image-section" src="@/static/images/backgrounds/huitlibary.jpg" alt="HUIT Building"></b-img>
       </b-col>
     </b-row>
 
@@ -29,23 +24,15 @@
             <b-card no-body class="overflow-hidden">
               <b-row no-gutters>
                 <b-col md="6">
-                  <b-card-img
-                    class="card-image"
-                    src="@/static/images/backgrounds/imagebook.png"
-                  ></b-card-img>
+                  <b-card-img class="card-image" src="@/static/images/backgrounds/imagebook.png"></b-card-img>
                 </b-col>
                 <b-col md="6">
-                  <b-card-body
-                    class="card-body"
-                    title="Sách giáo trình đại cương"
-                  >
+                  <b-card-body class="card-body" title="Sách giáo trình đại cương">
                     <b-card-text class="sub-title">
                       Các đầu sách giáo trình Đại cương chính thống và cập nhật
                       mới nhất, đa dạng theo nhu cầu của sinh viên.
                     </b-card-text>
-                    <b-button class="button-book" variant="outline-primary"
-                      >Xem Thêm</b-button
-                    >
+                    <b-button class="button-book" variant="outline-primary">Xem Thêm</b-button>
                   </b-card-body>
                 </b-col>
               </b-row>
@@ -57,23 +44,15 @@
             <b-card no-body class="overflow-hidden">
               <b-row no-gutters>
                 <b-col md="6">
-                  <b-card-img
-                    class="card-image"
-                    src="@/static/images/backgrounds/imagebook2.png"
-                  ></b-card-img>
+                  <b-card-img class="card-image" src="@/static/images/backgrounds/imagebook2.png"></b-card-img>
                 </b-col>
                 <b-col md="6">
-                  <b-card-body
-                    class="card-body"
-                    title="Sách giáo trình theo ngành học"
-                  >
+                  <b-card-body class="card-body" title="Sách giáo trình theo ngành học">
                     <b-card-text class="sub-title">
                       Combo các loại sách giáo trình được thiết kế theo ngành
                       học, phù hợp với sinh viên có nhu cầu mua trọn bộ.
                     </b-card-text>
-                    <b-button class="button-book" variant="outline-primary"
-                      >Xem Thêm</b-button
-                    >
+                    <b-button class="button-book" variant="outline-primary">Xem Thêm</b-button>
                   </b-card-body>
                 </b-col>
               </b-row>
@@ -91,16 +70,11 @@
       </h4>
       <b-row class="per-page">
         <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="2">
-          <ProductCard :product="book"></ProductCard>
+          <ProductCard :product="book" @click.native="addToCart(book)"></ProductCard>
         </b-col>
       </b-row>
-      <b-pagination
-        v-model="currentPage"
-        :total-rows="books.length"
-        :per-page="perPage"
-        aria-controls="my-table"
-        class ="per-page"
-      ></b-pagination>
+      <b-pagination v-model="currentPage" :total-rows="books.length" :per-page="perPage" aria-controls="my-table"
+        class="per-page"></b-pagination>
     </div>
     <b-row class="text-section-hero">
       <b-col md="6" class="text-section-container">
@@ -111,17 +85,11 @@
         <p class="subtitle">2. Sách chính hãng - Bản quyền</p>
         <p class="subtitle">3. Phân loại rõ ràng theo bậc học, khoa</p>
         <p class="subtitle">4. Có thể mua trực tuyến và tại trường HUIT</p>
-        <b-button variant="outline-primary" class="mt-3"
-          >Tìm hiểu thêm</b-button
-        >
+        <b-button variant="outline-primary" class="mt-3">Tìm hiểu thêm</b-button>
       </b-col>
       <b-col md="6" class="image-container">
         <!-- Image goes here, adjust path accordingly -->
-        <b-img
-          class="image-section-hero"
-          src="@/static/images/backgrounds/Unsplash.png"
-          alt="HUIT Building"
-        ></b-img>
+        <b-img class="image-section-hero" src="@/static/images/backgrounds/Unsplash.png" alt="HUIT Building"></b-img>
       </b-col>
     </b-row>
     <Footer> </Footer>
@@ -135,10 +103,12 @@ import User from "./user";
 import Login from "./loginkeycloak";
 import HeroSection from "../components/HeroSection";
 import ProductCard from "../components/ProductCard";
+import SachService from "../services/api/SachService";
+import Swal from 'sweetalert2';
 
 export default {
   name: "IndexPage",
-  components: { ProductCard, HeroSection, Login, User, Footer, Header, Error },
+  components: { ProductCard, HeroSection, Login, User, Footer, Header },
   data() {
     return {
       slide: 0,
@@ -265,6 +235,40 @@ export default {
       return this.books.slice(start, end);
     },
   },
+  async mounted() {
+    await this.fetch();
+  },
+  methods: {
+    async fetch() {
+      try {
+        const response = await SachService.getDataSortByTheLoai(this.$axios);
+        this.books = response.data;
+      }
+      catch {
+        console.log('fetch error');
+      }
+    },
+    addToCart(item) {
+      const response = this.$cart.getCart();
+      const existingItemIndex = response.findIndex(cartItem => cartItem.id === item.id);
+
+      if (existingItemIndex !== -1) {
+        Swal.fire(
+            'Thông báo!',
+            'Sản phẩm đã tồn tại trong giỏ hàng.',
+            'warning'
+          );
+      } else {
+        item.stock = 1;
+        this.$cart.addToCart(item);
+        Swal.fire(
+            'Thông báo!',
+            'Đã thêm sản phẩm vào giỏ hàng.',
+            'success'
+          );
+      }
+    },
+  }
 };
 </script>
 <style>
@@ -273,10 +277,12 @@ html {
   height: 100%;
   margin: 0;
 }
+
 .per-page {
   margin-top: 20px;
   justify-content: center;
 }
+
 .subtitle {
   color: rgba(0, 0, 0, 0.8);
 
@@ -284,9 +290,11 @@ html {
   font-size: 22px;
   font-style: normal;
   font-weight: 500;
-  line-height: 180%; /* 39.6px */
+  line-height: 180%;
+  /* 39.6px */
   letter-spacing: 0.88px;
 }
+
 #app {
   display: flex;
   flex-direction: column;
@@ -300,23 +308,29 @@ html {
   font-size: 60px;
   font-style: normal;
   font-weight: 600;
-  line-height: 145%; /* 87px */
+  line-height: 145%;
+  /* 87px */
   letter-spacing: -1.2px;
   text-transform: capitalize;
 }
+
 .text-huit-hero {
   color: #0094ff;
   font-family: Inter;
   font-size: 40px;
   font-style: normal;
   font-weight: 600;
-  line-height: 145%; /* 87px */
+  line-height: 145%;
+  /* 87px */
   letter-spacing: -1.2px;
   text-transform: capitalize;
 }
+
 .content {
-  flex: 1; /* This allows the content to expand and push the footer down */
+  flex: 1;
+  /* This allows the content to expand and push the footer down */
 }
+
 .text-carousel {
   color: #173f5f;
   font-size: 28px;
@@ -326,6 +340,7 @@ html {
   letter-spacing: 1.874px;
   margin-left: 320px;
 }
+
 .text-carousel-hero {
   color: #173f5f;
   font-size: 28px;
@@ -335,21 +350,21 @@ html {
   letter-spacing: 1.874px;
   margin-left: 320px;
 }
+
 .text-section {
   width: 1447px;
   height: 558px;
-  background: linear-gradient(
-    79deg,
-    rgba(255, 255, 255, 0.11) -2.75%,
-    #fff 20.07%,
-    #fff 54.28%,
-    #fff 101.59%
-  );
+  background: linear-gradient(79deg,
+      rgba(255, 255, 255, 0.11) -2.75%,
+      #fff 20.07%,
+      #fff 54.28%,
+      #fff 101.59%);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
 }
+
 .text-section-hero {
   width: 1447px;
   height: 558px;
@@ -359,6 +374,7 @@ html {
   margin-right: auto;
   border-radius: 15px;
 }
+
 .text-section-container {
   padding: 80px;
 }
@@ -376,17 +392,21 @@ html {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .overflow-hidden {
   height: 100%;
 }
+
 .book-container {
   justify-content: center;
   height: 100%;
 }
+
 .button-book {
   margin-top: 80px;
   max-width: 100%;
 }
+
 .book-section {
   background-color: #f8f9fa;
   padding: 1rem;
@@ -402,13 +422,16 @@ html {
   width: 40%;
   height: 40%;
 }
+
 .card-image {
   width: auto;
   height: auto;
 }
+
 .book-card .b-button {
   border-radius: 0;
 }
+
 .card-body {
   padding: 20px;
   color: #173f5f;
@@ -418,17 +441,21 @@ html {
   line-height: normal;
   letter-spacing: 1.874px;
 }
+
 .sub-title {
   color: #767070;
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
-  line-height: 30px; /* 166.667% */
+  line-height: 30px;
+  /* 166.667% */
   letter-spacing: 1.289px;
 }
+
 .col-heigt {
   height: 100%;
 }
+
 .image-section-hero {
   display: flex;
   width: 100%;
@@ -438,9 +465,11 @@ html {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .slide-product {
   margin: 80px;
 }
+
 .product-carousel-container {
   max-width: 600px;
   margin: auto;
@@ -448,6 +477,7 @@ html {
   height: 600px;
   margin-top: 120px;
 }
+
 .carousel-control-prev-icon {
   background-image: url("@/static/images/backgrounds/left-arrow-backup-2.svg");
 }
@@ -455,6 +485,7 @@ html {
 .carousel-control-next-icon {
   background-image: url("@/static/images/backgrounds/right-arrow-svgrepo-com.svg");
 }
+
 .carousel-indicators {
   display: none;
 }
