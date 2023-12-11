@@ -6,8 +6,10 @@
     <b-card-body>
       <h4 class="product-name">{{ product.name }}</h4>
       <div class="product-price">{{ product.price | currency }}</div>
-      <b-button variant="warning" class="add-to-cart-button">Thêm vào giỏ</b-button>
     </b-card-body>
+    <div class="center-align">
+      <b-button variant="warning" class="add-to-cart-button">Thêm vào giỏ</b-button>
+    </div>
   </b-card>
 </template>
 
@@ -38,7 +40,9 @@ export default {
   overflow: hidden;
   transition: transform 0.3s ease;
 }
-
+.center-align{
+  text-align: center;
+}
 .product-card:hover {
   transform: translateY(-5px);
 }

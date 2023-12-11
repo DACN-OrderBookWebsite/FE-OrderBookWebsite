@@ -86,29 +86,27 @@
 
     <div class="slide-product">
       <h4 class="text-carousel">Các giáo trình phổ cập</h4>
-      <h4 class="text-carousel-hero">Được sinh viên trường đại học công thương sử dụng rộng rãi</h4>
-      <div class="product-carousel-container">
-        <b-carousel
-          id="book-carousel"
-          v-model="slide"
-          :interval="4000"
-          controls
-          indicators
-        >
-          <b-carousel-slide
-            v-for="(product, index) in products"
-            :key="index"
-            img-blank
-            img-alt="Product image"
-          >
-            <ProductCard :product="product"></ProductCard>
-          </b-carousel-slide>
-        </b-carousel>
-      </div>
+      <h4 class="text-carousel-hero">
+        Được sinh viên trường đại học công thương sử dụng rộng rãi
+      </h4>
+      <b-row class="per-page">
+        <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="2">
+          <ProductCard :product="book"></ProductCard>
+        </b-col>
+      </b-row>
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="books.length"
+        :per-page="perPage"
+        aria-controls="my-table"
+        class ="per-page"
+      ></b-pagination>
     </div>
     <b-row class="text-section-hero">
       <b-col md="6" class="text-section-container">
-        <h1 class="text-huit-hero">Vì sao nên mua giáo trình tại HUIT Zone ?</h1>
+        <h1 class="text-huit-hero">
+          Vì sao nên mua giáo trình tại HUIT Zone ?
+        </h1>
         <p class="subtitle">1. Chất lượng sách đảm bảo</p>
         <p class="subtitle">2. Sách chính hãng - Bản quyền</p>
         <p class="subtitle">3. Phân loại rõ ràng theo bậc học, khoa</p>
@@ -171,6 +169,82 @@ export default {
           price: "35.00",
         },
       ],
+      books: [
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          image: "http://localhost:3000/_nuxt/static/images/backgrounds/imagebook.png",
+          description: "Description for product 1",
+        },
+        {
+          id: 2,
+          name: "Book Title 2",
+          price: 29.99,
+          stock: 5,
+          image: "http://localhost:3000/_nuxt/static/images/backgrounds/imagebook.png",
+          description: "Description for product 2",
+        },
+        {
+          id: 4,
+          name: "Book Title 3",
+          price: 9.99,
+          stock: 20,
+          image: "http://localhost:3000/_nuxt/static/images/backgrounds/imagebook.png",
+          description: "Description for product 3",
+        },
+        {
+          id: 5,
+          name: "Book Title 3",
+          price: 9.99,
+          stock: 20,
+          image: "http://localhost:3000/_nuxt/static/images/backgrounds/imagebook.png",
+          description: "Description for product 3",
+        },
+        {
+          id: 6,
+          name: "Book Title 3",
+          price: 9.99,
+          stock: 20,
+          image: "http://localhost:3000/_nuxt/static/images/backgrounds/imagebook.png",
+          description: "Description for product 3",
+        },
+        {
+          id: 7,
+          name: "Book Title 3",
+          price: 9.99,
+          stock: 20,
+          image: "http://localhost:3000/_nuxt/static/images/backgrounds/imagebook.png",
+          description: "Description for product 3",
+        },
+        {
+          id: 8,
+          name: "Book Title 3",
+          price: 9.99,
+          stock: 20,
+          image: "path-to-image-3.jpg",
+          description: "Description for product 3",
+        },
+        {
+          id: 9,
+          name: "Book Title 3",
+          price: 9.99,
+          stock: 20,
+          image: "path-to-image-3.jpg",
+          description: "Description for product 3",
+        },
+        {
+          id: 310,
+          name: "Book Title 3",
+          price: 9.99,
+          stock: 20,
+          image: "path-to-image-3.jpg",
+          description: "Description for product 3",
+        },
+      ],
+      currentPage: 1,
+      perPage: 5,
     };
   },
   computed: {
@@ -185,6 +259,11 @@ export default {
         return acc;
       }, []);
     },
+    paginatedBooks() {
+      let start = (this.currentPage - 1) * this.perPage;
+      let end = start + this.perPage;
+      return this.books.slice(start, end);
+    },
   },
 };
 </script>
@@ -193,6 +272,10 @@ body,
 html {
   height: 100%;
   margin: 0;
+}
+.per-page {
+  margin-top: 20px;
+  justify-content: center;
 }
 .subtitle {
   color: rgba(0, 0, 0, 0.8);
@@ -209,7 +292,6 @@ html {
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden;
-
 }
 
 .text-huit {
@@ -308,7 +390,7 @@ html {
 .book-section {
   background-color: #f8f9fa;
   padding: 1rem;
-  height: 450px;  
+  height: 450px;
   margin-top: 50px;
 }
 
@@ -367,11 +449,11 @@ html {
   margin-top: 120px;
 }
 .carousel-control-prev-icon {
-  background-image: url('@/static/images/backgrounds/left-arrow-backup-2.svg');
+  background-image: url("@/static/images/backgrounds/left-arrow-backup-2.svg");
 }
 
 .carousel-control-next-icon {
-  background-image: url('@/static/images/backgrounds/right-arrow-svgrepo-com.svg');
+  background-image: url("@/static/images/backgrounds/right-arrow-svgrepo-com.svg");
 }
 .carousel-indicators {
   display: none;

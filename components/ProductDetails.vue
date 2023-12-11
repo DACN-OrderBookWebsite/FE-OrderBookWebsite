@@ -57,7 +57,7 @@
     </div>
     <h2>Các Giáo Trình Đại Cương Khác</h2>
     <b-row>
-      <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="4">
+      <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="2">
         <ProductCard :product="book"></ProductCard>
       </b-col>
     </b-row>
@@ -97,7 +97,7 @@ export default {
 
       ],
       currentPage: 1,
-      perPage: 3,
+      perPage: 5,
     };
   },
   computed: {
