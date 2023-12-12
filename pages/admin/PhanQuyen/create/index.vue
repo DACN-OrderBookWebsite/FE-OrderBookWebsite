@@ -12,8 +12,7 @@
                 </b-form-group>
 
                 <b-form-group label="Người dùng:" label-for="input-role">
-                    <b-form-select id="input-role" v-model="data.idQuyen" required
-                        :options="QuyenOption"></b-form-select>
+                    <b-form-select id="input-role" v-model="data.idQuyen" required :options="QuyenOption"></b-form-select>
                     <small v-if="dataerror.name" class="text-danger">{{
                         dataerror.idQuyen
                     }}</small>
@@ -46,12 +45,27 @@ export default {
             },
             NhomOption: [],
             QuyenOption: [],
+            quyen: 5
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.getRolePermission();
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         async confirmAndCreate() {
             const confirmResult = await Swal.fire({
                 title: "Xác nhận thêm?",

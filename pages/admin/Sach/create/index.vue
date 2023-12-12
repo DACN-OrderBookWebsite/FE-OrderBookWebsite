@@ -43,6 +43,12 @@
                         placeholder="Nhập đơn giá" disabled></b-form-input>
                 </b-form-group>
 
+                <!-- Năm xuất bản -->
+                <b-form-group label="Năm xuất bản:" label-for="input-number">
+                    <b-form-input id="input-number" v-model="data.NamXuatBan" type="number" step="1" required
+                        placeholder="Nhập năm xuất bản"></b-form-input>
+                </b-form-group>
+
                 <!-- Trạng Thái Hoạt Động -->
                 <b-form-group label="Trạng Thái Hoạt Động:" label-for="input-disabled">
                     <b-form-checkbox id="input-disabled" v-model="data.Disabled">
@@ -67,6 +73,7 @@
 <script>
 import SachService from '~/services/api/SachService';
 import PictureService from '~/services/api/PictureService';
+import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Swal from 'sweetalert2';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
@@ -82,6 +89,7 @@ export default {
                 DonGia: 0,
                 SoLuongTon: 0,
                 Anh: null,
+                NamXuatBan: 2000,
                 Disabled: 0
             },
             dataerror: {
@@ -89,12 +97,27 @@ export default {
             TheLoaiOption: [],
             NhaXuatBanOption: [],
             TacGiaOption: [],
+            quyen: 9
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.getRolePermission();
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         async confirmAndCreate() {
             const confirmResult = await Swal.fire({
                 title: 'Xác nhận thêm?',

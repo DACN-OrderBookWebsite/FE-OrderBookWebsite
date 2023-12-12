@@ -23,9 +23,10 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/client-only.js', mode: 'client' },
+    '~/plugins/cart.js',
     '~/plugins/currencyFormatter.js',
-    { src: '~/plugins/client-only.js', mode: 'client' }
-    
+    '~/plugins/login.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

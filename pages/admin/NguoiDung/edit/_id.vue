@@ -90,6 +90,7 @@
 
 <script>
 import NguoiDungService from "~/services/api/NguoiDungService";
+import PhanQuyenService from "~/services/api/PhanQuyenService";
 import PictureService from "~/services/api/PictureService";
 import Swal from "sweetalert2";
 import Header from "../../../../components/Header";
@@ -116,13 +117,28 @@ export default {
                 idChucVu: "",
             },
             ChucVuOption: [],
+            quyen: 2
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.fetch();
         await this.getEdit();
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         async fetch() {
             try {
                 const response = await NguoiDungService.getItem(this.$axios, this.$route.params.id);

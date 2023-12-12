@@ -23,5 +23,11 @@ export default {
     resetPassword(axios, userId, MatKhau, MatKhau_confirmation) {
       return axios.put(`/api/NguoiDung/${userId}/changePassword`, { MatKhau, MatKhau_confirmation });
     },
+    checkLogin(axios, username, password) {
+      return axios.get(`/api/NguoiDung/${username}/${password}/checkLogin`);
+    },
+    getDataByTenDangNhap(axios, username) {
+      return axios.get(`/api/NguoiDung/${username}/getDataByTenDangNhap`);
+    },
   };
   
