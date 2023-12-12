@@ -120,6 +120,7 @@
 import SachService from '~/services/api/SachService';
 import HoaDonService from '~/services/api/HoaDonService';
 import ChiTietHoaDonService from '~/services/api/ChiTietHoaDonService';
+import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
 import Swal from "sweetalert2";
@@ -159,10 +160,11 @@ export default {
             dataerror: {},
             selectedDate: new Date(),
             selectedTime: '00:00:00',
-            NhaCungCapOption: []
+            quyen: 12
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.loadSelectedbox();
         await this.fetchHoaDon();
         await this.fetch();
@@ -173,16 +175,29 @@ export default {
     computed: {
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         // async getHoaDon() {
         //     const response = await HoaDonService.getItem(this.$axios, this.$route.params.id);
         //     this.dataHoaDon = response;
         // },
-        getCurrentStaff(){
-            try{
+        getCurrentStaff() {
+            try {
                 const response = this.$login.getLogin();
                 this.data.idNhanVien = response.length !== 0 ? response[0].id : null;
                 console.log(response);
-            }catch{
+            } catch {
                 console.log('error không ai đăng nhập');
             }
         },
@@ -192,19 +207,6 @@ export default {
             const response2 = await ChiTietHoaDonService.calculateTongTienOfHoaDon(this.$axios, this.$route.params.id);
             this.dataHoaDon.TongTien = response2.data.TongTien;
             await HoaDonService.update(this.$axios, this.$route.params.id, this.dataHoaDon);
-        },
-        async loadSelectedbox() {
-            try {
-                const response = await HoaDonService.getPermission(this.$axios);
-                this.NhaCungCapOption = response.data.NhaCungCap.map((item) => {
-                    return {
-                        value: item.id,
-                        text: item.name,
-                    };
-                });
-            } catch (error) {
-                console.error(error);
-            }
         },
         formatTrangThai(idTrangThai) {
             return idTrangThai === 1 ? 'Chưa xác nhận' : idTrangThai === 2 ? 'Đã xác nhận' : idTrangThai === 3 ? 'Chưa thanh toán' : 'Hoàn thành';

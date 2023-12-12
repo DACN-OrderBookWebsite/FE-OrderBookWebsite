@@ -40,6 +40,7 @@ import SachService from '~/services/api/SachService';
 import PhieuNhapService from '~/services/api/PhieuNhapService';
 import ChiTietPhieuNhapService from '~/services/api/ChiTietPhieuNhapService';
 import TrangThaiDonHangService from '~/services/api/TrangThaiDonHangService';
+import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import Swal from "sweetalert2";
@@ -82,12 +83,14 @@ export default {
                 NhanVien: "",
                 NhaCungCap: ""
             },
-            dataSanPham:{
-                SoLuongTon:0
-            }
+            dataSanPham: {
+                SoLuongTon: 0
+            },
+            quyen: 11
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.loadSelectedbox();
         await this.fetch(1);
         this.getCurrentStaff();
@@ -95,21 +98,34 @@ export default {
     computed: {
     },
     methods: {
-        getCurrentStaff(){
-            try{
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
+        getCurrentStaff() {
+            try {
                 const response = this.$login.getLogin();
                 this.newData.idNhanVien = response.length !== 0 ? response[0].id : null;
                 console.log(response);
-            }catch{
+            } catch {
                 console.log('error không ai đăng nhập');
             }
         },
         async updateSoLuongSanPhamByPhieuNhap(idSanPham, SoLuong) {
             const response = await SachService.getItem(this.$axios, idSanPham);
-            console.log("123",response);
+            console.log("123", response);
             this.dataSanPham.SoLuongTon = response.SoLuongTon;
             this.dataSanPham.SoLuongTon += SoLuong;
-            console.log("456",this.dataSanPham);
+            console.log("456", this.dataSanPham);
             await SachService.updateSoLuongSanPhamByPhieuNhap(this.$axios, idSanPham, this.dataSanPham);
         },
         formatTrangThai(idTrangThai) {

@@ -31,6 +31,7 @@ import SachService from '~/services/api/SachService';
 import HoaDonService from '~/services/api/HoaDonService';
 import ChiTietHoaDonService from '~/services/api/ChiTietHoaDonService';
 import TrangThaiDonHangService from '~/services/api/TrangThaiDonHangService';
+import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import Swal from "sweetalert2";
@@ -65,36 +66,51 @@ export default {
                 NgayNhanHang: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 TongSoLuong: 0,
                 TongTien: 0,
-                isGroup:0,
-                MaSV:'',
-                TenSV:'',
-                SDT:'',
-                DiaChiNhanHang:'',
-                GhiChu:'',
+                isGroup: 0,
+                MaSV: '',
+                TenSV: '',
+                SDT: '',
+                DiaChiNhanHang: '',
+                GhiChu: '',
                 idTrangThai: 1,
                 idNhanVien: 1,
                 idKhachHang: 1
             },
             dataerror: {
             },
-            dataSanPham:{
-                SoLuongTon:0
-            }
+            dataSanPham: {
+                SoLuongTon: 0
+            },
+            quyen: 12
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.loadTrangThai();
         await this.fetch(1);
     },
     computed: {
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         async updateSoLuongSanPhamByHoaDon(idSanPham, SoLuong) {
             const response = await SachService.getItem(this.$axios, idSanPham);
-            console.log("123",response);
+            console.log("123", response);
             this.dataSanPham.SoLuongTon = response.SoLuongTon;
             this.dataSanPham.SoLuongTon -= SoLuong;
-            console.log("456",this.dataSanPham);
+            console.log("456", this.dataSanPham);
             await SachService.updateSoLuongSanPhamByPhieuNhap(this.$axios, idSanPham, this.dataSanPham);
         },
         formatTrangThai(idTrangThai) {
@@ -241,7 +257,7 @@ export default {
                 );
             }
         },
-        add(){
+        add() {
             this.$router.push('/admin/XuatHang/create');
         }
     }

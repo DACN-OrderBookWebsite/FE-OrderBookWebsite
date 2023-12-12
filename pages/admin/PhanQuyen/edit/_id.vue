@@ -55,13 +55,28 @@ export default {
             },
             NhomOption: [],
             QuyenOption: [],
+            quyen: 5
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.getEdit();
         await this.fetch();
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         async fetch() {
             try {
                 const response = await PhanQuyenService.getItem(this.$axios, this.$route.params.id);

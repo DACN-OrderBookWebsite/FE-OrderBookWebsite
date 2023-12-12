@@ -11,10 +11,12 @@
                     <!-- Ngày nhận hàng -->
                     <b-form-group label="Ngày nhận hàng:" label-for="input-NgayNhanHang" class="d-flex align-items-center">
                         <b-form-datepicker v-model="selectedDate" placeholder="Chọn ngày" class="mb-2"
-                            @input="handleDateChange" :value="selectedDate" :disabled="dataPhieuNhap.idTrangThai === 4"></b-form-datepicker>
+                            @input="handleDateChange" :value="selectedDate"
+                            :disabled="dataPhieuNhap.idTrangThai === 4"></b-form-datepicker>
 
                         <b-form-timepicker v-model="selectedTime" placeholder="Chọn giờ" class="mb-2"
-                            @input="handleDateChange" :value="selectedTime" :disabled="dataPhieuNhap.idTrangThai === 4"></b-form-timepicker>
+                            @input="handleDateChange" :value="selectedTime"
+                            :disabled="dataPhieuNhap.idTrangThai === 4"></b-form-timepicker>
                     </b-form-group>
 
                     <!-- Trạng thái -->
@@ -25,7 +27,8 @@
                     <!-- Nhà cung cấp -->
                     <b-form-group label="Nhà cung cấp:" label-for="input-NhaCungCap" class="d-flex align-items-center">
                         <b-form-select id="input-NhaCungCap" v-model="dataPhieuNhap.idNhaCungCap" required
-                            :options="NhaCungCapOption" class="max-width-select" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-select>
+                            :options="NhaCungCapOption" class="max-width-select"
+                            :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-select>
                     </b-form-group>
 
                     <!-- Tổng số lượng -->
@@ -38,7 +41,8 @@
                         <span small class="text-danger">{{ dataPhieuNhap.TongTien }}</span>
                     </b-form-group>
 
-                    <b-button type="submit" variant="primary" :disabled="dataPhieuNhap.idTrangThai === 4">Cập nhật</b-button>
+                    <b-button type="submit" variant="primary" :disabled="dataPhieuNhap.idTrangThai === 4">Cập
+                        nhật</b-button>
                 </b-form>
             </div>
             <div class="horizontal-container">
@@ -53,7 +57,8 @@
                             <label>{{ formatDisabled(dataSanPham.item.Disabled) }}</label>
                         </template> -->
                         <template #cell(actions)="dataSanPham">
-                            <b-button size="sm" variant="primary" @click="insert(dataSanPham.item)" :disabled="dataPhieuNhap.idTrangThai !== 1">Thêm</b-button>
+                            <b-button size="sm" variant="primary" @click="insert(dataSanPham.item)"
+                                :disabled="dataPhieuNhap.idTrangThai !== 1">Thêm</b-button>
                         </template>
                     </b-table>
                 </div>
@@ -63,15 +68,17 @@
                     <b-table :items="dataChiTiet" :fields="fieldsChiTiet" class="text-center">
                         <template #cell(SoLuong)="dataChiTiet">
                             <b-form-input v-model="dataChiTiet.item.SoLuong" type="number" min="1"
-                                @blur="handleBlur(dataChiTiet.item)" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-input>
+                                @blur="handleBlur(dataChiTiet.item)"
+                                :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-input>
                         </template>
                         <template #cell(DonGiaNhap)="dataChiTiet">
                             <b-form-input v-model="dataChiTiet.item.DonGiaNhap" type="number" min="0"
-                                @blur="handleBlur(dataChiTiet.item)" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-input>
+                                @blur="handleBlur(dataChiTiet.item)"
+                                :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-input>
                         </template>
                         <template #cell(actions)="dataChiTiet">
-                            <b-button size="sm" variant="danger"
-                                @click="confirmAndRemove(dataChiTiet.item.id)" :disabled="dataPhieuNhap.idTrangThai !== 1">Xóa</b-button>
+                            <b-button size="sm" variant="danger" @click="confirmAndRemove(dataChiTiet.item.id)"
+                                :disabled="dataPhieuNhap.idTrangThai !== 1">Xóa</b-button>
                         </template>
                     </b-table>
                 </div>
@@ -88,6 +95,7 @@
 import SachService from '~/services/api/SachService';
 import PhieuNhapService from '~/services/api/PhieuNhapService';
 import ChiTietPhieuNhapService from '~/services/api/ChiTietPhieuNhapService';
+import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
 import Swal from "sweetalert2";
@@ -133,10 +141,12 @@ export default {
             },
             selectedDate: new Date(),
             selectedTime: '00:00:00',
-            NhaCungCapOption: []
+            NhaCungCapOption: [],
+            quyen: 11
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.loadSelectedbox();
         await this.fetchPhieuNhap();
         await this.fetch();
@@ -147,19 +157,32 @@ export default {
     computed: {
     },
     methods: {
-        getCurrentStaff(){
-            try{
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
+        getCurrentStaff() {
+            try {
                 const response = this.$login.getLogin();
                 this.dataPhieuNhap.idNhanVien = response.length !== 0 ? response[0].id : null;
-            }catch{
+            } catch {
                 this.$router.push('/');
             }
         },
-        async getPhieuNhap(){
+        async getPhieuNhap() {
             const response = await PhieuNhapService.getItem(this.$axios, this.$route.params.id);
             this.dataPhieuNhap = response;
         },
-        async updateTongSoLuong_TongTien(){
+        async updateTongSoLuong_TongTien() {
             const response = await ChiTietPhieuNhapService.sumSoLuongOfPhieuNhap(this.$axios, this.$route.params.id);
             this.dataPhieuNhap.TongSoLuong = response.data.TongSoLuong;
             const response2 = await ChiTietPhieuNhapService.calculateTongTienOfPhieuNhap(this.$axios, this.$route.params.id);
@@ -355,6 +378,5 @@ export default {
     /* Thêm padding để làm đẹp */
     border: 1px solid #ccc;
     /* Thêm đường viền cho thẩm mỹ */
-}
-</style>
+}</style>
     
