@@ -25,6 +25,7 @@ export default {
   plugins: [
     { src: '~/plugins/client-only.js', mode: 'client' },
     '~/plugins/cart.js',
+    '~/plugins/login.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

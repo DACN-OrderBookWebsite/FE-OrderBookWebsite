@@ -5,40 +5,71 @@
             <!-- <div class="h1 text-center">Danh sách Sách</div>
         <b-button @click="add">Thêm</b-button> -->
             <div class="user-create-container border">
-                <div class="h1 text-center">Cập nhật phiếu nhập số {{ this.$route.params.id }}</div>
+                <div class="h1 text-center">Cập nhật hóa đơn số {{ this.$route.params.id }}</div>
                 <b-form @submit.prevent="confirmUpdate">
 
                     <!-- Ngày nhận hàng -->
                     <b-form-group label="Ngày nhận hàng:" label-for="input-NgayNhanHang" class="d-flex align-items-center">
                         <b-form-datepicker v-model="selectedDate" placeholder="Chọn ngày" class="mb-2"
-                            @input="handleDateChange" :value="selectedDate" :disabled="dataPhieuNhap.idTrangThai === 4"></b-form-datepicker>
+                            @input="handleDateChange" :value="selectedDate"
+                            :disabled="dataHoaDon.idTrangThai === 4"></b-form-datepicker>
 
                         <b-form-timepicker v-model="selectedTime" placeholder="Chọn giờ" class="mb-2"
-                            @input="handleDateChange" :value="selectedTime" :disabled="dataPhieuNhap.idTrangThai === 4"></b-form-timepicker>
+                            @input="handleDateChange" :value="selectedTime"
+                            :disabled="dataHoaDon.idTrangThai === 4"></b-form-timepicker>
                     </b-form-group>
 
                     <!-- Trạng thái -->
                     <b-form-group label="Trạng thái:" label-for="input-TrangThai" class="d-flex align-items-center">
-                        <span small class="text-danger">{{ formatTrangThai(dataPhieuNhap.idTrangThai) }}</span>
+                        <span small class="text-danger">{{ formatTrangThai(dataHoaDon.idTrangThai) }}</span>
                     </b-form-group>
 
-                    <!-- Nhà cung cấp -->
-                    <b-form-group label="Nhà cung cấp:" label-for="input-NhaCungCap" class="d-flex align-items-center">
-                        <b-form-select id="input-NhaCungCap" v-model="dataPhieuNhap.idNhaCungCap" required
-                            :options="NhaCungCapOption" class="max-width-select" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-select>
+                    <!-- Mã sinh viên -->
+                    <b-form-group label="Mã sinh viên:" label-for="input-name">
+                        <b-form-input id="input-name" v-model="dataHoaDon.MaSV" required placeholder="Nhập Mã sinh viên"
+                            :disabled="dataHoaDon.idTrangThai === 4"></b-form-input>
+                        <small v-if="dataerror.MaSV" class="text-danger">{{ dataerror.MaSV }}</small>
+                    </b-form-group>
+
+                    <!-- Tên -->
+                    <b-form-group label="Tên:" label-for="input-name">
+                        <b-form-input id="input-name" v-model="dataHoaDon.TenSV" required placeholder="Nhập tên"
+                            :disabled="dataHoaDon.idTrangThai === 4"></b-form-input>
+                        <small v-if="dataerror.TenSV" class="text-danger">{{ dataerror.TenSV }}</small>
+                    </b-form-group>
+
+                    <!-- Số điện thoại -->
+                    <b-form-group label="Số điện thoại:" label-for="input-name">
+                        <b-form-input id="input-name" v-model="dataHoaDon.SDT" required placeholder="Nhập số điện thoại"
+                            :disabled="dataHoaDon.idTrangThai === 4"></b-form-input>
+                        <small v-if="dataerror.SDT" class="text-danger">{{ dataerror.SDT }}</small>
+                    </b-form-group>
+
+                    <!-- Địa chỉ nhận hàng -->
+                    <b-form-group label="Địa chỉ nhận hàng:" label-for="input-name">
+                        <b-form-input id="input-name" v-model="dataHoaDon.DiaChiNhanHang" required
+                            placeholder="Nhập Địa chỉ nhận hàng" :disabled="dataHoaDon.idTrangThai === 4"></b-form-input>
+                        <small v-if="dataerror.DiaChiNhanHang" class="text-danger">{{ dataerror.DiaChiNhanHang }}</small>
+                    </b-form-group>
+
+                    <!-- Ghi chú -->
+                    <b-form-group label="Ghi chú:" label-for="input-name">
+                        <b-form-input id="input-name" v-model="dataHoaDon.GhiChu" placeholder="Nhập Ghi chú"
+                            :disabled="dataHoaDon.idTrangThai === 4"></b-form-input>
+                        <small v-if="dataerror.GhiChu" class="text-danger">{{ dataerror.GhiChu }}</small>
                     </b-form-group>
 
                     <!-- Tổng số lượng -->
                     <b-form-group label="Tổng số lượng:" label-for="input-TongSoLuong" class="d-flex align-items-center">
-                        <span small class="text-danger">{{ dataPhieuNhap.TongSoLuong }}</span>
+                        <span small class="text-danger">{{ dataHoaDon.TongSoLuong }}</span>
                     </b-form-group>
 
                     <!-- Tổng tiền-->
                     <b-form-group label="Tổng tiền:" label-for="input-TongTien" class="d-flex align-items-center">
-                        <span small class="text-danger">{{ dataPhieuNhap.TongTien }}</span>
+                        <span small class="text-danger">{{ dataHoaDon.TongTien }}</span>
                     </b-form-group>
 
-                    <b-button type="submit" variant="primary" :disabled="dataPhieuNhap.idTrangThai === 4">Cập nhật</b-button>
+                    <b-button type="submit" variant="primary" :disabled="dataHoaDon.idTrangThai === 4">Cập nhật</b-button>
                 </b-form>
             </div>
             <div class="horizontal-container">
@@ -53,25 +84,26 @@
                             <label>{{ formatDisabled(dataSanPham.item.Disabled) }}</label>
                         </template> -->
                         <template #cell(actions)="dataSanPham">
-                            <b-button size="sm" variant="primary" @click="insert(dataSanPham.item)" :disabled="dataPhieuNhap.idTrangThai !== 1">Thêm</b-button>
+                            <b-button size="sm" variant="primary" @click="insert(dataSanPham.item)"
+                                :disabled="dataHoaDon.idTrangThai !== 1">Thêm</b-button>
                         </template>
                     </b-table>
                 </div>
 
                 <div class="right-table">
-                    <div class="h1 text-center">Chi tiết phiếu nhập</div>
+                    <div class="h1 text-center">Chi tiết hóa đơn</div>
                     <b-table :items="dataChiTiet" :fields="fieldsChiTiet" class="text-center">
                         <template #cell(SoLuong)="dataChiTiet">
                             <b-form-input v-model="dataChiTiet.item.SoLuong" type="number" min="1"
-                                @blur="handleBlur(dataChiTiet.item)" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-input>
+                                @blur="handleBlur(dataChiTiet.item)"
+                                :disabled="dataHoaDon.idTrangThai !== 1"></b-form-input>
                         </template>
-                        <template #cell(DonGiaNhap)="dataChiTiet">
-                            <b-form-input v-model="dataChiTiet.item.DonGiaNhap" type="number" min="0"
-                                @blur="handleBlur(dataChiTiet.item)" :disabled="dataPhieuNhap.idTrangThai !== 1"></b-form-input>
+                        <template #cell(DonGia)="dataChiTiet">
+                            <b-form-input v-model="dataChiTiet.item.DonGia" type="number" min="0" disabled></b-form-input>
                         </template>
                         <template #cell(actions)="dataChiTiet">
-                            <b-button size="sm" variant="danger"
-                                @click="confirmAndRemove(dataChiTiet.item.id)" :disabled="dataPhieuNhap.idTrangThai !== 1">Xóa</b-button>
+                            <b-button size="sm" variant="danger" @click="confirmAndRemove(dataChiTiet.item.id)"
+                                :disabled="dataHoaDon.idTrangThai !== 1">Xóa</b-button>
                         </template>
                     </b-table>
                 </div>
@@ -86,8 +118,8 @@
     
 <script>
 import SachService from '~/services/api/SachService';
-import PhieuNhapService from '~/services/api/PhieuNhapService';
-import ChiTietPhieuNhapService from '~/services/api/ChiTietPhieuNhapService';
+import HoaDonService from '~/services/api/HoaDonService';
+import ChiTietHoaDonService from '~/services/api/ChiTietHoaDonService';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
 import Swal from "sweetalert2";
@@ -113,24 +145,18 @@ export default {
             fieldsChiTiet: [
                 { key: 'name', label: 'Tên' },
                 { key: 'SoLuong', label: 'Số lượng' },
-                { key: 'DonGiaNhap', label: 'Đơn giá nhập' },
+                { key: 'DonGia', label: 'Đơn giá' },
                 { key: 'actions', label: 'Hành Động' }
             ],
             newDataChiTiet: {
                 SoLuong: 1,
-                DonGiaNhap: 0,
+                DonGia: 0,
                 idSanPham: 0,
-                idPhieuNhap: this.$route.params.id
+                idHoaDon: this.$route.params.id
             },
-            dataPhieuNhap: {
-                NgayNhap: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-                NgayNhanHang: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-                TongSoLuong: 0,
-                TongTien: 0,
-                idTrangThai: 1,
-                idNhanVien: 1,
-                idNhaCungCap: 1
+            dataHoaDon: {
             },
+            dataerror: {},
             selectedDate: new Date(),
             selectedTime: '00:00:00',
             NhaCungCapOption: []
@@ -138,37 +164,38 @@ export default {
     },
     async mounted() {
         await this.loadSelectedbox();
-        await this.fetchPhieuNhap();
+        await this.fetchHoaDon();
         await this.fetch();
         await this.fetchChiTiet();
-        await this.getPhieuNhap();
+        // await this.getHoaDon();
         this.getCurrentStaff();
     },
     computed: {
     },
     methods: {
+        // async getHoaDon() {
+        //     const response = await HoaDonService.getItem(this.$axios, this.$route.params.id);
+        //     this.dataHoaDon = response;
+        // },
         getCurrentStaff(){
             try{
                 const response = this.$login.getLogin();
-                this.dataPhieuNhap.idNhanVien = response.length !== 0 ? response[0].id : null;
+                this.data.idNhanVien = response.length !== 0 ? response[0].id : null;
+                console.log(response);
             }catch{
-                this.$router.push('/');
+                console.log('error không ai đăng nhập');
             }
         },
-        async getPhieuNhap(){
-            const response = await PhieuNhapService.getItem(this.$axios, this.$route.params.id);
-            this.dataPhieuNhap = response;
-        },
-        async updateTongSoLuong_TongTien(){
-            const response = await ChiTietPhieuNhapService.sumSoLuongOfPhieuNhap(this.$axios, this.$route.params.id);
-            this.dataPhieuNhap.TongSoLuong = response.data.TongSoLuong;
-            const response2 = await ChiTietPhieuNhapService.calculateTongTienOfPhieuNhap(this.$axios, this.$route.params.id);
-            this.dataPhieuNhap.TongTien = response2.data.TongTien;
-            await PhieuNhapService.update(this.$axios, this.$route.params.id, this.dataPhieuNhap);
+        async updateTongSoLuong_TongTien() {
+            const response = await ChiTietHoaDonService.sumSoLuongOfHoaDon(this.$axios, this.$route.params.id);
+            this.dataHoaDon.TongSoLuong = response.data.TongSoLuong;
+            const response2 = await ChiTietHoaDonService.calculateTongTienOfHoaDon(this.$axios, this.$route.params.id);
+            this.dataHoaDon.TongTien = response2.data.TongTien;
+            await HoaDonService.update(this.$axios, this.$route.params.id, this.dataHoaDon);
         },
         async loadSelectedbox() {
             try {
-                const response = await PhieuNhapService.getPermission(this.$axios);
+                const response = await HoaDonService.getPermission(this.$axios);
                 this.NhaCungCapOption = response.data.NhaCungCap.map((item) => {
                     return {
                         value: item.id,
@@ -183,14 +210,14 @@ export default {
             return idTrangThai === 1 ? 'Chưa xác nhận' : idTrangThai === 2 ? 'Đã xác nhận' : idTrangThai === 3 ? 'Chưa thanh toán' : 'Hoàn thành';
         },
         handleDateChange() {
-            this.dataPhieuNhap.NgayNhanHang = `${this.selectedDate} ${this.selectedTime}`;
+            this.dataHoaDon.NgayNhanHang = `${this.selectedDate} ${this.selectedTime}`;
         },
-        async fetchPhieuNhap() {
+        async fetchHoaDon() {
             try {
-                const response = await PhieuNhapService.getItem(this.$axios, this.$route.params.id);
-                this.dataPhieuNhap = response;
-                this.selectedDate = moment(this.dataPhieuNhap.NgayNhanHang).format('YYYY-MM-DD');
-                this.selectedTime = moment(this.dataPhieuNhap.NgayNhanHang).format('hh:mm:ss');
+                const response = await HoaDonService.getItem(this.$axios, this.$route.params.id);
+                this.dataHoaDon = response;
+                this.selectedDate = moment(this.dataHoaDon.NgayNhanHang).format('YYYY-MM-DD');
+                this.selectedTime = moment(this.dataHoaDon.NgayNhanHang).format('hh:mm:ss');
             } catch (error) {
                 console.error(error);
             }
@@ -205,7 +232,7 @@ export default {
         },
         async fetchChiTiet() {
             try {
-                const response = await ChiTietPhieuNhapService.getDataByidPhieuNhapAndNameOfSanPham(this.$axios, this.$route.params.id);
+                const response = await ChiTietHoaDonService.getDataByidHoaDonAndNameOfSanPham(this.$axios, this.$route.params.id);
                 this.dataChiTiet = response.data;
             } catch (error) {
                 console.error(error);
@@ -216,7 +243,7 @@ export default {
         },
         async handleBlur(item) {
             try {
-                await ChiTietPhieuNhapService.update(this.$axios, item.id, item);
+                await ChiTietHoaDonService.update(this.$axios, item.id, item);
                 await this.updateTongSoLuong_TongTien();
             } catch (error) {
                 console.log(error);
@@ -229,17 +256,18 @@ export default {
         },
         async insert(item) {
             try {
-                const response = await ChiTietPhieuNhapService.getDataByCheckSanPhamIsInsertedToPhieuNhap(this.$axios, this.$route.params.id, item.id);
+                const response = await ChiTietHoaDonService.getDataByCheckSanPhamIsInsertedToHoaDon(this.$axios, this.$route.params.id, item.id);
                 if (response.data.length != 0) {
                     this.newDataChiTiet.id = response.data[0].id;
                     this.newDataChiTiet.SoLuong = response.data[0].SoLuong + 1;
-                    this.newDataChiTiet.DonGiaNhap = response.data[0].DonGiaNhap;
+                    this.newDataChiTiet.DonGia = response.data[0].DonGia;
                     this.newDataChiTiet.idSanPham = response.data[0].idSanPham;
-                    this.newDataChiTiet.idPhieuNhap = response.data[0].idPhieuNhap;
-                    await ChiTietPhieuNhapService.update(this.$axios, this.newDataChiTiet.id, this.newDataChiTiet);
+                    this.newDataChiTiet.idHoaDon = response.data[0].idHoaDon;
+                    await ChiTietHoaDonService.update(this.$axios, this.newDataChiTiet.id, this.newDataChiTiet);
                 } else {
                     this.newDataChiTiet.idSanPham = item.id;
-                    await ChiTietPhieuNhapService.insert(this.$axios, this.newDataChiTiet);
+                    this.newDataChiTiet.DonGia = item.DonGia;
+                    await ChiTietHoaDonService.insert(this.$axios, this.newDataChiTiet);
                 }
                 this.updateTongSoLuong_TongTien();
                 await this.fetchChiTiet();
@@ -270,7 +298,7 @@ export default {
         },
         async remove(id) {
             try {
-                await ChiTietPhieuNhapService.delete(this.$axios, id);
+                await ChiTietHoaDonService.delete(this.$axios, id);
                 await this.updateTongSoLuong_TongTien();
                 await this.fetchChiTiet();
                 Swal.fire(
@@ -305,7 +333,7 @@ export default {
         },
         async update() {
             try {
-                await PhieuNhapService.update(this.$axios, this.$route.params.id, this.dataPhieuNhap);
+                await HoaDonService.update(this.$axios, this.$route.params.id, this.dataHoaDon);
                 Swal.fire(
                     'Cập nhật!',
                     'Thông tin đã được cập nhật thành công.',

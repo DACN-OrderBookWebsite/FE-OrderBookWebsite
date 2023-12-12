@@ -40,6 +40,9 @@ import HeroSection from "../../components/HeroSection";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import auth from "~/services/api/auth"; 
+import NguoiDungService from "~/services/api/NguoiDungService"; 
+import Swal from 'sweetalert2';
+
 export default {
   name: 'login',
   components: { HeroSection, Footer, Header },
@@ -49,19 +52,55 @@ export default {
       password: '',
     };
   },
+  mounted(){
+    this.fetch();
+  },
   methods: {
+    fetch(){
+      const response = this.$login.getLogin();
+      if(response.length !== 0)
+      {
+        this.$router.push('/');
+      }
+    },
     async onSubmit() {
       try {
-        const credentials = {
-          TenDangNhap: this.username,
-          MatKhau: this.password,
-        };
-        const response = await auth.login(this.$axios,credentials );
-        console.error("111111111:", response);  
-        if (response.data.user.idChucVu === 1) {
-          this.$router.push('/admin');
-        } else {
-          this.$router.push('/');
+        // const credentials = {
+        //   TenDangNhap: this.username,
+        //   MatKhau: this.password,
+        // };
+        // const response = await auth.login(this.$axios,credentials );
+        // console.error("111111111:", response);  
+        // if (response.data.user.idChucVu === 1) {
+        //   this.$router.push('/admin');
+        // } else {
+        //   this.$router.push('/');
+        // }
+        const response = await NguoiDungService.checkLogin(this.$axios, this.username, this.password);
+        if(response.data.success === true)
+        {
+          const NguoiDung = await NguoiDungService.getDataByTenDangNhap(this.$axios, this.username);
+          if(NguoiDung.data.Disabled === 1)
+          {
+            Swal.fire(
+            'Thông báo!',
+            'Tài khoản của bạn đã bị khóa.',
+            'warning'
+          );
+          }
+          else
+          {
+            this.$login.addToLogin(NguoiDung.data);
+            this.$router.push('/');
+          }
+        }
+        else
+        {
+          Swal.fire(
+            'Thông báo!',
+            'Sai tên đăng nhập hoặc mật khẩu.',
+            'error'
+          );
         }
       } catch (error) {
         console.error("Error during login:", error);

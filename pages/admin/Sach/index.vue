@@ -40,6 +40,7 @@ export default {
         { key: 'DonGia', label: 'Đơn giá' },
         { key: 'SoLuongTon', label: 'Số lượng tồn' },
         { key: 'Anh', label: 'Ảnh' },
+        { key: 'NamXuatBan', label: 'NamXuatBan' },
         { key: 'Disabled', label: 'Kinh doanh' },
         { key: 'actions', label: 'Hành Động' }
       ]

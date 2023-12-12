@@ -43,6 +43,12 @@
                         placeholder="Nhập đơn giá" disabled></b-form-input>
                 </b-form-group>
 
+                 <!-- Năm xuất bản -->
+                 <b-form-group label="Năm xuất bản:" label-for="input-number">
+                    <b-form-input id="input-number" v-model="data.NamXuatBan" type="number" step="1" required
+                        placeholder="Nhập năm xuất bản"></b-form-input>
+                </b-form-group>
+
                 <!-- Trạng Thái Hoạt Động -->
                 <b-form-group label="Trạng Thái Hoạt Động:" label-for="input-disabled">
                     <b-form-checkbox id="input-disabled" v-model="data.Disabled">
