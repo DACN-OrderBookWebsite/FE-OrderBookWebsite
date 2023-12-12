@@ -28,7 +28,8 @@
 
                 <!-- Mã sinh viên -->
                 <b-form-group label="Mã sinh viên:" label-for="input-name">
-                    <b-form-input id="input-name" v-model="data.MaSV" required placeholder="Nhập Mã sinh viên"></b-form-input>
+                    <b-form-input id="input-name" v-model="data.MaSV" required
+                        placeholder="Nhập Mã sinh viên"></b-form-input>
                     <small v-if="dataerror.MaSV" class="text-danger">{{ dataerror.MaSV }}</small>
                 </b-form-group>
 
@@ -40,13 +41,15 @@
 
                 <!-- Số điện thoại -->
                 <b-form-group label="Số điện thoại:" label-for="input-name">
-                    <b-form-input id="input-name" v-model="data.SDT" required placeholder="Nhập số điện thoại"></b-form-input>
+                    <b-form-input id="input-name" v-model="data.SDT" required
+                        placeholder="Nhập số điện thoại"></b-form-input>
                     <small v-if="dataerror.SDT" class="text-danger">{{ dataerror.SDT }}</small>
                 </b-form-group>
 
                 <!-- Địa chỉ nhận hàng -->
                 <b-form-group label="Địa chỉ nhận hàng:" label-for="input-name">
-                    <b-form-input id="input-name" v-model="data.DiaChiNhanHang" required placeholder="Nhập Địa chỉ nhận hàng"></b-form-input>
+                    <b-form-input id="input-name" v-model="data.DiaChiNhanHang" required
+                        placeholder="Nhập Địa chỉ nhận hàng"></b-form-input>
                     <small v-if="dataerror.DiaChiNhanHang" class="text-danger">{{ dataerror.DiaChiNhanHang }}</small>
                 </b-form-group>
 
@@ -66,6 +69,7 @@
   
 <script>
 import HoaDonService from '~/services/api/HoaDonService';
+import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Swal from 'sweetalert2';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
@@ -79,12 +83,12 @@ export default {
                 NgayNhanHang: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 TongSoLuong: 0,
                 TongTien: 0,
-                isGroup:0,
-                MaSV:'',
-                TenSV:'',
-                SDT:'',
-                DiaChiNhanHang:'',
-                GhiChu:'',
+                isGroup: 0,
+                MaSV: '',
+                TenSV: '',
+                SDT: '',
+                DiaChiNhanHang: '',
+                GhiChu: '',
                 idTrangThai: 1,
                 idNhanVien: 1,
                 idKhachHang: 1
@@ -93,12 +97,27 @@ export default {
             },
             selectedDate: new Date(),
             selectedTime: '00:00:00',
+            quyen: 12
         };
     },
     async mounted() {
+        await this.checkQuyen();
         this.getCurrentStaff();
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         handleDateChange() {
             this.data.NgayNhanHang = `${this.selectedDate} ${this.selectedTime}`;
         },
@@ -140,12 +159,12 @@ export default {
                 );
             }
         },
-        getCurrentStaff(){
-            try{
+        getCurrentStaff() {
+            try {
                 const response = this.$login.getLogin();
                 this.data.idNhanVien = response.length !== 0 ? response[0].id : null;
                 console.log(response);
-            }catch{
+            } catch {
                 console.log('error không ai đăng nhập');
             }
         }

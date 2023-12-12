@@ -43,8 +43,8 @@
                         placeholder="Nhập đơn giá" disabled></b-form-input>
                 </b-form-group>
 
-                 <!-- Năm xuất bản -->
-                 <b-form-group label="Năm xuất bản:" label-for="input-number">
+                <!-- Năm xuất bản -->
+                <b-form-group label="Năm xuất bản:" label-for="input-number">
                     <b-form-input id="input-number" v-model="data.NamXuatBan" type="number" step="1" required
                         placeholder="Nhập năm xuất bản"></b-form-input>
                 </b-form-group>
@@ -73,6 +73,7 @@
 <script>
 import SachService from '~/services/api/SachService';
 import PictureService from '~/services/api/PictureService';
+import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Swal from 'sweetalert2';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
@@ -87,13 +88,28 @@ export default {
             TheLoaiOption: [],
             NhaXuatBanOption: [],
             TacGiaOption: [],
+            quyen: 9
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.getEdit();
         await this.fetch();
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         async fetch() {
             try {
                 const response = await SachService.getItem(this.$axios, this.$route.params.id);
@@ -104,39 +120,39 @@ export default {
             }
         },
         confirmUpdate() {
-        Swal.fire({
-          title: 'Xác nhận cập nhật',
-          text: "Bạn có chắc chắn muốn cập nhật thông tin?",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Có, cập nhật!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            console.log(this.data);
-            this.update();
-          }
-        });
-      },
-      async update() {
-        try {  
-          await SachService.update(this.$axios, this.$route.params.id, this.data);
-          Swal.fire(
-            'Cập nhật!',
-            'Thông tin đã được cập nhật thành công.',
-            'success'
-          );
-          this.$router.push('/admin/Sach');
-        } catch (error) {
-          this.dataerror = error.response.data.errors;
-          Swal.fire(
-            'Lỗi!',
-            'Có lỗi xảy ra khi cập nhật thông tin.',
-            'error'
-          );
-        }
-      },
+            Swal.fire({
+                title: 'Xác nhận cập nhật',
+                text: "Bạn có chắc chắn muốn cập nhật thông tin?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có, cập nhật!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log(this.data);
+                    this.update();
+                }
+            });
+        },
+        async update() {
+            try {
+                await SachService.update(this.$axios, this.$route.params.id, this.data);
+                Swal.fire(
+                    'Cập nhật!',
+                    'Thông tin đã được cập nhật thành công.',
+                    'success'
+                );
+                this.$router.push('/admin/Sach');
+            } catch (error) {
+                this.dataerror = error.response.data.errors;
+                Swal.fire(
+                    'Lỗi!',
+                    'Có lỗi xảy ra khi cập nhật thông tin.',
+                    'error'
+                );
+            }
+        },
         async getEdit() {
             try {
                 const response = await SachService.getEdit(this.$axios, this.$route.params.id);

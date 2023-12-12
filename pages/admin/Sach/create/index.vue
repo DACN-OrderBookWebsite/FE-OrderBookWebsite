@@ -73,6 +73,7 @@
 <script>
 import SachService from '~/services/api/SachService';
 import PictureService from '~/services/api/PictureService';
+import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Swal from 'sweetalert2';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
@@ -96,12 +97,27 @@ export default {
             TheLoaiOption: [],
             NhaXuatBanOption: [],
             TacGiaOption: [],
+            quyen: 9
         };
     },
     async mounted() {
+        await this.checkQuyen();
         await this.getRolePermission();
     },
     methods: {
+        async checkQuyen() {
+            const response = this.$login.getLogin();
+            if (response[0].id === null) {
+                this.$router.push('/loginkeycloak');
+            }
+            else {
+                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
+                console.log(kq.data.result);
+                if (kq.data.result === false) {
+                    this.$router.push('/');
+                }
+            }
+        },
         async confirmAndCreate() {
             const confirmResult = await Swal.fire({
                 title: 'Xác nhận thêm?',

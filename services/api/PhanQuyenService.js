@@ -20,6 +20,8 @@ export default {
     getEdit(axios, id) {
       return axios.get(`/api/PhanQuyen/${id}/edit`);
     },
-    
+    checkQuyen(axios, idNguoiDung, idQuyen){
+      return axios.get(`api/PhanQuyen/${idNguoiDung}/${idQuyen}/checkQuyen`);
+    },
   };
   
