@@ -23,7 +23,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/currencyFormatter.js',
     { src: '~/plugins/client-only.js', mode: 'client' }
+    
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -113,6 +115,11 @@ export default {
         path: '/shoppingCart',
         name: 'ShoppingCart',
         component: '~/pages/ShoppingCart'
+      },
+      {
+        path: '/TheLoai/:id',
+        name: 'TheLoai',
+        component: '~/pages/TheLoai/_id.vue'
       },
       // Các route khác
 

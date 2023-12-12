@@ -5,7 +5,7 @@
     </div>
     <b-card-body>
       <h4 class="product-name">{{ product.name }}</h4>
-      <div class="product-price">{{ product.price | currency }}</div>
+      <div class="product-price">{{ $formatCurrencyVND(product.price) }}</div>
     </b-card-body>
     <div class="center-align">
       <b-button variant="warning" class="add-to-cart-button">Thêm vào giỏ</b-button>
@@ -20,11 +20,6 @@ export default {
     product: {
       type: Object,
       required: true
-    }
-  },
-  filters: {
-    currency(value) {
-      return `$${parseFloat(value).toFixed(2)}`;
     }
   }
 }
