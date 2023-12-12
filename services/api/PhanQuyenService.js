@@ -20,5 +20,6 @@ export default {
     getEdit(axios, id) {
       return axios.get(`/api/PhanQuyen/${id}/edit`);
     },
+    
   };
   

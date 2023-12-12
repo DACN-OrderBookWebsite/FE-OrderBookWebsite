@@ -2,17 +2,8 @@
     <div>
         <Header></Header>
         <div id="table_content">
-            <div class="h1 text-center">Danh sách phiếu nhập</div>
-
-            <!-- Nhà cung cấp -->
-            <b-form-group label="Nhà cung cấp:" label-for="input-NhaCungCap" class="d-flex align-items-center">
-                <b-form-select id="input-NhaCungCap" v-model="newData.idNhaCungCap" required :options="NhaCungCapOption"
-                    class="max-width-select"></b-form-select>
-                <b-button @click="confirmAndCreate">Thêm</b-button>
-            </b-form-group>
-            <small v-if="dataerror.idNhaCungCap" class="text-danger">{{ dataerror.idNhaCungCap }}</small>
-
-
+            <div class="h1 text-center">Danh sách phiếu xuất</div>
+            <b-button @click="add">Thêm</b-button>
             <!-- Trạng thái -->
             <b-form-group label="Trạng thái:" label-for="input-TrangThai" class="d-flex align-items-center">
                 <b-form-select id="input-TrangThai" v-model="TrangThai" required :options="TrangThaiOption"
@@ -37,8 +28,8 @@
   
 <script>
 import SachService from '~/services/api/SachService';
-import PhieuNhapService from '~/services/api/PhieuNhapService';
-import ChiTietPhieuNhapService from '~/services/api/ChiTietPhieuNhapService';
+import HoaDonService from '~/services/api/HoaDonService';
+import ChiTietHoaDonService from '~/services/api/ChiTietHoaDonService';
 import TrangThaiDonHangService from '~/services/api/TrangThaiDonHangService';
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
@@ -52,35 +43,39 @@ export default {
             data: [],
             fields: [
                 { key: 'id', label: 'ID' },
-                { key: 'NgayNhap', label: 'Ngày nhập' },
+                { key: 'NgayXuat', label: 'Ngày xuất' },
                 { key: 'NgayNhanHang', label: 'Ngày nhận hàng' },
                 { key: 'TongSoLuong', label: 'Tổng số lượng' },
                 { key: 'TongTien', label: 'Tổng tiền' },
+                // { key: 'isGroup', label: 'Mua theo nhóm' },
+                { key: 'MaSV', label: 'Mã số sinh viên' },
+                { key: 'TenSV', label: 'Tên sinh viên' },
+                { key: 'SDT', label: 'Số điện thoại' },
+                { key: 'DiaChiNhanHang', label: 'Địa chỉ nhận hàng' },
+                { key: 'GhiChu', label: 'Ghi chú' },
                 { key: 'idTrangThai', label: 'Trạng thái' },
                 { key: 'idNhanVien', label: 'Nhân viên' },
-                { key: 'idNhaCungCap', label: 'Nhà cung cấp' },
+                { key: 'idKhachHang', label: 'Khách hàng' },
                 { key: 'actions', label: 'Hành Động' }
             ],
             TrangThai: 1,
             TrangThaiOption: [],
-            NhaCungCapOption: [],
             newData: {
-                NgayNhap: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                NgayXuat: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 NgayNhanHang: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 TongSoLuong: 0,
                 TongTien: 0,
+                isGroup:0,
+                MaSV:'',
+                TenSV:'',
+                SDT:'',
+                DiaChiNhanHang:'',
+                GhiChu:'',
                 idTrangThai: 1,
                 idNhanVien: 1,
-                idNhaCungCap: 1
+                idKhachHang: 1
             },
             dataerror: {
-                NgayNhap: "",
-                NgayNhanHang: "",
-                TongSoLuong: "",
-                TongTien: "",
-                TrangThai: "",
-                NhanVien: "",
-                NhaCungCap: ""
             },
             dataSanPham:{
                 SoLuongTon:0
@@ -88,27 +83,17 @@ export default {
         };
     },
     async mounted() {
-        await this.loadSelectedbox();
+        await this.loadTrangThai();
         await this.fetch(1);
-        this.getCurrentStaff();
     },
     computed: {
     },
     methods: {
-        getCurrentStaff(){
-            try{
-                const response = this.$login.getLogin();
-                this.newData.idNhanVien = response.length !== 0 ? response[0].id : null;
-                console.log(response);
-            }catch{
-                console.log('error không ai đăng nhập');
-            }
-        },
-        async updateSoLuongSanPhamByPhieuNhap(idSanPham, SoLuong) {
+        async updateSoLuongSanPhamByHoaDon(idSanPham, SoLuong) {
             const response = await SachService.getItem(this.$axios, idSanPham);
             console.log("123",response);
             this.dataSanPham.SoLuongTon = response.SoLuongTon;
-            this.dataSanPham.SoLuongTon += SoLuong;
+            this.dataSanPham.SoLuongTon -= SoLuong;
             console.log("456",this.dataSanPham);
             await SachService.updateSoLuongSanPhamByPhieuNhap(this.$axios, idSanPham, this.dataSanPham);
         },
@@ -132,85 +117,24 @@ export default {
                 console.error("Error while fetching create form:", error);
             }
         },
-        async loadSelectedbox() {
-            try {
-                const response = await PhieuNhapService.getPermission(this.$axios);
-                this.NhaCungCapOption = response.data.NhaCungCap.map((item) => {
-                    return {
-                        value: item.id,
-                        text: item.name,
-                    };
-                });
-                this.TrangThaiOption = response.data.TrangThai.map((item) => {
-                    return {
-                        value: item.id,
-                        text: item.name,
-                    };
-                });
-            } catch (error) {
-                console.error(error);
-            }
-        },
         async fetch(TrangThai) {
             try {
-                const response = await PhieuNhapService.getDataByidTrangThai(this.$axios, TrangThai);
+                const response = await HoaDonService.getDataByidTrangThai(this.$axios, TrangThai);
                 this.data = response.data;
             } catch (error) {
                 console.error(error);
             }
         },
-        async confirmAndCreate() {
-            const confirmResult = await Swal.fire({
-                title: 'Xác nhận thêm?',
-                text: 'Bạn có chắc muốn thêm?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Thêm',
-                cancelButtonText: 'Hủy'
-            });
-
-            if (confirmResult.isConfirmed) {
-                this.create();
-            }
-        },
         formattedModifiedDate(date) {
             return moment(date).format("YYYY-MM-DD HH:mm:ss");
         },
-        async create() {
-            try {
-                this.formattedModifiedDate(this.newData.NgayNhap);
-                this.formattedModifiedDate(this.newData.NgayNhanHang);
-                // this.newData.TongSoLuong =  0,
-                //  this.newData.TongTien: 0,
-                // TrangThai: 1,
-                // NhanVien: 1,
-                // NhaCungCap: 1
-                await PhieuNhapService.insert(this.$axios, this.newData);
-                this.TrangThai = 1;
-                this.fetch(this.TrangThai);
-                Swal.fire(
-                    'Thêm thành công!',
-                    'Dữ liệu đã được thêm.',
-                    'success'
-                );
-            } catch (error) {
-                this.dataerror = error.response.data.errors;
-                Swal.fire(
-                    'Thêm Thất Bại!',
-                    'Đã có lỗi xảy ra khi thêm dữ liệu.',
-                    'error'
-                );
-            }
-        },
         edit(item) {
             // if (item.idTrangThai === 1) {
-            this.$router.push(`/admin/NhapHang/edit/${item.id}`);
+            this.$router.push(`/admin/XuatHang/edit/${item.id}`);
             // } else {
             //     Swal.fire(
             //         'Thông báo!',
-            //         'Phiếu nhập chỉ có thể cập nhật ở trạng thái chưa xác nhận!.',
+            //         'phiếu xuất chỉ có thể cập nhật ở trạng thái chưa xác nhận!.',
             //         'warning'
             //     )
             // }
@@ -219,7 +143,7 @@ export default {
             if (item.idTrangThai === 4) {
                 Swal.fire(
                     'Thông báo!',
-                    'Phiếu nhập đã hoàn thành, không thể xóa.',
+                    'phiếu xuất đã hoàn thành, không thể xóa.',
                     'warning'
                 )
                 return;
@@ -241,8 +165,8 @@ export default {
         },
         async remove(item) {
             try {
-                await ChiTietPhieuNhapService.deleteByPhieuNhap(this.$axios, item.id);
-                await PhieuNhapService.delete(this.$axios, item.id);
+                await ChiTietHoaDonService.deleteByHoaDon(this.$axios, item.id);
+                await HoaDonService.delete(this.$axios, item.id);
                 await this.fetch(1);
                 Swal.fire(
                     'Đã Xóa!',
@@ -262,7 +186,7 @@ export default {
             if (item.idTrangThai === 4) {
                 Swal.fire(
                     'Thông báo!',
-                    'Phiếu nhập đã hoàn thành, không thể cập nhật thêm.',
+                    'phiếu xuất đã hoàn thành, không thể cập nhật thêm.',
                     'warning'
                 );
             } else {
@@ -285,14 +209,14 @@ export default {
         async update(item) {
             try {
                 item.idTrangThai += 1;
-                await PhieuNhapService.update(this.$axios, item.id, item);
+                await HoaDonService.update(this.$axios, item.id, item);
                 if (item.idTrangThai === 4) {
-                    ChiTietPhieuNhapService.getDataByPhieuNhap(this.$axios, item.id)
+                    ChiTietHoaDonService.getDataByHoaDon(this.$axios, item.id)
                         .then(response => {
                             if (response && response.data && Array.isArray(response.data)) {
                                 response.data.forEach((element) => {
                                     console.log(element);
-                                    this.updateSoLuongSanPhamByPhieuNhap(element.idSanPham, element.SoLuong);
+                                    this.updateSoLuongSanPhamByHoaDon(element.idSanPham, element.SoLuong);
                                 });
                             } else {
                                 console.error('Invalid or missing data in the response');
@@ -316,6 +240,9 @@ export default {
                     'error'
                 );
             }
+        },
+        add(){
+            this.$router.push('/admin/XuatHang/create');
         }
     }
 }

@@ -167,8 +167,8 @@ export default {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Có, xóa nó!',
-        cancelButtonText: 'Không, hủy bỏ!'
+        confirmButtonText: 'Có!',
+        cancelButtonText: 'Không!'
       });
 
       if (result.isConfirmed) {
