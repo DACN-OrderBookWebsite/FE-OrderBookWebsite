@@ -12,7 +12,6 @@
               <label for="select-category">Tất Cả: </label>
               <b-form-select
                 id="select-category"
-                v-model="selectedCategory"
                 :options="options"
               >
               </b-form-select>
@@ -20,7 +19,6 @@
               <label for="select-sort">Sắp Xếp Theo: </label>
               <b-form-select
                 id="select-sort"
-                v-model="selectedSort"
                 :options="options"
               ></b-form-select>
 
@@ -272,7 +270,7 @@ export default {
     },
   },
   async mounted() {
-    await this.fetch();
+    // await this.fetch();
   },
   methods: {
     increaseQuantity() {
@@ -284,13 +282,13 @@ export default {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
-    async fetch() {
-      const response = await SachService.getDataByTheLoai(
-        this.$axios,
-        this.$route.params.id
-      );
-      this.books = response.data;
-    },
+    // async fetch() {
+    //   const response = await SachService.getDataByTheLoai(
+    //     this.$axios,
+    //     this.$route.params.id
+    //   );
+    //   this.books = response.data;
+    // },
     async sortData() {
       const response = await SachService.getDataByTheLoaiSort(
         this.$axios,
