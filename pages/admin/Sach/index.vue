@@ -35,9 +35,9 @@ export default {
       data: [],
       fields: [
         { key: 'name', label: 'Tên' },
-        { key: 'idTheLoai', label: 'Thể loại' },
-        { key: 'idNhaXuatBan', label: 'Nhà xuất bản' },
-        { key: 'idTacGia', label: 'Tác giả' },
+        { key: 'nameOfTheLoai', label: 'Thể loại' },
+        { key: 'nameOfNhaXuatBan', label: 'Nhà xuất bản' },
+        { key: 'nameOfTacGia', label: 'Tác giả' },
         { key: 'DonGia', label: 'Đơn giá' },
         { key: 'SoLuongTon', label: 'Số lượng tồn' },
         { key: 'Anh', label: 'Ảnh' },
@@ -70,7 +70,7 @@ export default {
     },
     async fetch() {
       try {
-        const response = await SachService.getData(this.$axios);
+        const response = await SachService.getDataSach_NhaXuatBan_TacGia_TheLoai(this.$axios);
         this.data = response.data;
       } catch (error) {
         console.error(error);

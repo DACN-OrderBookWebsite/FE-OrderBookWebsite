@@ -28,7 +28,9 @@ export default {
       data: [],
       fields: [
         { key: 'idNhom', label: 'ID Nhóm' },
+        { key: 'nameOfNhom', label: 'Tên Nhóm' },
         { key: 'idQuyen', label: 'ID Quyền' },
+        { key: 'nameOfQuyen', label: 'Tên Quyền' },
         { key: 'actions', label: 'Hành Động' }
       ],
       quyen: 5
@@ -56,7 +58,7 @@ export default {
     },
     async fetch() {
       try {
-        const response = await PhanQuyenService.getData(this.$axios);
+        const response = await PhanQuyenService.getDataNhomAndQuyen(this.$axios);
         this.data = response.data;
       } catch (error) {
         console.error(error);
