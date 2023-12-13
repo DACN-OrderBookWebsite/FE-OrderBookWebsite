@@ -3,31 +3,83 @@
     <Header></Header>
     <HeroSection></HeroSection>
     <b-row class="section-title">
-      <b-col cols="12" md="3">
+      <b-col cols="12" md="3" class="p-0">
         <div class="title">
           <p class="p-2 button-title">Giáo Trình Đại Cương</p>
         </div>
       </b-col>
-      <b-col cols="12" md="9"
-        ><div class="title-2">
-          <p class="">Tất Cả</p>
-          <b-form-select v-model="selected" :options="options"></b-form-select>
-          <p class="">Tất Cả</p>
+      <!-- Thêm label và b-form-select -->
+      <b-col cols="12" md="9">
+        <div class="title-2">
+          <label for="select-category">Tất Cả: </label>
           <b-form-select
-            v-model="selected"
+            id="select-category"
+            v-model="selectedCategory"
             :options="options"
-          ></b-form-select></div
-      ></b-col>
+          >
+          </b-form-select>
+
+          <label for="select-sort">Sắp Xếp Theo: </label>
+          <b-form-select
+            id="select-sort"
+            v-model="selectedSort"
+            :options="options"
+          ></b-form-select>
+
+          <!-- Icon chuyển đổi hiển thị -->
+          <span class="view-icon grid-view" 
+            ><i class="fa fa-th"></i
+          ></span>
+          <span class="view-icon list-view"
+            ><i class="fa fa-list"></i
+          ></span>
+        </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="12" md="3" class="p-0">
+        <div class="title-3">
+          <b-button variant="outline-primary" >Lọc</b-button>
+          <b-button variant="outline-danger">Xóa Tất Cả</b-button>
+        </div>
+      </b-col>
     </b-row>
     <b-row>
       <b-col cols="12" md="3">
-        <b-row>h1</b-row>
-        <b-row>h1</b-row>
-        <b-row>h1</b-row>
+        <b-row
+          ><div class="title">
+            <p class="p-2 button-title">Tác Giả</p>
+            <b-form-checkbox-group
+              v-model="selectedCheckBox"
+              :options="optionsCheckBox"
+              name="flavour-2a"
+              stacked
+            ></b-form-checkbox-group></div
+        ></b-row>
+        <b-row
+          ><div class="title">
+            <p class="p-2 button-title">Tác Giả</p>
+            <b-form-checkbox-group
+              v-model="selectedCheckBox"
+              :options="optionsCheckBox"
+              name="flavour-2a"
+              stacked
+            ></b-form-checkbox-group></div
+        ></b-row>
+        <b-row
+          ><div class="title">
+            <p class="p-2 button-title">Tác Giả</p>
+            <b-form-checkbox-group
+              v-model="selectedCheckBox"
+              :options="optionsCheckBox"
+              name="flavour-2a"
+              stacked
+            ></b-form-checkbox-group></div
+        ></b-row>
       </b-col>
       <b-col cols="12" md="9">
         <b-row>
-          <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="2">
+          <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="3">
             <ProductCard :product="book"></ProductCard>
           </b-col>
         </b-row>
@@ -58,6 +110,13 @@ export default {
       author: "Tên Tác Giả",
       publisher: "Nhà Xuất Bản",
       selected: null,
+      selectedCheckBox: [], // Must be an array reference!
+      optionsCheckBox: [
+        { text: "Orange", value: "orange" },
+        { text: "Apple", value: "apple" },
+        { text: "Pineapple", value: "pineapple" },
+        { text: "Grape", value: "grape" },
+      ],
       options: [
         { value: null, text: "Please select an option" },
         { value: "a", text: "This is First option" },
@@ -139,9 +198,105 @@ export default {
           imageUrl: "path-to-image-3.jpg",
           description: "Description for product 3",
         },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
+        {
+          id: 1,
+          name: "Book Title 1",
+          price: 19.99,
+          stock: 10,
+          imageUrl: "path-to-image-1.jpg",
+          description: "Description for product 1",
+        },
       ],
       currentPage: 1,
-      perPage: 5,
+      perPage: 15,
     };
   },
   computed: {
@@ -168,6 +323,34 @@ body {
   background-color: #f4f4f4;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+.title-2 {
+  padding: 20px;
+}
+.title-2 label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.title-2 .b-form-select {
+  display: inline-block;
+  margin-right: 20px;
+  width: auto;
+}
+
+/* CSS cho icon chuyển đổi hiển thị */
+.view-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.grid-view i {
+  color: blue; /* Màu cho icon dạng lưới */
+}
+
+.list-view i {
+  color: green; /* Màu cho icon dạng danh sách */
+}
 .section-title {
   margin-top: 40px;
 }
@@ -191,7 +374,15 @@ body {
   display: inline-flex;
   border: 1px solid #9da2a6;
   text-align: center;
-  justify-content: center;
+  justify-content: space-evenly;
+}
+.title-3 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
 }
 /* Định dạng tiêu đề các phần, ví dụ như các tiêu đề của cột bên trái */
 h1 {
@@ -206,7 +397,7 @@ h1 {
   font-family: Josefin Sans;
   font-size: 18px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: bold;
   line-height: normal;
   text-transform: capitalize;
 }
