@@ -17,7 +17,8 @@
         <nuxt-link class="link-to" to="contactUs">
           <b-col class="text-hero">LIÊN HỆ</b-col>
         </nuxt-link> -->
-        <!-- <nuxt-link v-for="menuItem in menuItems" :key="menuItem.id" :to="`/${menuItem.id}`" class="link-to">
+        <!-- <nuxt-link v-for="menuItem in menuItems" :key="menuItem.id" :to="`/TheLoai/${menuItem.id}`" class="link-to">
+ 974033ee601aa17154ab8aeb2ce960eb6598feeb
           <b-col class="text-hero">{{ menuItem.name }}</b-col>
         </nuxt-link>
       </b-row> -->

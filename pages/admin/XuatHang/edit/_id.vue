@@ -176,7 +176,7 @@ export default {
     methods: {
         async checkQuyen() {
             const response = this.$login.getLogin();
-            if (response[0].id === null) {
+            if (response.length === 0) {
                 this.$router.push('/loginkeycloak');
             }
             else {
@@ -304,11 +304,14 @@ export default {
                     if (!shouldContinue) {
                         return;
                     }
+                    this.newDataChiTiet.id = null;
+                    this.newDataChiTiet.SoLuong = 1
                     this.newDataChiTiet.idSanPham = item.id;
                     this.newDataChiTiet.DonGia = item.DonGia;
+                    this.newDataChiTiet.idHoaDon = this.$route.params.id;
                     await ChiTietHoaDonService.insert(this.$axios, this.newDataChiTiet);
                 }
-                this.updateTongSoLuong_TongTien();
+                await this.updateTongSoLuong_TongTien();
                 await this.fetchChiTiet();
             } catch (error) {
                 console.log(error);

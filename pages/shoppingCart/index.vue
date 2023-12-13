@@ -8,36 +8,24 @@
           {{ $formatCurrencyVND(data.item.price) }}
         </template>
         <template v-slot:cell(image)="data">
-          <b-img
-            :src="data.item.image"
-            alt="Image"
-            fluid
-            style="width: 50px; height: 50px"
-          ></b-img>
+          <b-img :src="data.item.image" alt="Image" fluid style="width: 50px; height: 50px"></b-img>
         </template>
         <template v-slot:cell(quantity)="data">
           <b-input-group size="sm">
-            <b-button @click="decrement(data.index)" variant="outline-secondary"
-              >-</b-button
-            >
+            <b-button @click="decrement(data.index)" variant="outline-secondary">-</b-button>
             <b-form-input v-model="data.item.quantity" readonly></b-form-input>
-            <b-button @click="increment(data.index)" variant="outline-secondary"
-              >+</b-button
-            >
+            <b-button @click="increment(data.index)" variant="outline-secondary">+</b-button>
           </b-input-group>
         </template>
         <template v-slot:cell(total)="data">
           {{ $formatCurrencyVND(data.item.price * data.item.quantity) }}
         </template>
+        <template #cell(actions)="data">
+          <b-button size="sm" variant="danger" @click="confirmAndRemove(data.item)">Xóa</b-button>
+        </template>
       </b-table>
       <div class="d-flex flex-row-reverse">
-        <b-button
-          type="submit"
-          class="pb-2 mb-3"
-          variant="danger"
-          @click="confirmClearCart"
-          >Xoá giỏ hàng</b-button
-        >
+        <b-button type="submit" class="pb-2 mb-3" variant="danger" @click="confirmClearCart">Xoá giỏ hàng</b-button>
       </div>
       <!-- Form Đặt Hàng -->
       <b-form @submit="confirmDatHang" class="form-submit">
@@ -51,7 +39,7 @@
           </b-form-group>
           <label>Mã Số Sinh Viên<span style="color:red">*</span>:</label>
 
-          <b-form-group >
+          <b-form-group>
             <b-form-input v-model="dataHoaDon.MaSV"></b-form-input>
             <small v-if="dataerror.MaSV" class="text-danger">{{
               dataerror.MaSV[0]
@@ -82,12 +70,10 @@
 
         <!-- Tổng Tiền -->
         <div class="p-2 total-price d-flex flex-row-reverse">
-          <span
-            >Thành tiền:
+          <span>Thành tiền:
             <span class="sum-total">{{
               $formatCurrencyVND(totalPrice)
-            }}</span></span
-          >
+            }}</span></span>
         </div>
         <div class="p-2 total-price d-flex flex-row-reverse">
           <b-button type="submit" variant="primary">Đặt Hàng</b-button>
@@ -125,6 +111,7 @@ export default {
         { key: "price", class: "text-center" },
         { key: "quantity", class: "text-center quantity-column" },
         { key: "total", class: "text-center" },
+        { key: 'actions', label: 'Hành Động' }
       ],
       dataHoaDon: {
         NgayXuat: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
@@ -227,6 +214,14 @@ export default {
       let shownWarning = false;
 
       try {
+        if(this.cartItems.length === 0){
+          Swal.fire(
+              'Thông báo',
+              'Vui lòng chọn sản phẩm cần mua',
+              'warning'
+            );
+          return;
+        }
         await Promise.all(this.cartItems.map(async item => {
           const sp = await SachService.getItem(this.$axios, item.id);
           if (sp.SoLuongTon < item.quantity && !shownWarning) {
@@ -276,7 +271,33 @@ export default {
           "error"
         );
       }
-    }
+    },
+    async confirmAndRemove(item) {
+      const result = await Swal.fire({
+        title: "Bạn có chắc chắn muốn xóa sản phẩm " + item.title + " khỏi giỏ hảng?",
+        text: "Bạn sẽ không thể hoàn nguyên hành động này!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có!",
+        cancelButtonText: "Không!",
+      });
+
+      if (result.isConfirmed) {
+        this.removeItemFromCart(item);
+      }
+    },
+    async removeItemFromCart(item) {
+      // Gọi phương thức xóa của thư viện giỏ hàng
+      this.$cart.removeItem(item.id);
+      await this.getCart();
+      Swal.fire(
+        'Thông báo',
+        'Xóa thành công sản phẩm ' + item.title + ' khỏi giỏ hàng',
+        'success'
+      )
+    },
   }
 };
 </script>
@@ -284,9 +305,11 @@ export default {
 .container {
   margin-top: 20px;
 }
+
 .quantity-column {
   width: 10%;
 }
+
 .total-price {
   margin-bottom: 20px;
   font-size: 1.25em;
@@ -297,11 +320,14 @@ export default {
   width: 100px;
   /* Điều chỉnh kích thước ảnh */
 }
+
 .sum-total {
   color: red;
 }
+
 .form-submit {
   border: 1px solid #9da2a6;
 }
+
 /* Thêm các style khác nếu cần */
 </style>

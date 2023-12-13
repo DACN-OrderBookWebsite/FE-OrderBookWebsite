@@ -32,5 +32,14 @@ export default {
     getDataSach_NhaXuatBan_TacGia_TheLoai(axios) {
       return axios.get(`/api/Sach/getDataSach_NhaXuatBan_TacGia_TheLoai`);
     },
+    getDataByTheLoai(axios, idTheLoai){
+      return axios.get(`/api/Sach/${idTheLoai}/getDataByTheLoai`);
+    },
+    getDataByTheLoaiSort(axios, idTheLoai, sort){
+      return axios.get(`/api/Sach/${idTheLoai}/${sort}/getDataByTheLoaiSort`);
+    },
+    search(axios, data){
+      return axios.get(`/api/Sach/${data}/search`);
+    }
   };
   
