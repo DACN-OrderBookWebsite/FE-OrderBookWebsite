@@ -71,7 +71,7 @@
 </template>
   
   <script>
-import ProductCard from "./ProductCard.vue";
+import ProductCard from "./ProductCard";
 
 export default {
   name: "ProductDetails",

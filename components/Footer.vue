@@ -62,6 +62,7 @@ export default {
   flex-wrap: wrap;
   justify-content: space-around;
   padding-bottom: 20px;
+  text-align: justify;
 }
 
 .footer-column {

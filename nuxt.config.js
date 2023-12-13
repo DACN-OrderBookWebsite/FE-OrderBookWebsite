@@ -25,6 +25,7 @@ export default {
   plugins: [
     { src: '~/plugins/client-only.js', mode: 'client' },
     '~/plugins/cart.js',
+    '~/plugins/currencyFormatter.js',
     '~/plugins/login.js',
   ],
 
@@ -115,6 +116,11 @@ export default {
         path: '/shoppingCart',
         name: 'ShoppingCart',
         component: '~/pages/ShoppingCart'
+      },
+      {
+        path: '/TheLoai/:id',
+        name: 'TheLoai',
+        component: '~/pages/TheLoai/_id.vue'
       },
       // Các route khác
 
