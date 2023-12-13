@@ -20,5 +20,8 @@ export default {
     getEdit(axios, id) {
       return axios.get(`/api/NhomNguoiDung/${id}/edit`);
     },
+    getDataNhomAndNguoiDung(axios) {
+      return axios.get(`/api/NhomNguoiDung/getDataNhomAndNguoiDung`);
+    },
   };
   

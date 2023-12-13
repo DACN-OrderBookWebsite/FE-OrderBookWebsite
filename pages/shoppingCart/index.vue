@@ -105,7 +105,8 @@ import HeroSection from "../../components/HeroSection";
 import Swal from "sweetalert2";
 import HoaDonService from "../../services/api/HoaDonService";
 import ChiTietHoaDonService from "../../services/api/ChiTietHoaDonService";
-import moment from "moment";
+import SachService from "../../services/api/SachService";
+import moment from 'moment';
 
 export default {
   name: "ShoppingCart",
@@ -222,26 +223,35 @@ export default {
       }
     },
     async onSubmit() {
+      let shouldContinue = true;
+      let shownWarning = false;
+
       try {
-        this.dataHoaDon.NgayXuat = moment(new Date()).format(
-          "YYYY-MM-DD HH:mm:ss"
-        );
-        this.dataHoaDon.NgayNhanHang = moment(new Date()).format(
-          "YYYY-MM-DD HH:mm:ss"
-        );
-        this.dataHoaDon.TongSoLuong = this.cartItems.reduce(
-          (total, item) => total + item.quantity,
-          0
-        );
+        await Promise.all(this.cartItems.map(async item => {
+          const sp = await SachService.getItem(this.$axios, item.id);
+          if (sp.SoLuongTon < item.quantity && !shownWarning) {
+            Swal.fire(
+              'Thông báo',
+              'Sản phẩm ' + sp.name + ' trong kho chỉ còn ' + sp.SoLuongTon + ' sản phẩm',
+              'warning'
+            );
+            shownWarning = true;  // Đánh dấu đã hiển thị thông báo
+            shouldContinue = false;  // Dừng xử lý
+          }
+        }));
+
+        if (!shouldContinue) {
+          return;
+        }
+
+        // Các bước tiếp theo sẽ chỉ được thực hiện nếu không có lỗi ném từ trên
+        this.dataHoaDon.NgayXuat = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+        this.dataHoaDon.NgayNhanHang = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+        this.dataHoaDon.TongSoLuong = this.cartItems.reduce((total, item) => total + item.quantity, 0);
         this.dataHoaDon.TongTien = this.totalPrice;
-        console.log(this.dataHoaDon);
         await HoaDonService.insert(this.$axios, this.dataHoaDon);
-        const response = await HoaDonService.showDataByMaSV(
-          this.$axios,
-          this.dataHoaDon.MaSV
-        );
-        console.log(response);
-        this.cartItems.map(async (item) => {
+        const response = await HoaDonService.showDataByMaSV(this.$axios, this.dataHoaDon.MaSV);
+        this.cartItems.map(async item => {
           const dataChiTiet = {
             SoLuong: item.quantity,
             DonGia: item.price,
@@ -266,8 +276,8 @@ export default {
           "error"
         );
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

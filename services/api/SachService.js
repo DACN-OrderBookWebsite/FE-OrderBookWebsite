@@ -29,5 +29,8 @@ export default {
     showDataWithoutID(axios, id) {
       return axios.get(`/api/Sach/${id}/showDataWithoutID`);
     },
+    getDataSach_NhaXuatBan_TacGia_TheLoai(axios) {
+      return axios.get(`/api/Sach/getDataSach_NhaXuatBan_TacGia_TheLoai`);
+    },
   };
   
