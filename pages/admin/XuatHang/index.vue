@@ -113,6 +113,14 @@ export default {
             console.log("456", this.dataSanPham);
             await SachService.updateSoLuongSanPhamByPhieuNhap(this.$axios, idSanPham, this.dataSanPham);
         },
+        async updateSoLuongSanPhamByHoaDonAfterDelete(idSanPham, SoLuong) {
+            const response = await SachService.getItem(this.$axios, idSanPham);
+            console.log("123", response);
+            this.dataSanPham.SoLuongTon = response.SoLuongTon;
+            this.dataSanPham.SoLuongTon += SoLuong;
+            console.log("456", this.dataSanPham);
+            await SachService.updateSoLuongSanPhamByPhieuNhap(this.$axios, idSanPham, this.dataSanPham);
+        },
         formatTrangThai(idTrangThai) {
             return idTrangThai === 1 ? 'Chưa xác nhận' : idTrangThai === 2 ? 'Đã xác nhận' : idTrangThai === 3 ? 'Chưa thanh toán' : 'Hoàn thành';
         },
@@ -181,6 +189,24 @@ export default {
         },
         async remove(item) {
             try {
+                //Cập nhật lại số lượng tồn khi xóa nếu trạng thái là 2 hoặc 3
+                if (item.idTrangThai === 2 || item.idTrangThai === 3) {
+                    ChiTietHoaDonService.getDataByHoaDon(this.$axios, item.id)
+                        .then(response => {
+                            if (response && response.data && Array.isArray(response.data)) {
+                                response.data.forEach((element) => {
+                                    console.log(element);
+                                    this.updateSoLuongSanPhamByHoaDonAfterDelete(element.idSanPham, element.SoLuong);
+                                });
+                            } else {
+                                console.error('Invalid or missing data in the response');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                        });
+                }
+
                 await ChiTietHoaDonService.deleteByHoaDon(this.$axios, item.id);
                 await HoaDonService.delete(this.$axios, item.id);
                 await this.fetch(1);
@@ -226,7 +252,8 @@ export default {
             try {
                 item.idTrangThai += 1;
                 await HoaDonService.update(this.$axios, item.id, item);
-                if (item.idTrangThai === 4) {
+                //Cập nhật lại số lượng tồn sản phẩm sau khi đã xác nhận với khách hàng
+                if (item.idTrangThai === 2) {
                     ChiTietHoaDonService.getDataByHoaDon(this.$axios, item.id)
                         .then(response => {
                             if (response && response.data && Array.isArray(response.data)) {
