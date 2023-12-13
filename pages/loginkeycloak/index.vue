@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <Header></Header>
-    <hero-section></hero-section>
     <b-row class="justify-content-md-center">
       <b-col md="6">
         <b-card class="mt-5">

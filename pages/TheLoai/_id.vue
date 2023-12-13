@@ -1,82 +1,56 @@
 <template>
   <div id="app">
     <Header></Header>
-    <HeroSection></HeroSection>
-    <b-row class="section-title">
-      <b-col cols="12" md="3" class="p-0">
-        <div class="title">
-          <p class="p-2 button-title">Giáo Trình Đại Cương</p>
-        </div>
-      </b-col>
-      <!-- Thêm label và b-form-select -->
-      <b-col cols="12" md="9">
-        <div class="title-2">
-          <!-- <label for="select-category">Tất Cả: </label>
-          <b-form-select
-            id="select-category"
-            v-model="selectedCategory"
-            :options="options"
-          >
-          </b-form-select> -->
-
-          <label for="select-sort">Sắp Xếp Theo: </label>
-          <b-form-select id="select-sort" v-model="selectedSort" :options="options" @change="sortData"></b-form-select>
-
-          <!-- Icon chuyển đổi hiển thị -->
-          <span class="view-icon grid-view"><i class="fa fa-th"></i></span>
-          <span class="view-icon list-view"><i class="fa fa-list"></i></span>
-        </div>
-      </b-col>
-    </b-row>
-    <!-- <b-row>
-      <b-col cols="12" md="3" class="p-0">
-        <div class="title-3">
-          <b-button variant="outline-primary" >Lọc</b-button>
-          <b-button variant="outline-danger">Xóa Tất Cả</b-button>
-        </div>
-      </b-col>
-    </b-row> -->
     <b-row>
-      <!-- <b-col cols="12" md="3">
-        <b-row
-          ><div class="title">
-            <p class="p-2 button-title">Tác Giả</p>
-            <b-form-checkbox-group
-              v-model="selectedCheckBox"
-              :options="optionsCheckBox"
-              name="flavour-2a"
-              stacked
-            ></b-form-checkbox-group></div
-        ></b-row>
-        <b-row
-          ><div class="title">
-            <p class="p-2 button-title">Tác Giả</p>
-            <b-form-checkbox-group
-              v-model="selectedCheckBox"
-              :options="optionsCheckBox"
-              name="flavour-2a"
-              stacked
-            ></b-form-checkbox-group></div
-        ></b-row>
-        <b-row
-          ><div class="title">
-            <p class="p-2 button-title">Tác Giả</p>
-            <b-form-checkbox-group
-              v-model="selectedCheckBox"
-              :options="optionsCheckBox"
-              name="flavour-2a"
-              stacked
-            ></b-form-checkbox-group></div
-        ></b-row>
-      </b-col> -->
-      <b-col cols="12" md="12">
-        <b-row>
-          <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="3">
-            <ProductCard :product="book"></ProductCard>
+      <b-col cols="12" md="2" class="p-0">
+        <HeroSection></HeroSection>
+      </b-col>
+      <b-col cols="12" md="10" class="p-0">
+        <b-row class="section-title">
+          <b-col cols="12" md="10">
+            <div class="title-2">
+              <label for="select-category">Tất Cả: </label>
+              <b-form-select
+                id="select-category"
+                :options="options"
+              >
+              </b-form-select>
+
+              <label for="select-sort">Sắp Xếp Theo: </label>
+              <b-form-select
+                id="select-sort"
+                :options="options"
+              ></b-form-select>
+
+              <!-- Icon chuyển đổi hiển thị -->
+              <span class="view-icon grid-view"><i class="fa fa-th"></i></span>
+              <span class="view-icon list-view"
+                ><i class="fa fa-list"></i
+              ></span>
+            </div>
           </b-col>
         </b-row>
-        <b-pagination v-model="currentPage" :total-rows="books.length" :per-page="perPage"
-          aria-controls="my-table"></b-pagination>
+        <b-row>
+          <b-col cols="12" md="3" class="p-0">
+            <div class="title-3">
+            </div>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="12" md="10">
+            <b-row>
+              <b-col
+                v-for="book in paginatedBooks"
+                :key="book.id"
+                cols="12"
+                md="3"
+              >
+                <ProductCard :product="book"></ProductCard>
+              </b-col>
+            </b-row>
+            <b-pagination v-model="currentPage" :total-rows="books.length" :per-page="perPage" aria-controls="my-table"></b-pagination>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
     <Footer></Footer>
@@ -98,6 +72,7 @@ export default {
       publishYear: "2020",
       author: "Tên Tác Giả",
       publisher: "Nhà Xuất Bản",
+      isSidebarOpen: false,
       selected: null,
       selectedCheckBox: [], // Must be an array reference!
       optionsCheckBox: [
@@ -284,7 +259,7 @@ export default {
       ],
       currentPage: 1,
       perPage: 15,
-      selectedSort: 1
+      selectedSort: 1,
     };
   },
   computed: {
@@ -295,7 +270,7 @@ export default {
     },
   },
   async mounted() {
-    await this.fetch();
+    // await this.fetch();
   },
   methods: {
     increaseQuantity() {
@@ -304,14 +279,24 @@ export default {
     decreaseQuantity() {
       if (this.quantity > 0) this.quantity--;
     },
-    async fetch() {
-      const response = await SachService.getDataByTheLoai(this.$axios, this.$route.params.id);
+    toggleSidebar() {
+      this.isSidebarOpen = !this.isSidebarOpen;
+    },
+    // async fetch() {
+    //   const response = await SachService.getDataByTheLoai(
+    //     this.$axios,
+    //     this.$route.params.id
+    //   );
+    //   this.books = response.data;
+    // },
+    async sortData() {
+      const response = await SachService.getDataByTheLoaiSort(
+        this.$axios,
+        this.$route.params.id,
+        this.selectedSort
+      );
       this.books = response.data;
     },
-    async sortData() {
-      const response = await SachService.getDataByTheLoaiSort(this.$axios, this.$route.params.id, this.selectedSort);
-      this.books = response.data;
-    }
   },
 };
 </script>
@@ -322,7 +307,31 @@ body {
   background-color: #f4f4f4;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-
+.content {
+  margin-left: 250px; /* Điều này tạo ra khoảng trống bên trái cho thanh sidebar */
+  padding: 20px;
+}
+.sidebar {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  border: 1px solid #9da2a6;
+  text-align: center;
+  justify-content: center;
+}
+.button-sidebar {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  color: var(--color-text-color, #1a1a1a);
+  margin-top: 1rem;
+  font-family: Josefin Sans;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: normal;
+  text-transform: capitalize;
+}
 .title-2 {
   padding: 20px;
 }
@@ -363,7 +372,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 .title {
@@ -376,7 +384,7 @@ body {
 }
 
 .title-2 {
-  width: 90%;
+  width: 100%;
   display: inline-flex;
   border: 1px solid #9da2a6;
   text-align: center;
@@ -448,6 +456,7 @@ h1 {
 .b-pagination {
   justify-content: center;
   padding-top: 1rem;
+  width: 100%;
 }
 
 /* Định dạng cho header và footer */
@@ -494,7 +503,7 @@ footer {
 }
 
 /* Đảm bảo các card có khoảng cách đều nhau */
-.row>[class^="col-"] {
+.row > [class^="col-"] {
   padding: 0 0.5rem;
   margin-bottom: 1rem;
 }
