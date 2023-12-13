@@ -14,7 +14,7 @@
 
           <div class="col-md-6">
             <h2>{{ data.name }}</h2>
-            <p>{{ data.DonGia }}</p>
+            <p>{{ $formatCurrencyVND(data.DonGia) }}</p>
             <b-row>
               <div class="col-md-6 container-info-product">
                 <p class="mg-bottom-40">
@@ -38,8 +38,8 @@
               <span>{{ quantity }}</span>
               <b-button variant="primary" @click="increaseQuantity">+</b-button>
             </div>
-            <b-button variant="success" class="mr-2">Cho vào giỏ hàng</b-button>
-            <b-button variant="danger">Đặt sách ngay</b-button>
+            <b-button variant="success" class="mr-2" @click="addToCart(data)">Cho vào giỏ hàng</b-button>
+            <!-- <b-button variant="danger">Đặt sách ngay</b-button> -->
           </div>
         </div>
       </div>
@@ -66,6 +66,7 @@
 <script>
 import ProductCard from "../../components/ProductCard.vue";
 import SachService from '../../services/api/SachService';
+import Swal from 'sweetalert2';
 
 export default {
   name: "ProductDetails",
@@ -115,7 +116,27 @@ export default {
       } catch {
         console.log('Lỗi load dữ liệu fetch.');
       }
-    }
+    },
+    addToCart(item) {
+      const response = this.$cart.getCart();
+      const existingItemIndex = response.findIndex(cartItem => cartItem.id === item.id);
+
+      if (existingItemIndex !== -1) {
+        Swal.fire(
+          'Thông báo!',
+          'Sản phẩm đã tồn tại trong giỏ hàng.',
+          'warning'
+        );
+      } else {
+        item.stock = this.quantity;
+        this.$cart.addToCart(item);
+        Swal.fire(
+          'Thông báo!',
+          'Đã thêm sản phẩm vào giỏ hàng.',
+          'success'
+        );
+      }
+    },
   },
 };
 </script>
