@@ -176,7 +176,7 @@ export default {
     methods: {
         async checkQuyen() {
             const response = this.$login.getLogin();
-            if (response[0].id === null) {
+            if (response.length === 0) {
                 this.$router.push('/loginkeycloak');
             }
             else {
