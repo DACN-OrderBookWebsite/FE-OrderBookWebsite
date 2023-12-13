@@ -58,8 +58,8 @@ export default {
                 { key: 'TongSoLuong', label: 'Tổng số lượng' },
                 { key: 'TongTien', label: 'Tổng tiền' },
                 { key: 'idTrangThai', label: 'Trạng thái' },
-                { key: 'idNhanVien', label: 'Nhân viên' },
-                { key: 'idNhaCungCap', label: 'Nhà cung cấp' },
+                { key: 'nameOfNhanVien', label: 'Nhân viên' },
+                { key: 'nameOfNhaCungCap', label: 'Nhà cung cấp' },
                 { key: 'actions', label: 'Hành Động' }
             ],
             TrangThai: 1,
