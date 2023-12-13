@@ -165,7 +165,6 @@ export default {
     },
     async mounted() {
         await this.checkQuyen();
-        await this.loadSelectedbox();
         await this.fetchHoaDon();
         await this.fetch();
         await this.fetchChiTiet();
@@ -244,7 +243,22 @@ export default {
             return disabled === 1 ? "Ngừng kinh doanh" : "Đang kinh doanh";
         },
         async handleBlur(item) {
+            let shouldContinue = true;
             try {
+                const sp = await SachService.getItem(this.$axios, item.idSanPham);
+                if (sp.SoLuongTon < item.SoLuong) {
+                    Swal.fire(
+                        'Thông báo',
+                        'Sản phẩm ' + sp.name + ' trong kho chỉ còn ' + sp.SoLuongTon + ' sản phẩm',
+                        'warning'
+                    );
+                    shouldContinue = false;
+                }
+                if (!shouldContinue) {
+                    this.fetchChiTiet();
+                    return;
+                }
+
                 await ChiTietHoaDonService.update(this.$axios, item.id, item);
                 await this.updateTongSoLuong_TongTien();
             } catch (error) {
@@ -257,9 +271,21 @@ export default {
             }
         },
         async insert(item) {
+            let shouldContinue = true;
             try {
                 const response = await ChiTietHoaDonService.getDataByCheckSanPhamIsInsertedToHoaDon(this.$axios, this.$route.params.id, item.id);
                 if (response.data.length != 0) {
+                    if (item.SoLuongTon < response.data[0].SoLuong + 1) {
+                        Swal.fire(
+                            'Thông báo',
+                            'Sản phẩm ' + item.name + ' trong kho chỉ còn ' + item.SoLuongTon + ' sản phẩm',
+                            'warning'
+                        );
+                        shouldContinue = false;
+                    }
+                    if (!shouldContinue) {
+                        return;
+                    }
                     this.newDataChiTiet.id = response.data[0].id;
                     this.newDataChiTiet.SoLuong = response.data[0].SoLuong + 1;
                     this.newDataChiTiet.DonGia = response.data[0].DonGia;
@@ -267,6 +293,17 @@ export default {
                     this.newDataChiTiet.idHoaDon = response.data[0].idHoaDon;
                     await ChiTietHoaDonService.update(this.$axios, this.newDataChiTiet.id, this.newDataChiTiet);
                 } else {
+                    if (item.SoLuongTon === 0) {
+                        Swal.fire(
+                            'Thông báo',
+                            'Sản phẩm ' + item.name + ' trong kho chỉ còn ' + item.SoLuongTon + ' sản phẩm',
+                            'warning'
+                        );
+                        shouldContinue = false;
+                    }
+                    if (!shouldContinue) {
+                        return;
+                    }
                     this.newDataChiTiet.idSanPham = item.id;
                     this.newDataChiTiet.DonGia = item.DonGia;
                     await ChiTietHoaDonService.insert(this.$axios, this.newDataChiTiet);
