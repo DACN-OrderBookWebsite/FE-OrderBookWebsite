@@ -70,7 +70,7 @@
       </h4>
       <b-row class="per-page">
         <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="2">
-          <ProductCard :product="book" @click.native="addToCart(book)"></ProductCard>
+          <ProductCard :product="book"></ProductCard>
         </b-col>
       </b-row>
       <b-pagination v-model="currentPage" :total-rows="books.length" :per-page="perPage" aria-controls="my-table"
@@ -248,26 +248,26 @@ export default {
         console.log('fetch error');
       }
     },
-    addToCart(item) {
-      const response = this.$cart.getCart();
-      const existingItemIndex = response.findIndex(cartItem => cartItem.id === item.id);
+    // addToCart(item) {
+    //   const response = this.$cart.getCart();
+    //   const existingItemIndex = response.findIndex(cartItem => cartItem.id === item.id);
 
-      if (existingItemIndex !== -1) {
-        Swal.fire(
-            'Thông báo!',
-            'Sản phẩm đã tồn tại trong giỏ hàng.',
-            'warning'
-          );
-      } else {
-        item.stock = 1;
-        this.$cart.addToCart(item);
-        Swal.fire(
-            'Thông báo!',
-            'Đã thêm sản phẩm vào giỏ hàng.',
-            'success'
-          );
-      }
-    },
+    //   if (existingItemIndex !== -1) {
+    //     Swal.fire(
+    //         'Thông báo!',
+    //         'Sản phẩm đã tồn tại trong giỏ hàng.',
+    //         'warning'
+    //       );
+    //   } else {
+    //     item.stock = 1;
+    //     this.$cart.addToCart(item);
+    //     Swal.fire(
+    //         'Thông báo!',
+    //         'Đã thêm sản phẩm vào giỏ hàng.',
+    //         'success'
+    //       );
+    //   }
+    // },
   }
 };
 </script>
