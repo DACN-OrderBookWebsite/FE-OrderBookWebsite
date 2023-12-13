@@ -11,41 +11,33 @@
       <!-- Thêm label và b-form-select -->
       <b-col cols="12" md="9">
         <div class="title-2">
-          <label for="select-category">Tất Cả: </label>
+          <!-- <label for="select-category">Tất Cả: </label>
           <b-form-select
             id="select-category"
             v-model="selectedCategory"
             :options="options"
           >
-          </b-form-select>
+          </b-form-select> -->
 
           <label for="select-sort">Sắp Xếp Theo: </label>
-          <b-form-select
-            id="select-sort"
-            v-model="selectedSort"
-            :options="options"
-          ></b-form-select>
+          <b-form-select id="select-sort" v-model="selectedSort" :options="options" @change="sortData"></b-form-select>
 
           <!-- Icon chuyển đổi hiển thị -->
-          <span class="view-icon grid-view" 
-            ><i class="fa fa-th"></i
-          ></span>
-          <span class="view-icon list-view"
-            ><i class="fa fa-list"></i
-          ></span>
+          <span class="view-icon grid-view"><i class="fa fa-th"></i></span>
+          <span class="view-icon list-view"><i class="fa fa-list"></i></span>
         </div>
       </b-col>
     </b-row>
-    <b-row>
+    <!-- <b-row>
       <b-col cols="12" md="3" class="p-0">
         <div class="title-3">
           <b-button variant="outline-primary" >Lọc</b-button>
           <b-button variant="outline-danger">Xóa Tất Cả</b-button>
         </div>
       </b-col>
-    </b-row>
+    </b-row> -->
     <b-row>
-      <b-col cols="12" md="3">
+      <!-- <b-col cols="12" md="3">
         <b-row
           ><div class="title">
             <p class="p-2 button-title">Tác Giả</p>
@@ -76,19 +68,15 @@
               stacked
             ></b-form-checkbox-group></div
         ></b-row>
-      </b-col>
-      <b-col cols="12" md="9">
+      </b-col> -->
+      <b-col cols="12" md="12">
         <b-row>
           <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="3">
             <ProductCard :product="book"></ProductCard>
           </b-col>
         </b-row>
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="books.length"
-          :per-page="perPage"
-          aria-controls="my-table"
-        ></b-pagination>
+        <b-pagination v-model="currentPage" :total-rows="books.length" :per-page="perPage"
+          aria-controls="my-table"></b-pagination>
       </b-col>
     </b-row>
     <Footer></Footer>
@@ -99,6 +87,7 @@ import ProductCard from "../../components/ProductCard";
 import HeroSection from "../../components/HeroSection";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import SachService from "../../services/api/SachService";
 export default {
   name: "TheLoai",
   components: { ProductCard, HeroSection, Header, Footer },
@@ -118,11 +107,9 @@ export default {
         { text: "Grape", value: "grape" },
       ],
       options: [
-        { value: null, text: "Please select an option" },
-        { value: "a", text: "This is First option" },
-        { value: "b", text: "Selected Option" },
-        { value: { C: "3PO" }, text: "This is an option with object value" },
-        { value: "d", text: "This one is disabled", disabled: true },
+        { value: 1, text: "Tên" },
+        { value: 2, text: "Giá tăng dần" },
+        { value: 3, text: "Giá giảm dần" },
       ],
       quantity: 1,
       books: [
@@ -297,6 +284,7 @@ export default {
       ],
       currentPage: 1,
       perPage: 15,
+      selectedSort: 1
     };
   },
   computed: {
@@ -306,6 +294,9 @@ export default {
       return this.books.slice(start, end);
     },
   },
+  async mounted() {
+    await this.fetch();
+  },
   methods: {
     increaseQuantity() {
       this.quantity++;
@@ -313,19 +304,29 @@ export default {
     decreaseQuantity() {
       if (this.quantity > 0) this.quantity--;
     },
+    async fetch() {
+      const response = await SachService.getDataByTheLoai(this.$axios, this.$route.params.id);
+      this.books = response.data;
+    },
+    async sortData() {
+      const response = await SachService.getDataByTheLoaiSort(this.$axios, this.$route.params.id, this.selectedSort);
+      this.books = response.data;
+    }
   },
 };
 </script>
     
-    <style scoped>
+<style scoped>
 /* Đặt màu nền, font chữ cho toàn bộ trang */
 body {
   background-color: #f4f4f4;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .title-2 {
   padding: 20px;
 }
+
 .title-2 label {
   margin-right: 10px;
   font-weight: bold;
@@ -345,21 +346,26 @@ body {
 }
 
 .grid-view i {
-  color: blue; /* Màu cho icon dạng lưới */
+  color: blue;
+  /* Màu cho icon dạng lưới */
 }
 
 .list-view i {
-  color: green; /* Màu cho icon dạng danh sách */
+  color: green;
+  /* Màu cho icon dạng danh sách */
 }
+
 .section-title {
   margin-top: 40px;
 }
+
 #app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden;
 }
+
 .title {
   margin-left: auto;
   margin-right: auto;
@@ -376,6 +382,7 @@ body {
   text-align: center;
   justify-content: space-evenly;
 }
+
 .title-3 {
   margin-left: auto;
   margin-right: auto;
@@ -384,12 +391,14 @@ body {
   display: flex;
   justify-content: space-evenly;
 }
+
 /* Định dạng tiêu đề các phần, ví dụ như các tiêu đề của cột bên trái */
 h1 {
   font-size: 1rem;
   color: #333;
   margin-bottom: 0.5rem;
 }
+
 .button-title {
   max-width: 100%;
   color: var(--color-text-color, #1a1a1a);
@@ -401,6 +410,7 @@ h1 {
   line-height: normal;
   text-transform: capitalize;
 }
+
 /* Định dạng cho các card sản phẩm */
 .product-card {
   background-color: #fff;
@@ -484,7 +494,7 @@ footer {
 }
 
 /* Đảm bảo các card có khoảng cách đều nhau */
-.row > [class^="col-"] {
+.row>[class^="col-"] {
   padding: 0 0.5rem;
   margin-bottom: 1rem;
 }

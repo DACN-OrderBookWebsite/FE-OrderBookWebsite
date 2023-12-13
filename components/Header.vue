@@ -8,9 +8,9 @@
       </div>
     </nuxt-link>
     <div class="search-container">
-      <input type="text" placeholder="Nhập Tên sách, Tác Giả" class="search-input" />
+      <input type="text" placeholder="Nhập Tên sách" class="search-input" v-model="searchData" @keyup.enter="handleEnterKey"/>
       <button class="search-btn">
-        <i class="search-icon">
+        <i class="search-icon" @click="search">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18" fill="none">
             <path
               d="M7.73631 11.8166L8.21846 11.4551L7.77419 11.0479C6.54136 9.91812 5.83675 8.50892 5.83675 6.99844C5.83675 5.26295 6.77788 3.64948 8.37371 2.45265C9.96944 1.2559 12.1947 0.5 14.6684 0.5C17.142 0.5 19.3673 1.2559 20.963 2.45265C22.5589 3.64948 23.5 5.26295 23.5 6.99844C23.5 8.73394 22.5589 10.3474 20.963 11.5442C19.3673 12.741 17.142 13.4969 14.6684 13.4969L14.6676 13.4969C12.6032 13.5002 10.6138 12.9646 9.04014 11.997L8.75037 11.8188L8.47824 12.023L1.34291 17.3749L0.833236 16.9924L7.73631 11.8166ZM8.77826 12.4229C10.4389 13.444 12.521 14.0004 14.6684 13.9969L8.77826 12.4229ZM22.6337 6.99844C22.6337 5.25643 21.6963 3.72022 20.2512 2.63644C18.8067 1.55305 16.8325 0.899689 14.6684 0.899689C12.5043 0.899689 10.5301 1.55305 9.08552 2.63644C7.64043 3.72022 6.70308 5.25643 6.70308 6.99844C6.70308 8.74046 7.64043 10.2767 9.08552 11.3604C10.5301 12.4438 12.5043 13.0972 14.6684 13.0972C16.8325 13.0972 18.8067 12.4438 20.2512 11.3604C21.6963 10.2767 22.6337 8.74046 22.6337 6.99844Z"
@@ -71,7 +71,8 @@ export default {
   data() {
     return {
       CartQuantity: 0,
-      isNotLogin: true
+      isNotLogin: true,
+      searchData: "",
     };
   },
   mounted(){
@@ -102,6 +103,12 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    search(){
+      this.$router.push(`/TimKiem/` + this.searchData);
+    },
+    handleEnterKey(){
+      this.search();
     }
   }
 };
