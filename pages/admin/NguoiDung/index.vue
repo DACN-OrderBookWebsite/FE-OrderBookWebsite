@@ -44,7 +44,7 @@ export default {
                 { key: 'SDT', label: 'Số điện thoại' },
                 { key: 'DiaChi', label: 'Địa chỉ' },
                 { key: 'Email', label: 'Email' },
-                { key: 'idChucVu', label: 'Chức vụ' },
+                { key: 'nameOfChucVu', label: 'Chức vụ' },
                 { key: 'GioiTinh', label: 'Giới tính' },
                 { key: 'Anh', label: 'Ảnh' },
                 { key: 'Disabled', label: 'Hoạt động' },
@@ -75,7 +75,7 @@ export default {
         },
         async fetch() {
             try {
-                const response = await NguoiDungService.getData(this.$axios);
+                const response = await NguoiDungService.getNguoiDungAndChucVu(this.$axios);
                 this.data = response.data;
             } catch (error) {
                 console.error(error);

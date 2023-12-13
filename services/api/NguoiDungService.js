@@ -29,5 +29,8 @@ export default {
     getDataByTenDangNhap(axios, username) {
       return axios.get(`/api/NguoiDung/${username}/getDataByTenDangNhap`);
     },
+    getNguoiDungAndChucVu(axios) {
+      return axios.get(`/api/NguoiDung/getNguoiDungAndChucVu`);
+    },
   };
   

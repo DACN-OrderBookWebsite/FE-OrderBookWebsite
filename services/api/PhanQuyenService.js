@@ -23,5 +23,8 @@ export default {
     checkQuyen(axios, idNguoiDung, idQuyen){
       return axios.get(`api/PhanQuyen/${idNguoiDung}/${idQuyen}/checkQuyen`);
     },
+    getDataNhomAndQuyen(axios) {
+      return axios.get(`/api/PhanQuyen/getDataNhomAndQuyen`);
+    },
   };
   
