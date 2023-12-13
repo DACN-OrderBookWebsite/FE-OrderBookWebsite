@@ -1,8 +1,8 @@
-<template>
+<!-- <template>
   <div>
     <b-container fluid class="hero-section">
       <b-row class="hero-section-col" cols="1" cols-sm="2" cols-md="4" cols-lg="6">
-        <!-- <nuxt-link class="link-to" to="/">
+        <nuxt-link class="link-to" to="/">
           <b-col class="text-hero">TRANG CHỦ</b-col>
         </nuxt-link>
         <nuxt-link class="link-to" to="/GiaoTrinhDaiCuong">
@@ -17,12 +17,119 @@
         <nuxt-link class="link-to" to="contactUs">
           <b-col class="text-hero">LIÊN HỆ</b-col>
         </nuxt-link> -->
-        <nuxt-link v-for="menuItem in menuItems" :key="menuItem.id" :to="`/${menuItem.id}`" class="link-to">
+        <!-- <nuxt-link v-for="menuItem in menuItems" :key="menuItem.id" :to="`/${menuItem.id}`" class="link-to">
           <b-col class="text-hero">{{ menuItem.name }}</b-col>
         </nuxt-link>
-      </b-row>
-    </b-container>
+      </b-row> -->
+    <!-- </b-container> -->
     <!-- <section-bar :current-route="$route.path"></section-bar> -->
+  <!-- </div> -->
+<!-- </template> -->
+<template>
+  <div class="sidebar-main" :class="{ 'sidebar-open': isSidebarOpen }">
+    <button @click="toggleSidebar" class="toggle-button">
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="content" v-if="isSidebarOpen">
+      <div class="menu-container">
+        <b-card>
+          <b-card-header v-b-toggle="accordion1">Section 1</b-card-header>
+          <b-collapse id="accordion1">
+            <b-card-body> Content for section 1 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 2 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 3 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 4 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card>
+          <b-card-header v-b-toggle="accordion2">Section 2</b-card-header>
+          <b-collapse id="accordion2">
+            <b-card-body> Content for section 5 </b-card-body>
+          </b-collapse>
+        </b-card>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -35,6 +142,7 @@ export default {
   data() {
     return {
       menuItems: [],
+      isSidebarOpen: false,
     };
   },
   mounted() {
@@ -46,8 +154,11 @@ export default {
         const items = await TheLoaiService.getFiveTheLoai(this.$axios);
         this.menuItems = items.data;
       } catch (error) {
-        console.error('Error fetching menu items', error);
+        console.error("Error fetching menu items", error);
       }
+    },
+    toggleSidebar() {
+      this.isSidebarOpen = !this.isSidebarOpen;
     },
   },
 };
@@ -57,7 +168,34 @@ export default {
 .link-to {
   text-decoration: none;
 }
+.sidebar-main {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  margin: 10px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+.menu-container {
+  max-height: 800px; /* Set the maximum height as per your design */
+  overflow-y: auto; /* Enable vertical scrolling when content exceeds max height */
+}
+.sidebar-open {
+  width: 250px;
+}
 
+.toggle-button {
+  background-color: transparent;
+  border: none;
+  color: black;
+  font-size: 24px;
+  cursor: pointer;
+  margin: 10px;
+  align-self: flex-start;
+}
 .hero-section {
   padding: 40px 0;
   justify-content: center;
