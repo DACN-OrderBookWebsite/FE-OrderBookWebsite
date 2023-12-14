@@ -33,7 +33,7 @@
     </button>
     <div class="content" v-if="isSidebarOpen">
       <div class="menu-container">
-        <b-card>
+        <!-- <b-card>
           <b-card-header v-b-toggle="accordion1">Section 1</b-card-header>
           <b-collapse id="accordion1">
             <b-card-body> Content for section 1 </b-card-body>
@@ -128,7 +128,15 @@
           <b-collapse id="accordion2">
             <b-card-body> Content for section 5 </b-card-body>
           </b-collapse>
-        </b-card>
+        </b-card> -->
+        <nuxt-link v-for="(menu, index) in menuItems" :key="index" :to="{ path: `/TheLoai/${menu.id}` }">
+          <b-card>
+            <b-card-header v-b-toggle="menu.id">{{ menu.name }}</b-card-header>
+            <b-collapse :id="menu.id">
+              <b-card-body>{{ menu.name }}</b-card-body>
+            </b-collapse>
+          </b-card>
+        </nuxt-link>
       </div>
     </div>
   </div>
@@ -152,7 +160,7 @@ export default {
   methods: {
     async fetchMenuItems() {
       try {
-        const items = await TheLoaiService.getFiveTheLoai(this.$axios);
+        const items = await TheLoaiService.getData(this.$axios);
         this.menuItems = items.data;
       } catch (error) {
         console.error("Error fetching menu items", error);
@@ -169,6 +177,7 @@ export default {
 .link-to {
   text-decoration: none;
 }
+
 .sidebar-main {
   background-color: transparent;
   border: none;
@@ -180,10 +189,14 @@ export default {
   position: sticky;
   top: 0;
 }
+
 .menu-container {
-  max-height: 800px; /* Set the maximum height as per your design */
-  overflow-y: auto; /* Enable vertical scrolling when content exceeds max height */
+  max-height: 800px;
+  /* Set the maximum height as per your design */
+  overflow-y: auto;
+  /* Enable vertical scrolling when content exceeds max height */
 }
+
 .sidebar-open {
   width: 250px;
 }
@@ -197,6 +210,7 @@ export default {
   margin: 10px;
   align-self: flex-start;
 }
+
 .hero-section {
   padding: 40px 0;
   justify-content: center;

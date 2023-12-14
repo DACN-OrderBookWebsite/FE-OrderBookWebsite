@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header></Header>
+        <AdminSection></AdminSection>
         <div class="user-create-container border">
             <h1 class="text-center">Chỉnh sửa sách</h1>
             <b-form @submit.prevent="confirmUpdate">
@@ -77,14 +78,13 @@ import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Swal from 'sweetalert2';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
+import AdminSection from '../../../../components/AdminSection.vue';
 
 export default {
     data() {
         return {
-            data: {
-            },
-            dataerror: {
-            },
+            data: {},
+            dataerror: {},
             TheLoaiOption: [],
             NhaXuatBanOption: [],
             TacGiaOption: [],
@@ -115,7 +115,8 @@ export default {
                 const response = await SachService.getItem(this.$axios, this.$route.params.id);
                 this.data = response;
                 this.editAnh();
-            } catch (error) {
+            }
+            catch (error) {
                 console.error(error);
             }
         },
@@ -138,19 +139,12 @@ export default {
         async update() {
             try {
                 await SachService.update(this.$axios, this.$route.params.id, this.data);
-                Swal.fire(
-                    'Cập nhật!',
-                    'Thông tin đã được cập nhật thành công.',
-                    'success'
-                );
+                Swal.fire('Cập nhật!', 'Thông tin đã được cập nhật thành công.', 'success');
                 this.$router.push('/admin/Sach');
-            } catch (error) {
+            }
+            catch (error) {
                 this.dataerror = error.response.data.errors;
-                Swal.fire(
-                    'Lỗi!',
-                    'Có lỗi xảy ra khi cập nhật thông tin.',
-                    'error'
-                );
+                Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật thông tin.', 'error');
             }
         },
         async getEdit() {
@@ -174,7 +168,8 @@ export default {
                         text: item.name,
                     };
                 });
-            } catch (error) {
+            }
+            catch (error) {
                 console.error("Error while fetching create form:", error);
             }
         },
@@ -185,15 +180,16 @@ export default {
                 const file = fileInput.files[0];
                 // Lưu đối tượng File vào this.data.Anh nếu cần thiết
                 this.data.Anh = file.name;
-
                 const response = await PictureService.getSachPicture(this.data.Anh);
                 this.URLAnh = response;
                 this.data.Anh = this.URLAnh;
-            } else {
+            }
+            else {
                 console.log("Không có tệp nào được chọn");
             }
         }
-    }
+    },
+    components: { AdminSection }
 }
 </script>
   

@@ -35,7 +35,7 @@
               v-for="book in paginatedBooks"
               :key="book.id"
               cols="12"
-              md="2"
+              md="3"
             >
               <ProductCard
                 :product="book"

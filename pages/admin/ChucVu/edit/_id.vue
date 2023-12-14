@@ -1,6 +1,7 @@
 <template>
   <div>
     <Header></Header>
+    <AdminSection></AdminSection>
     <b-container>
       <b-row class="justify-content-md-center">
         <b-col md="6">
@@ -28,12 +29,13 @@
 import Swal from 'sweetalert2';
 import ChucVuService from '~/services/api/ChucVuService';
 import PhanQuyenService from '~/services/api/PhanQuyenService';
+import AdminSection from '../../../../components/AdminSection.vue';
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
 import moment from 'moment';
 
 export default {
-  components: { Footer, Header },
+  components: { Footer, Header, AdminSection },
   data() {
     return {
       data: {

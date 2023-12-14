@@ -1,6 +1,7 @@
 <template>
   <div>
     <Header></Header>
+    <AdminSection></AdminSection>
     <div id="table_content">
       <div class="h1 text-center">Danh sách chức vụ</div>
       <b-button @click="add">Thêm</b-button>
@@ -18,12 +19,13 @@
 <script>
 import ChucVuService from '~/services/api/ChucVuService';
 import PhanQuyenService from '~/services/api/PhanQuyenService';
+import AdminSection from '../../../components/AdminSection.vue';
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import Swal from "sweetalert2";
 
 export default {
-  components: { Footer, Header },
+  components: { Footer, Header , AdminSection},
   data() {
     return {
       data: [],

@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header></Header>
+        <AdminSectionVue></AdminSectionVue>
         <div class="user-create-container border">
             <h1 class="text-center">Thêm hóa đơn mới</h1>
             <b-form @submit.prevent="confirmAndCreate">
