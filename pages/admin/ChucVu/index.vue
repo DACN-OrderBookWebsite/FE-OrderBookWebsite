@@ -35,7 +35,7 @@ export default {
     };
   },
   async mounted() {
-    await this.checkQuyen();
+    // await this.checkQuyen();
     await this.fetch();
   },
   computed: {

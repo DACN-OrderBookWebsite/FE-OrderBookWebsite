@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header> </Header>
-    <HeroSection></HeroSection>
+    <section-bar :current-route="$route.path"></section-bar>
     <div class="container">
       <b-table striped hover :items="cartItems" :fields="fields" outlined>
         <template v-slot:cell(price)="data">
