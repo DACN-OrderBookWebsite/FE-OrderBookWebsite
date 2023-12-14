@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header></Header>
+        <AdminSection></AdminSection>
         <div class="user-create-container border">
             <h1 class="text-center">Thêm người dùng mới</h1>
             <b-form @submit.prevent="confirmAndCreate">
@@ -92,6 +93,7 @@
 import NguoiDungService from "~/services/api/NguoiDungService";
 import PhanQuyenService from "~/services/api/PhanQuyenService";
 import PictureService from "~/services/api/PictureService";
+import AdminSection from "../../../../components/AdminSection.vue";
 import Swal from "sweetalert2";
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";

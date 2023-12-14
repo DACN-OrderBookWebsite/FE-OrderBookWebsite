@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header></Header>
+        <AdminSection></AdminSection>
         <div class="user-create-container border">
             <h1 class="text-center">Thêm người dùng mới</h1>
             <b-form @submit.prevent="confirmUpdate">
@@ -96,12 +97,12 @@ import Swal from "sweetalert2";
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
 import moment from 'moment';
+import AdminSection from "../../../../components/AdminSection.vue";
 
 export default {
     data() {
         return {
-            data: {
-            },
+            data: {},
             dataerror: {
                 name: "",
                 TenDangNhap: "",
@@ -143,7 +144,8 @@ export default {
             try {
                 const response = await NguoiDungService.getItem(this.$axios, this.$route.params.id);
                 this.data = response;
-            } catch (error) {
+            }
+            catch (error) {
                 console.error(error);
             }
         },
@@ -170,19 +172,12 @@ export default {
             try {
                 this.NgayThayDoi = this.formattedModifiedDate(this.NgayThayDoi);
                 await NguoiDungService.update(this.$axios, this.$route.params.id, this.data);
-                Swal.fire(
-                    'Cập nhật!',
-                    'Thông tin đã được cập nhật thành công.',
-                    'success'
-                );
+                Swal.fire('Cập nhật!', 'Thông tin đã được cập nhật thành công.', 'success');
                 this.$router.push('/admin/NguoiDung');
-            } catch (error) {
+            }
+            catch (error) {
                 this.dataerror = error.response.data.errors;
-                Swal.fire(
-                    'Lỗi!',
-                    'Có lỗi xảy ra khi cập nhật thông tin.',
-                    'error'
-                );
+                Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật thông tin.', 'error');
             }
         },
         async getEdit() {
@@ -194,7 +189,8 @@ export default {
                         text: item.name,
                     };
                 });
-            } catch (error) {
+            }
+            catch (error) {
                 console.error("Error while fetching create form:", error);
             }
         },
@@ -205,16 +201,15 @@ export default {
                 const file = fileInput.files[0];
                 // Lưu đối tượng File vào this.data.Anh nếu cần thiết
                 this.data.Anh = file.name;
-
-                const response = await PictureService.getNguoiDungPicture(
-                    this.data.Anh
-                );
+                const response = await PictureService.getNguoiDungPicture(this.data.Anh);
                 this.data.Anh = response;
-            } else {
+            }
+            else {
                 console.log("Không có tệp nào được chọn");
             }
         },
     },
+    components: { AdminSection }
 };
 </script>
 

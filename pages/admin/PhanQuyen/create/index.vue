@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header></Header>
+        <AdminSection></AdminSection>
         <div class="user-create-container border">
             <h1 class="text-center">Thêm phân quyền mới</h1>
             <b-form @submit.prevent="confirmAndCreate">
@@ -31,6 +32,7 @@ import PhanQuyenService from "~/services/api/PhanQuyenService";
 import Swal from "sweetalert2";
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
+import AdminSection from "../../../../components/AdminSection.vue";
 
 export default {
     data() {
@@ -77,7 +79,6 @@ export default {
                 confirmButtonText: "Thêm",
                 cancelButtonText: "Hủy",
             });
-
             if (confirmResult.isConfirmed) {
                 this.create();
             }
@@ -86,13 +87,10 @@ export default {
             try {
                 await PhanQuyenService.insert(this.$axios, this.data);
                 Swal.fire("Thêm thành công!", "Dữ liệu đã được thêm.", "success");
-            } catch (error) {
+            }
+            catch (error) {
                 this.dataerror = error.response.data.errors;
-                Swal.fire(
-                    "Thêm Thất Bại!",
-                    "Đã có lỗi xảy ra khi thêm dữ liệu.",
-                    "error"
-                );
+                Swal.fire("Thêm Thất Bại!", "Đã có lỗi xảy ra khi thêm dữ liệu.", "error");
             }
         },
         async getRolePermission() {
@@ -110,11 +108,13 @@ export default {
                         text: item.name,
                     };
                 });
-            } catch (error) {
+            }
+            catch (error) {
                 console.error("Error while fetching create form:", error);
             }
         },
     },
+    components: { AdminSection }
 };
 </script>
 

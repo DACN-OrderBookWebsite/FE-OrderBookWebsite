@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header></Header>
+        <AdminSection></AdminSection>
         <div class="user-create-container border">
             <h1 class="text-center">Thêm Thể Loại mới</h1>
             <b-form @submit.prevent="confirmAndCreate">
@@ -24,6 +25,7 @@ import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Swal from 'sweetalert2';
 import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
+import AdminSection from '../../../../components/AdminSection.vue';
 
 export default {
     data() {
@@ -66,7 +68,6 @@ export default {
                 confirmButtonText: 'Thêm',
                 cancelButtonText: 'Hủy'
             });
-
             if (confirmResult.isConfirmed) {
                 this.create();
             }
@@ -74,21 +75,15 @@ export default {
         async create() {
             try {
                 await TheLoaiService.insert(this.$axios, this.data);
-                Swal.fire(
-                    'Thêm thành công!',
-                    'Dữ liệu đã được thêm.',
-                    'success'
-                );
-            } catch (error) {
+                Swal.fire('Thêm thành công!', 'Dữ liệu đã được thêm.', 'success');
+            }
+            catch (error) {
                 this.dataerror = error.response.data.errors;
-                Swal.fire(
-                    'Thêm Thất Bại!',
-                    'Đã có lỗi xảy ra khi thêm dữ liệu.',
-                    'error'
-                );
+                Swal.fire('Thêm Thất Bại!', 'Đã có lỗi xảy ra khi thêm dữ liệu.', 'error');
             }
         },
-    }
+    },
+    components: { AdminSection }
 }
 </script>
   
