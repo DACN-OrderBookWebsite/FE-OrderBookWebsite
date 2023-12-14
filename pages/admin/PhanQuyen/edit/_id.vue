@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header></Header>
+        <AdminSection></AdminSection>
         <b-container>
             <b-row class="justify-content-md-center">
                 <b-col md="6">
@@ -40,9 +41,10 @@ import PhanQuyenService from '~/services/api/PhanQuyenService';
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
 import moment from 'moment';
+import AdminSection from '../../../../components/AdminSection.vue';
 
 export default {
-    components: { Footer, Header },
+    components: { Footer, Header, AdminSection },
     data() {
         return {
             data: {

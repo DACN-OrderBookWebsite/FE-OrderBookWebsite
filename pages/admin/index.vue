@@ -3,6 +3,7 @@
     <Header></Header>
     <div>
       <b-container fluid>
+        <AdminSection></AdminSection>
         <!-- Row for entire admin layout -->
         <b-row>
 
@@ -34,10 +35,11 @@
 <script>
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import AdminSection from "../../components/AdminSection.vue";
 export default {
   name: 'Admin',
   middleware: 'auth',
-  components: {Footer, Header},
+  components: {Footer, Header, AdminSection},
   // You may need to import additional components or functionality here
 };
 </script>

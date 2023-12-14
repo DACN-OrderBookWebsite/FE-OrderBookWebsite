@@ -1,6 +1,7 @@
 <template>
     <div>
         <Header></Header>
+        <AdminSection></AdminSection>
         <div id="table_content">
             <!-- <div class="h1 text-center">Danh sách Sách</div>
         <b-button @click="add">Thêm</b-button> -->
@@ -125,9 +126,10 @@ import Header from "../../../../components/Header";
 import Footer from "../../../../components/Footer";
 import Swal from "sweetalert2";
 import moment from 'moment';
+import AdminSection from '../../../../components/AdminSection.vue';
 
 export default {
-    components: { Footer, Header },
+    components: { Footer, Header, AdminSection },
     data() {
         return {
             dataSanPham: [],

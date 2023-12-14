@@ -9,17 +9,19 @@
         <b-row class="section-title">
           <b-col cols="12" md="10">
             <div class="title-2">
-              <label for="select-category">Tất Cả: </label>
+              <!-- <label for="select-category">Tất Cả: </label>
               <b-form-select
                 id="select-category"
                 :options="options"
               >
-              </b-form-select>
+              </b-form-select> -->
 
               <label for="select-sort">Sắp Xếp Theo: </label>
               <b-form-select
                 id="select-sort"
                 :options="options"
+                @change="sortData"
+                v-model="selectedSort"
               ></b-form-select>
 
               <!-- Icon chuyển đổi hiển thị -->
@@ -270,7 +272,7 @@ export default {
     },
   },
   async mounted() {
-    // await this.fetch();
+    await this.fetch();
   },
   methods: {
     increaseQuantity() {
@@ -282,13 +284,13 @@ export default {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
-    // async fetch() {
-    //   const response = await SachService.getDataByTheLoai(
-    //     this.$axios,
-    //     this.$route.params.id
-    //   );
-    //   this.books = response.data;
-    // },
+    async fetch() {
+      const response = await SachService.getDataByTheLoai(
+        this.$axios,
+        this.$route.params.id
+      );
+      this.books = response.data;
+    },
     async sortData() {
       const response = await SachService.getDataByTheLoaiSort(
         this.$axios,
