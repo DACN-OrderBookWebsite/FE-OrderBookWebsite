@@ -2,6 +2,7 @@
   <div id="app">
     <Header> </Header>
     <b-row>
+      <section-bar :current-route="$route.path"></section-bar>
       <b-col cols="12" md="2" class="p-0">
         <hero-section></hero-section>
       </b-col>

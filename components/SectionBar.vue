@@ -15,7 +15,7 @@ export default {
       activeSection:
         this.currentRoute === "/"
           ? ""
-          : `Trang Chủ > ${this.mapRouteToSection(this.currentRoute)}`,
+          : `${this.mapRouteToSection(this.currentRoute)}`,
     };
   },
   methods: {
@@ -27,9 +27,10 @@ export default {
         "/GiaoTrinhDeThi": "Giáo Trình Đề Thi",
         "/contactUs": "Liên Hệ",
         "/loginkeycloak": "Đăng Nhập",
-        "/shoppingCart": "Giỏ Hàng Của Bạn",
+        "/ShoppingCart": "Giỏ Hàng Của Bạn",
+        "/ProductDetails": "Chi Tiết Sản Phẩm",
       };
-      return routeSectionMapping[route] || "Không xác định";
+      return routeSectionMapping[route] || "";
     },
   },
   watch: {
@@ -38,7 +39,7 @@ export default {
       this.activeSection =
         newValue === "/"
           ? ""
-          : `Trang Chủ > ${this.mapRouteToSection(newValue)}`;
+          : `${this.mapRouteToSection(newValue)}`;
     },
   },
 };

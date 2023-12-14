@@ -1,7 +1,6 @@
 <template>
     <div id="app">
       <Header></Header>
-      <HeroSection></HeroSection>
       <b-row>
         <b-col cols="12" md="12">
           <b-row>

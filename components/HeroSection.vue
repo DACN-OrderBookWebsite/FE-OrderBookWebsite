@@ -23,7 +23,6 @@
         </nuxt-link>
       </b-row> -->
     <!-- </b-container> -->
-    <!-- <section-bar :current-route="$route.path"></section-bar> -->
   <!-- </div> -->
 <!-- </template> -->
 <template>
@@ -143,9 +142,8 @@
 </template>
 <script>
 import TheLoaiService from "../services/api/TheLoaiService";
-import SectionBar from "./SectionBar.vue";
 export default {
-  components: { SectionBar },
+  components: { },
   name: "HeroSection",
   // You can add your script here if needed
   data() {
