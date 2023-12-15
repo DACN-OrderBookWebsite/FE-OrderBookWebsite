@@ -57,7 +57,7 @@ export default {
                 { key: 'DiaChiNhanHang', label: 'Địa chỉ nhận hàng' },
                 { key: 'GhiChu', label: 'Ghi chú' },
                 { key: 'idTrangThai', label: 'Trạng thái' },
-                { key: 'idNhanVien', label: 'Nhân viên' },
+                { key: 'nameOfNhanVien', label: 'Nhân viên' },
                 { key: 'idKhachHang', label: 'Khách hàng' },
                 { key: 'actions', label: 'Hành Động' }
             ],
@@ -254,23 +254,56 @@ export default {
             try {
                 item.idTrangThai += 1;
                 await HoaDonService.update(this.$axios, item.id, item);
-                //Cập nhật lại số lượng tồn sản phẩm sau khi đã xác nhận với khách hàng
+
+                // Cờ để kiểm soát việc tiếp tục thực thi
+                let continueExecution = true;
+
                 if (item.idTrangThai === 2) {
-                    ChiTietHoaDonService.getDataByHoaDon(this.$axios, item.id)
-                        .then(response => {
+                    await ChiTietHoaDonService.getDataByHoaDon(this.$axios, item.id)
+                        .then(async (response) => {
                             if (response && response.data && Array.isArray(response.data)) {
-                                response.data.forEach((element) => {
-                                    console.log(element);
-                                    this.updateSoLuongSanPhamByHoaDon(element.idSanPham, element.SoLuong);
-                                });
+                                for (const element of response.data) {
+                                    const sp = await SachService.getItem(this.$axios, element.idSanPham);
+                                    if (sp.SoLuongTon < element.SoLuong) {
+                                        Swal.fire(
+                                            'Thông báo!',
+                                            'Sản phẩm ' + sp.name + ' trong kho chỉ còn ' + sp.SoLuongTon + ' sản phẩm',
+                                            'warning'
+                                        );
+                                        continueExecution = false; // Set cờ để dừng việc tiếp tục thực thi
+                                        break; // Thoát vòng lặp
+                                    }
+                                }
                             } else {
                                 console.error('Invalid or missing data in the response');
                             }
                         })
-                        .catch(error => {
+                        .catch((error) => {
                             console.error('Error fetching data:', error);
                         });
                 }
+
+                // Kiểm tra cờ trước khi tiếp tục thực thi các bước tiếp theo
+                if (!continueExecution) {
+                    return;
+                }
+
+                // Các bước tiếp theo nếu cờ không bị dừng
+
+                await ChiTietHoaDonService.getDataByHoaDon(this.$axios, item.id)
+                    .then(response => {
+                        if (response && response.data && Array.isArray(response.data)) {
+                            response.data.forEach((element) => {
+                                this.updateSoLuongSanPhamByHoaDon(element.idSanPham, element.SoLuong);
+                            });
+                        } else {
+                            console.error('Invalid or missing data in the response');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+
                 await this.fetch(item.idTrangThai - 1);
                 Swal.fire(
                     'Thông báo!',
