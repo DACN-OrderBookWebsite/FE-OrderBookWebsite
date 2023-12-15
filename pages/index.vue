@@ -441,7 +441,7 @@ html {
 .card-body {
   padding: 20px;
   color: #173f5f;
-  font-size: 28px;
+  font-size: 22px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
