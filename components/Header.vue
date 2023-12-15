@@ -8,7 +8,8 @@
       </div>
     </nuxt-link>
     <div class="search-container">
-      <input type="text" placeholder="Nhập Tên sách" class="search-input" v-model="searchData" @keyup.enter="handleEnterKey"/>
+      <input type="text" placeholder="Nhập Tên sách" class="search-input" v-model="searchData"
+        @keyup.enter="handleEnterKey" />
       <button class="search-btn">
         <i class="search-icon" @click="search">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18" fill="none">
@@ -30,16 +31,28 @@
         </i>
         TÀI KHOẢN
       </nuxt-link>
-      <button v-else @click="LogOut" class="account-link">
-        <i>
-          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <path
-              d="M6.45078 0C3.964 0 1.93523 1.85841 1.93523 4.13636C1.93523 5.56045 2.72868 6.825 3.9311 7.57132C1.63011 8.47541 0 10.5672 0 13H1.29016C1.29016 10.3823 3.59308 8.27273 6.45078 8.27273C9.30847 8.27273 11.6114 10.3823 11.6114 13H12.9016C12.9016 10.5672 11.2714 8.476 8.97045 7.57073C9.58414 7.19123 10.087 6.67975 10.4349 6.08104C10.7828 5.48233 10.9653 4.81463 10.9663 4.13636C10.9663 1.85841 8.93755 0 6.45078 0ZM6.45078 1.18182C8.23958 1.18182 9.67617 2.49777 9.67617 4.13636C9.67617 5.77495 8.23958 7.09091 6.45078 7.09091C4.66198 7.09091 3.22539 5.77495 3.22539 4.13636C3.22539 2.49777 4.66198 1.18182 6.45078 1.18182Z"
-              fill="#2C7ECA" />
-          </svg>
-        </i>
-        Log out
-      </button>
+      <div v-else>
+        <button @click="LogOut" class="account-link">
+          <i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path
+                d="M6.45078 0C3.964 0 1.93523 1.85841 1.93523 4.13636C1.93523 5.56045 2.72868 6.825 3.9311 7.57132C1.63011 8.47541 0 10.5672 0 13H1.29016C1.29016 10.3823 3.59308 8.27273 6.45078 8.27273C9.30847 8.27273 11.6114 10.3823 11.6114 13H12.9016C12.9016 10.5672 11.2714 8.476 8.97045 7.57073C9.58414 7.19123 10.087 6.67975 10.4349 6.08104C10.7828 5.48233 10.9653 4.81463 10.9663 4.13636C10.9663 1.85841 8.93755 0 6.45078 0ZM6.45078 1.18182C8.23958 1.18182 9.67617 2.49777 9.67617 4.13636C9.67617 5.77495 8.23958 7.09091 6.45078 7.09091C4.66198 7.09091 3.22539 5.77495 3.22539 4.13636C3.22539 2.49777 4.66198 1.18182 6.45078 1.18182Z"
+                fill="#2C7ECA" />
+            </svg>
+          </i>
+          Log out
+        </button>
+        <button @click="DoiMatKhau" class="account-link">
+          <i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path
+                d="M6.45078 0C3.964 0 1.93523 1.85841 1.93523 4.13636C1.93523 5.56045 2.72868 6.825 3.9311 7.57132C1.63011 8.47541 0 10.5672 0 13H1.29016C1.29016 10.3823 3.59308 8.27273 6.45078 8.27273C9.30847 8.27273 11.6114 10.3823 11.6114 13H12.9016C12.9016 10.5672 11.2714 8.476 8.97045 7.57073C9.58414 7.19123 10.087 6.67975 10.4349 6.08104C10.7828 5.48233 10.9653 4.81463 10.9663 4.13636C10.9663 1.85841 8.93755 0 6.45078 0ZM6.45078 1.18182C8.23958 1.18182 9.67617 2.49777 9.67617 4.13636C9.67617 5.77495 8.23958 7.09091 6.45078 7.09091C4.66198 7.09091 3.22539 5.77495 3.22539 4.13636C3.22539 2.49777 4.66198 1.18182 6.45078 1.18182Z"
+                fill="#2C7ECA" />
+            </svg>
+          </i>
+          Đổi mật khẩu
+        </button>
+      </div>
       <nuxt-link to="/ShoppingCart" class="cart-link">
         <i>
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -75,7 +88,7 @@ export default {
       searchData: "",
     };
   },
-  mounted(){
+  mounted() {
     this.getCartTotalQuantity();
     this.fetch();
   },
@@ -91,11 +104,11 @@ export default {
       this.CartQuantity = totalQuantity;
       return totalQuantity;
     },
-    fetch(){
+    fetch() {
       const response = this.$login.getLogin();
       this.isNotLogin = response.length === 0 ? true : false;
     },
-    LogOut(){
+    LogOut() {
       try {
         this.$login.clearLogin();
         console.log(this.$login.getLogin());
@@ -104,11 +117,19 @@ export default {
         console.error(error);
       }
     },
-    search(){
+    search() {
       this.$router.push(`/TimKiem/` + this.searchData);
     },
-    handleEnterKey(){
+    handleEnterKey() {
       this.search();
+    },
+    DoiMatKhau() {
+      try {
+        const response = this.$login.getLogin();
+        this.$router.push('/user/DoiMatKhau/' + response[0].id);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 };
