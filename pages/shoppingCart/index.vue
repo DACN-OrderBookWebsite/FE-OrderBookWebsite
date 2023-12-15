@@ -244,6 +244,10 @@ export default {
         this.dataHoaDon.NgayNhanHang = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
         this.dataHoaDon.TongSoLuong = this.cartItems.reduce((total, item) => total + item.quantity, 0);
         this.dataHoaDon.TongTien = this.totalPrice;
+
+        const user = this.$login.getLogin();
+        if(user.length !== 0)
+          this.dataHoaDon.idKhachHang = user[0].id;
         await HoaDonService.insert(this.$axios, this.dataHoaDon);
         const response = await HoaDonService.showDataByMaSV(this.$axios, this.dataHoaDon.MaSV);
         this.cartItems.map(async item => {
