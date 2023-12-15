@@ -22,37 +22,9 @@ export default {
     };
   },
   async mounted() {
-    //   await this.checkQuyen();
-    //   await this.fetch();
+
   },
   methods: {
-    async checkQuyen() {
-      const response = this.$login.getLogin();
-      if (response.length === 0) {
-        this.$router.push("/loginkeycloak");
-      } else {
-        const kq = await PhanQuyenService.checkQuyen(
-          this.$axios,
-          response[0].id,
-          this.quyen
-        );
-        console.log(kq.data.result);
-        if (kq.data.result === false) {
-          this.$router.push("/");
-        }
-      }
-    },
-    async fetch() {
-      try {
-        const response = await ChucVuService.getItem(
-          this.$axios,
-          this.$route.params.id
-        );
-        this.data = response;
-      } catch (error) {
-        console.error(error);
-      }
-    },
     confirmUpdate() {
       Swal.fire({
         title: "Xác nhận cập nhật",
