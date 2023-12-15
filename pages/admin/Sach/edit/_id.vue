@@ -52,7 +52,7 @@
 
                 <!-- Trạng Thái Hoạt Động -->
                 <b-form-group label="Trạng Thái Hoạt Động:" label-for="input-disabled">
-                    <b-form-checkbox id="input-disabled" v-model="data.Disabled">
+                    <b-form-checkbox id="input-disabled" v-model="data.Disabled" :value="1" :unchecked-value="0">
                         Ngừng kinh doanh:
                     </b-form-checkbox>
                 </b-form-group>

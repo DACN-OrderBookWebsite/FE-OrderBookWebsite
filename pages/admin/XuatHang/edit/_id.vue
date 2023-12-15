@@ -138,8 +138,8 @@ export default {
                 // { key: 'idTheLoai', label: 'Thể loại' },
                 // { key: 'idNhaXuatBan', label: 'Nhà xuất bản' },
                 // { key: 'idTacGia', label: 'Tác giả' },
-                // { key: 'DonGia', label: 'Đơn giá' },
-                // { key: 'SoLuongTon', label: 'Số lượng tồn' },
+                { key: 'DonGia', label: 'Đơn giá' },
+                { key: 'SoLuongTon', label: 'Số lượng tồn' },
                 { key: 'Anh', label: 'Ảnh' },
                 // { key: 'Disabled', label: 'Kinh doanh' },
                 { key: 'actions', label: 'Hành Động' }

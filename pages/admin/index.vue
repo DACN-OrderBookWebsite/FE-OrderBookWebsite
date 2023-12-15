@@ -4,28 +4,6 @@
     <div>
       <b-container fluid>
         <AdminSection></AdminSection>
-        <!-- Row for entire admin layout -->
-        <b-row>
-
-          <!-- Admin Sidebar -->
-          <b-col cols="12" md="3" lg="2" className="admin-sidebar">
-            <b-nav vertical className="flex-column">
-              <nuxt-link to="/admin">Dashboard</nuxt-link>
-              <nuxt-link to="/admin/users">Quản Lý Người Dùng</nuxt-link>
-              <nuxt-link to="/admin/product">Quản Lý Sản Phẩm</nuxt-link>
-              <nuxt-link to="/admin/ordermanagement">Quản Lý Đơn Hàng</nuxt-link>
-              <nuxt-link to="/admin/importproduct">Nhập Sản Phẩm</nuxt-link>
-              <!--            <nuxt-link to="/admin/logout">Logout</nuxt-link>-->
-            </b-nav>
-          </b-col>
-
-          <!-- Main Content Area -->
-          <b-col cols="12" md="9" lg="10" className="admin-content">
-            <!-- Your admin page content goes here -->
-            <router-view></router-view>
-          </b-col>
-
-        </b-row>
       </b-container>
     </div>
     <Footer></Footer>
@@ -38,7 +16,6 @@ import Footer from "../../components/Footer";
 import AdminSection from "../../components/AdminSection.vue";
 export default {
   name: 'Admin',
-  middleware: 'auth',
   components: {Footer, Header, AdminSection},
   // You may need to import additional components or functionality here
 };

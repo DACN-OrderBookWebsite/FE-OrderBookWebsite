@@ -3,7 +3,7 @@
         <Header></Header>
         <AdminSection></AdminSection>
         <div class="user-create-container border">
-            <h1 class="text-center">Thêm người dùng mới</h1>
+            <h1 class="text-center">Sửa thông tin người dùng</h1>
             <b-form @submit.prevent="confirmUpdate">
                 <!-- Tên -->
                 <b-form-group label="Tên:" label-for="input-name">
@@ -61,7 +61,7 @@
 
                 <!-- Trạng Thái Hoạt Động -->
                 <b-form-group label="Trạng Thái Hoạt Động:" label-for="input-disabled">
-                    <b-form-checkbox id="input-disabled" v-model="data.Disabled">
+                    <b-form-checkbox id="input-disabled" v-model="data.Disabled" :value="1" :unchecked-value="0">
                         Khóa tài khoản:
                     </b-form-checkbox>
                 </b-form-group>
