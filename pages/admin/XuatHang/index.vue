@@ -289,27 +289,27 @@ export default {
                 }
 
                 // Các bước tiếp theo nếu cờ không bị dừng
-
-                await ChiTietHoaDonService.getDataByHoaDon(this.$axios, item.id)
-                    .then(response => {
-                        if (response && response.data && Array.isArray(response.data)) {
-                            response.data.forEach((element) => {
-                                this.updateSoLuongSanPhamByHoaDon(element.idSanPham, element.SoLuong);
-                            });
-                        } else {
-                            console.error('Invalid or missing data in the response');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                    });
-
-                await this.fetch(item.idTrangThai - 1);
-                Swal.fire(
-                    'Thông báo!',
-                    'Trạng thái đã cập nhật.',
-                    'success'
-                );
+                if (item.idTrangThai === 2) {
+                    await ChiTietHoaDonService.getDataByHoaDon(this.$axios, item.id)
+                        .then(response => {
+                            if (response && response.data && Array.isArray(response.data)) {
+                                response.data.forEach((element) => {
+                                    this.updateSoLuongSanPhamByHoaDon(element.idSanPham, element.SoLuong);
+                                });
+                            } else {
+                                console.error('Invalid or missing data in the response');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                        });
+                    }
+                    await this.fetch(item.idTrangThai - 1);
+                    Swal.fire(
+                        'Thông báo!',
+                        'Trạng thái đã cập nhật.',
+                        'success'
+                    );
             } catch (error) {
                 console.error(error);
                 Swal.fire(
