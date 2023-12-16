@@ -4,39 +4,27 @@
     <b-row class="justify-content-md-center">
       <b-col md="6">
         <b-card class="mt-5">
-          <b-card-title class="text-center">Quên Mật Khẩu</b-card-title>
+          <b-card-title class="text-center">Đổi mật khẩu</b-card-title>
           <b-form @submit.prevent="onSubmit">
             <b-form-group label="Mật Khẩu Cũ:" label-for="old-password-input">
-              <b-form-input
-                id="old-password-input"
-                v-model="oldpassword"
-                type="password"
-                required
-                placeholder="Enter Old Password"
-              ></b-form-input>
+              <b-form-input id="old-password-input" v-model="MatKhauCu" type="password" required
+                placeholder="Enter Old Password"></b-form-input>
             </b-form-group>
 
             <b-form-group label="Mật Khẩu Mới:" label-for="password-input">
-              <b-form-input
-                id="username-input"
-                v-model="password"
-                type="password"
-                required
-                placeholder="Enter Password"
-              ></b-form-input>
+              <b-form-input id="username-input" v-model="data.MatKhau" type="password" required
+                placeholder="Enter Password"></b-form-input>
+              <small v-if="dataerror.MatKhau" class="text-danger">{{
+                dataerror.MatKhau[0]
+              }}</small>
             </b-form-group>
 
-            <b-form-group
-              label="Xác Nhận Mật Khẩu Mới:"
-              label-for="confirm-password-input"
-            >
-              <b-form-input
-                id="password-input"
-                type="password"
-                v-model="confirmpassword"
-                required
-                placeholder="Enter Confirm Password"
-              ></b-form-input>
+            <b-form-group label="Xác Nhận Mật Khẩu Mới:" label-for="confirm-password-input">
+              <b-form-input id="password-input" type="password" v-model="data.MatKhau_confirmation" required
+                placeholder="Enter Confirm Password"></b-form-input>
+              <small v-if="dataerror.MatKhau" class="text-danger">{{
+                dataerror.MatKhau[0]
+              }}</small>
             </b-form-group>
             <div class="button-submit">
               <b-button type="submit" variant="primary" block>Submit</b-button>
@@ -49,7 +37,7 @@
   </div>
 </template>
   
-  <script>
+<script>
 import HeroSection from "./HeroSection";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -61,56 +49,85 @@ export default {
   components: { HeroSection, Footer, Header },
   data() {
     return {
-      oldpassword: "",
-      password: "",
-      confirmpassword: "",
+      MatKhauCu: "",
+      data: {
+        MatKhau: "",
+        MatKhau_confirmation: ""
+      },
+      dataerror: {}
     };
   },
   mounted() {
-    //   this.fetch();
+    this.fetch();
   },
   methods: {
     fetch() {
       const response = this.$login.getLogin();
-      if (response.length !== 0) {
+      if (response.length === 0) {
         this.$router.push("/");
       }
     },
     async onSubmit() {
       try {
-      } catch (error) {
-        console.error("Error during change password:", error);
+        const user = this.$login.getLogin();
+        const checkMatKhauCu = await NguoiDungService.checkLogin(this.$axios, user[0].TenDangNhap, this.MatKhauCu);
+        if (checkMatKhauCu.data.success === true) {
+          await NguoiDungService.resetPassword(this.$axios, user[0].id, this.data.MatKhau, this.data.MatKhau_confirmation);
+          Swal.fire(
+            'Thông báo!',
+            'Mật khẩu đã thay đổi thành công.',
+            'success'
+          );
+          this.$login.clearLogin();
+          this.$router.push('/');
+        }
+        else {
+          Swal.fire(
+            'Thông báo!',
+            'Nhập sai mật khẩu cũ.',
+            'error'
+          );
+        }
+      }
+      catch (error) {
+        this.dataerror = error.response.data.errors;
       }
     },
   },
 };
 </script>
   
-  <style scoped>
+<style scoped>
 .container {
   max-width: unset !important;
   margin: 15px;
 }
+
 .text-center {
   font-size: 30px;
 }
+
 .button-submit {
-    display: flex;
-    margin-top: 15px;
-    justify-content: center;
+  display: flex;
+  margin-top: 15px;
+  justify-content: center;
 }
+
 .mt-5 {
   width: 50%;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
 }
+
 /* Card styling */
 .b-card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
-  border: none; /* Removes the default card border */
-  border-radius: 8px; /* Optional: for rounded corners */
+  border: none;
+  /* Removes the default card border */
+  border-radius: 8px;
+  /* Optional: for rounded corners */
 }
 
 .b-card:hover {
@@ -143,13 +160,18 @@ export default {
 .b-form-group {
   margin-bottom: 1rem;
 }
+
 .b-form-group label {
-  font-size: 22px !important; /* Reduced font size for labels */
-  color: #555; /* Optional: adjust the color as needed */
+  font-size: 22px !important;
+  /* Reduced font size for labels */
+  color: #555;
+  /* Optional: adjust the color as needed */
 }
+
 /* Button styling */
 .b-button {
-  background-color: #0056b3; /* Primary button color */
+  background-color: #0056b3;
+  /* Primary button color */
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -161,7 +183,8 @@ export default {
 .b-button:hover,
 .b-button:active,
 .b-button:focus {
-  background-color: #004494; /* Darken button on hover/focus/active */
+  background-color: #004494;
+  /* Darken button on hover/focus/active */
 }
 </style>
   
