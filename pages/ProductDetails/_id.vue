@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="body-container">
     <Header></Header>
     <section-bar :current-route="$route.path"></section-bar>
     <div class="product-details-container">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
           <div class="row container-product">
-            <div class="col-md-6 image-product">
+            <div class="col-md-4 image-product">
               <b-carousel id="carousel-1" :interval="4000" controls>
                 <b-carousel-slide
                   img-src="@/static/images/backgrounds/imagebook2.png"
@@ -19,17 +19,18 @@
               <!-- <img :src="data.Anh" alt="Ảnh"/> -->
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-8 ml-5">
               <h2>{{ data.name }}</h2>
-              <p>{{ $formatCurrencyVND(data.DonGia) }}</p>
               <b-row>
-                <div class="col-md-6 container-info-product">
+                <div class="container-info-product">
                   <p class="mg-bottom-40">
                     Năm xuất bản:
                     <span class="borderadius-organe">
                       {{ data.NamXuatBan }}</span
                     >
                   </p>
+                </div>
+                <div class="container-info-product">
                   <p class="mg-bottom-40">
                     Tác giả:
                     <span class="borderadius-organe">
@@ -37,7 +38,7 @@
                     >
                   </p>
                 </div>
-                <div class="col-md-6 container-info-product">
+                <div class="container-info-product">
                   <p class="mg-bottom-40">
                     Nhà xuất bản:
                     <span class="borderadius-organe">
@@ -45,45 +46,51 @@
                     >
                   </p>
                 </div>
+                <div class="container-info-product">
+                  <p class="mg-bottom-40 price-details">
+                    {{ $formatCurrencyVND(data.DonGia) }}
+                  </p>
+                </div>
               </b-row>
               <div class="quantity-controls">
-                <b-button variant="primary" @click="decreaseQuantity"
-                  >-</b-button
-                >
-                <span>{{ quantity }}</span>
-                <b-button variant="primary" @click="increaseQuantity"
-                  >+</b-button
-                >
+                <p class="mg-bottom-40">
+                  Số Lượng:
+                  <b-button variant="primary" @click="decreaseQuantity"
+                    >-</b-button
+                  >
+                  <span>{{ quantity }}</span>
+                  <b-button variant="primary" @click="increaseQuantity"
+                    >+</b-button
+                  >
+                </p>
               </div>
               <b-button variant="success" class="mr-2" @click="addToCart(data)"
                 >Cho vào giỏ hàng</b-button
               >
-              <!-- <b-button variant="danger">Đặt sách ngay</b-button> -->
             </div>
           </div>
         </div>
-        <div class="col-md-3 container-place-product">
-          <h2>Thông tin nơi lấy giáo trình</h2>
-          <p>
-            HUITLibrary - Thư viện đại học Công Thương TP.HCM Địa chỉ liên hệ:
-            140 Lê Trọng Tấn, Tân Phú, TP. Hồ Chí Minh, Việt Nam
-          </p>
-          <p>Năm xuất bản: {{ data.NamXuatBan }}</p>
-        </div>
       </div>
-      <h2>Các Giáo Trình Đại Cương Khác</h2>
-      <b-row>
-        <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="2">
-          <ProductCard :product="book"></ProductCard>
-        </b-col>
-      </b-row>
-      <b-pagination
-        v-model="currentPage"
-        :total-rows="books.length"
-        :per-page="perPage"
-        aria-controls="my-table"
-      ></b-pagination>
     </div>
+    <div class="product-details-container">
+      <div class="row paginate-product">
+        <p class="mg-top-40 product-other">
+          Các Giáo Trình Đại Cương Khác
+        </p>
+        <b-row>
+          <b-col v-for="book in paginatedBooks" :key="book.id" cols="12" md="3">
+            <ProductCard :product="book"></ProductCard>
+          </b-col>
+        </b-row>
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="books.length"
+          :per-page="perPage"
+          aria-controls="my-table"
+        ></b-pagination>
+      </div>
+    </div>
+
     <Footer></Footer>
   </div>
 </template>
@@ -96,7 +103,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 export default {
   name: "ProductDetails",
-  components: { ProductCard,Footer, Header },
+  components: { ProductCard, Footer, Header },
   data() {
     return {
       data: {},
@@ -175,7 +182,7 @@ export default {
         },
       ],
       currentPage: 1,
-      perPage: 5,
+      perPage: 4,
       quantity: 1,
     };
   },
@@ -231,16 +238,58 @@ export default {
 </script>
     
 <style scoped>
+body {
+  padding: 0 !important;
+}
+.ml-5 {
+  margin-left: 50px;
+}
+.price-details {
+  padding: 18px 15px;
+  border-radius: 5px;
+  background: #f1f2f2;
+  max-width: 80%;
+  font-weight: bold;
+  font-size: 30px;
+  color: #f37d21;
+}
+.mg-top-40{
+  margin-top: 40px;
+}
+.product-other {
+  padding: 18px 15px;
+  border-radius: 5px;
+  max-width: 80%;
+  font-weight: bold;
+  font-size: 30px;
+  color: #f37d21;
+  text-align: center;
+}
+.pagination {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
 .product-details-container {
-  margin: 5%;
+  margin-top: 1%;
+  margin-right: 5%;
+  margin-left: 5%;
   color: var(--color-text-color, #1a1a1a);
   font-family: Josefin Sans;
+  background-color: white;
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
-
+.paginate-product {
+  justify-content: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+.body-container {
+  background-color: #f1f1f1;
+}
 .borderadius-organe {
   border-radius: 5px;
   background: #ff6b00;
@@ -256,7 +305,6 @@ export default {
 
 .container-info-product {
   padding: 20px;
-  border: 1px solid #9da2a6;
 }
 
 .image-product {
@@ -285,12 +333,10 @@ export default {
 
 .container-product {
   max-height: fit-content;
-  border: 1px solid #9da2a6;
 }
 
 .container-place-product {
   max-height: fit-content;
-  border: 1px solid #9da2a6;
 }
 </style>
     
