@@ -1,29 +1,43 @@
 <template>
-  <b-card class="product-card" @click="details(product)" @mouseover="changeCursor(true)" @mouseout="changeCursor(false)"
-    :style="{ cursor: hoverEffect ? 'pointer' : 'default' }">
+  <b-card
+    class="product-card"
+    @click="details(product)"
+    @mouseover="changeCursor(true)"
+    @mouseout="changeCursor(false)"
+    :style="{ cursor: hoverEffect ? 'pointer' : 'default' }"
+  >
     <div class="product-image-wrapper">
-      <b-card-img :src="product.image" alt="Product Image" class="product-image"></b-card-img>
+      <b-card-img
+        :src="product.image"
+        alt="Product Image"
+        class="product-image"
+      ></b-card-img>
     </div>
     <b-card-body>
       <h4 class="product-name">{{ product.name }}</h4>
       <div class="product-price">{{ $formatCurrencyVND(product.price) }}</div>
+      <div class="center-align">
+        <b-button
+          variant="warning"
+          class="add-to-cart-button"
+          @click.stop="addToCart(product)"
+          >Thêm vào giỏ</b-button
+        >
+      </div>
     </b-card-body>
-    <div class="center-align">
-      <b-button variant="warning" class="add-to-cart-button" @click.stop="addToCart(product)">Thêm vào giỏ</b-button>
-    </div>
   </b-card>
 </template>
 
 <script>
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 export default {
-  name: 'ProductCard',
+  name: "ProductCard",
   props: {
     product: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -33,45 +47,44 @@ export default {
   methods: {
     addToCart(item) {
       const response = this.$cart.getCart();
-      const existingItemIndex = response.findIndex(cartItem => cartItem.id === item.id);
+      const existingItemIndex = response.findIndex(
+        (cartItem) => cartItem.id === item.id
+      );
 
       if (existingItemIndex !== -1) {
         Swal.fire(
-          'Thông báo!',
-          'Sản phẩm đã tồn tại trong giỏ hàng.',
-          'warning'
+          "Thông báo!",
+          "Sản phẩm đã tồn tại trong giỏ hàng.",
+          "warning"
         );
       } else {
         item.stock = 1;
         this.$cart.addToCart(item);
-        Swal.fire(
-          'Thông báo!',
-          'Đã thêm sản phẩm vào giỏ hàng.',
-          'success'
-        );
+        Swal.fire("Thông báo!", "Đã thêm sản phẩm vào giỏ hàng.", "success");
       }
     },
     details(item) {
-      this.$router.push('/ProductDetails/' + item.id);
+      this.$router.push("/ProductDetails/" + item.id);
     },
     changeCursor(value) {
       this.hoverEffect = value;
     },
-  }
-
-}
+  },
+};
 </script>
 
 <style scoped>
 .product-card {
+  min-height: 430px;
   max-width: 300px;
-  /* Điều chỉnh chiều rộng tùy theo layout của bạn */
   margin: auto;
   border: 1px solid #ddd;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.3s ease;
+  flex: 1 1 300px; /* Các card sẽ co giãn và có chiều rộng tối thiểu là 300px */
+  margin: 10px;
 }
 
 .center-align {
@@ -89,13 +102,14 @@ export default {
 }
 
 .product-image {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 200px; /* Chỉnh sửa giá trị này theo nhu cầu */
+  object-fit: cover;
 }
 
 .product-name {
   color: #333;
-  font-size: 1.25rem;
+  font-size: 14px;
   text-align: center;
   font-weight: bold;
   margin-top: 0.5rem;

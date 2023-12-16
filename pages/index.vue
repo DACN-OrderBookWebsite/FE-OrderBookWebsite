@@ -286,6 +286,8 @@ html {
 
 .per-page {
   margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .subtitle {
