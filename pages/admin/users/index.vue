@@ -153,11 +153,6 @@ export default {
 </script>
 
 <style scoped>
-#table_content {
-  padding: 0 60px;
-  /* 30px padding on both sides */
-}
-
 /* Additional styling for the table */
 .b-table {
   margin-top: 20px;

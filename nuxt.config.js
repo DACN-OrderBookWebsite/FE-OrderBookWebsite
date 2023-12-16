@@ -64,7 +64,7 @@ export default {
       {
         name: 'Admin',
         path: '/admin',
-        component: '~/pages/admin/index.vue'
+        component: '~/pages/admin/nguoidung/index.vue'
       },
       {
         path: '/admin/product',
@@ -168,5 +168,10 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    loaders: {
+      scss: {
+        implementation: require('sass'),
+      },
+    },
   }
 }

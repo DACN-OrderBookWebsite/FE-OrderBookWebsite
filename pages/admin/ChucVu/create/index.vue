@@ -1,98 +1,132 @@
 <template>
-    <div>
-        <Header></Header>
-        <AdminSection></AdminSection>
-        <div class="user-create-container border">
-            <h1 class="text-center">Thêm Chức vụ mới</h1>
-            <b-form @submit.prevent="confirmAndCreate">
-                <!-- Tên Người Dùng -->
-                <b-form-group label="Tên:" label-for="input-name">
-                    <b-form-input id="input-name" v-model="data.name" required placeholder="Nhập tên"></b-form-input>
-                    <small v-if="dataerror.name" class="text-danger">{{ dataerror.name }}</small>
-                </b-form-group>
-
-                <!-- Nút thêm -->
-                <b-button type="submit" variant="primary">Thêm</b-button>
-            </b-form>
+  <div class="body-container">
+    <Header></Header>
+    <SectionBar></SectionBar>
+    <b-row>
+      <b-col cols="12" md="2" class="p-1 sidebar-nav">
+        <div class="position-sticky top-0">
+          <VerticalSidebar />
         </div>
-        <Footer></Footer>
-    </div>
+      </b-col>
+      <b-col cols="12" md="10">
+        <div class="user-create-container container-fluid">
+          <h1 class="text-center">Thêm Chức vụ mới</h1>
+          <b-form @submit.prevent="confirmAndCreate">
+            <!-- Tên Người Dùng -->
+            <b-form-group label="Tên:" label-for="input-name">
+              <b-form-input
+                id="input-name"
+                v-model="data.name"
+                required
+                placeholder="Nhập tên"
+              ></b-form-input>
+              <small v-if="dataerror.name" class="text-danger">{{
+                dataerror.name
+              }}</small>
+            </b-form-group>
+
+            <!-- Nút thêm -->
+            <b-button type="submit" variant="primary">Thêm</b-button>
+          </b-form>
+        </div>
+      </b-col>
+    </b-row>
+    <Footer></Footer>
+  </div>
 </template>
   
 <script>
-import ChucVuService from '~/services/api/ChucVuService';
-import PhanQuyenService from '~/services/api/PhanQuyenService';
-import Swal from 'sweetalert2';
-import Header from "../../../../components/Header";
-import Footer from "../../../../components/Footer";
-import AdminSection from '../../../../components/AdminSection.vue';
+import ChucVuService from "~/services/api/ChucVuService";
+import PhanQuyenService from "~/services/api/PhanQuyenService";
+import Swal from "sweetalert2";
+import VerticalSidebar from "~/layouts/full-layout/vertical-sidebar/VerticalSidebar.vue";
+import Header from "~/components/Header";
+import Footer from "~/components/Footer";
 
 export default {
-    components: { Footer, Header , AdminSection},
-    data() {
-        return {
-            data: {
-                name: "",
-            },
-            dataerror: {
-                name: ""
-            },
-            roleOptions: [],
-            quyen: 1
-        };
+  components: { Footer, Header, VerticalSidebar },
+  data() {
+    return {
+      data: {
+        name: "",
+      },
+      dataerror: {
+        name: "",
+      },
+      roleOptions: [],
+      quyen: 1,
+    };
+  },
+  async mounted() {
+    await this.checkQuyen();
+  },
+  methods: {
+    async checkQuyen() {
+      const response = this.$login.getLogin();
+      if (response.length === 0) {
+        this.$router.push("/loginkeycloak");
+      } else {
+        const kq = await PhanQuyenService.checkQuyen(
+          this.$axios,
+          response[0].id,
+          this.quyen
+        );
+        console.log(kq.data.result);
+        if (kq.data.result === false) {
+          this.$router.push("/");
+        }
+      }
     },
-    async mounted() {
-        await this.checkQuyen();
+    async confirmAndCreate() {
+      const confirmResult = await Swal.fire({
+        title: "Xác nhận thêm?",
+        text: "Bạn có chắc muốn thêm?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Thêm",
+        cancelButtonText: "Hủy",
+      });
+      if (confirmResult.isConfirmed) {
+        this.create();
+      }
     },
-    methods: {
-        async checkQuyen() {
-            const response = this.$login.getLogin();
-            if (response.length === 0) {
-                this.$router.push('/loginkeycloak');
-            }
-            else {
-                const kq = await PhanQuyenService.checkQuyen(this.$axios, response[0].id, this.quyen);
-                console.log(kq.data.result);
-                if (kq.data.result === false) {
-                    this.$router.push('/');
-                }
-            }
-        },
-        async confirmAndCreate() {
-            const confirmResult = await Swal.fire({
-                title: 'Xác nhận thêm?',
-                text: 'Bạn có chắc muốn thêm?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Thêm',
-                cancelButtonText: 'Hủy'
-            });
-            if (confirmResult.isConfirmed) {
-                this.create();
-            }
-        },
-        async create() {
-            try {
-                await ChucVuService.insert(this.$axios, this.data);
-                Swal.fire('Thêm thành công!', 'Dữ liệu đã được thêm.', 'success');
-            }
-            catch (error) {
-                this.dataerror = error.response.data.errors;
-                Swal.fire('Thêm Thất Bại!', 'Đã có lỗi xảy ra khi thêm dữ liệu.', 'error');
-            }
-        },
+    async create() {
+      try {
+        await ChucVuService.insert(this.$axios, this.data);
+        Swal.fire("Thêm thành công!", "Dữ liệu đã được thêm.", "success");
+      } catch (error) {
+        this.dataerror = error.response.data.errors;
+        Swal.fire(
+          "Thêm Thất Bại!",
+          "Đã có lỗi xảy ra khi thêm dữ liệu.",
+          "error"
+        );
+      }
     },
-    components: { AdminSection }
-}
+  },
+};
 </script>
   
 <style scoped>
 .user-create-container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+#table_content {
+  background-color: white;
+}
+.body-container {
+  background-color: #f1f1f1;
+}
+.sidebar-nav {
+  margin-top: 15px;
+  background-color: white;
+}
+.container-fluid {
+  background-color: white;
 }
 </style>
   

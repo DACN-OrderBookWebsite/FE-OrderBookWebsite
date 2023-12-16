@@ -22,8 +22,8 @@ export default {
     };
   },
   async mounted() {
-    //   await this.checkQuyen();
-    //   await this.fetch();
+    await this.checkQuyen();
+    await this.fetch();
   },
   methods: {
     async checkQuyen() {
