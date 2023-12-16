@@ -97,7 +97,6 @@ export default {
     return {
       slide: 0,
       products: [
-        // Mảng dữ liệu mẫu cho các sản phẩm
         {
           name: "Giáo Trình Nguyên Lý Kế Toán",
           image:
@@ -287,6 +286,8 @@ html {
 
 .per-page {
   margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .subtitle {
