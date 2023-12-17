@@ -2,21 +2,20 @@
   <div class="body-container">
     <Header></Header>
     <section-bar :current-route="$route.path"></section-bar>
+    <div class="hero-section-container-left">
+      <HeroSection></HeroSection>
+    </div>
     <div class="product-details-container">
       <div class="row">
         <div class="col-md-12">
           <div class="row container-product">
             <div class="col-md-4 image-product">
-              <b-carousel id="carousel-1" :interval="4000" controls>
-                <b-carousel-slide
-                  img-src="@/static/images/backgrounds/imagebook2.png"
-                ></b-carousel-slide>
-                <b-carousel-slide
-                  img-src="@/static/images/backgrounds/imagebook2.png"
-                ></b-carousel-slide>
-                <!-- Thêm các b-carousel-slide khác cho các hình ảnh sản phẩm  -->
-              </b-carousel>
-              <!-- <img :src="data.Anh" alt="Ảnh"/> -->
+              <!-- <b-carousel id="carousel-1" :interval="4000" controls>
+                <b-carousel-slide img-src="@/static/images/backgrounds/imagebook2.png"></b-carousel-slide>
+                <b-carousel-slide img-src="@/static/images/backgrounds/imagebook2.png"></b-carousel-slide>
+                Thêm các b-carousel-slide khác cho các hình ảnh sản phẩm
+              </b-carousel> -->
+              <img :src="data.Anh" class="carousel-image" alt="Ảnh"/>
             </div>
 
             <div class="col-md-8 ml-5">
@@ -26,24 +25,21 @@
                   <p class="mg-bottom-40">
                     Năm xuất bản:
                     <span class="borderadius-organe">
-                      {{ data.NamXuatBan }}</span
-                    >
+                      {{ data.NamXuatBan }}</span>
                   </p>
                 </div>
                 <div class="container-info-product">
                   <p class="mg-bottom-40">
                     Tác giả:
                     <span class="borderadius-organe">
-                      {{ data.nameOfTacGia }}</span
-                    >
+                      {{ data.nameOfTacGia }}</span>
                   </p>
                 </div>
                 <div class="container-info-product">
                   <p class="mg-bottom-40">
                     Nhà xuất bản:
                     <span class="borderadius-organe">
-                      {{ data.nameOfNhaXuatBan }}</span
-                    >
+                      {{ data.nameOfNhaXuatBan }}</span>
                   </p>
                 </div>
                 <div class="container-info-product">
@@ -55,18 +51,12 @@
               <div class="quantity-controls">
                 <p class="mg-bottom-40">
                   Số Lượng:
-                  <b-button variant="primary" @click="decreaseQuantity"
-                    >-</b-button
-                  >
+                  <b-button variant="primary" @click="decreaseQuantity">-</b-button>
                   <span>{{ quantity }}</span>
-                  <b-button variant="primary" @click="increaseQuantity"
-                    >+</b-button
-                  >
+                  <b-button variant="primary" @click="increaseQuantity">+</b-button>
                 </p>
               </div>
-              <b-button variant="success" class="mr-2" @click="addToCart(data)"
-                >Cho vào giỏ hàng</b-button
-              >
+              <b-button variant="success" class="mr-2" @click="addToCart(data)">Cho vào giỏ hàng</b-button>
             </div>
           </div>
         </div>
@@ -82,12 +72,8 @@
             <ProductCard :product="book"></ProductCard>
           </b-col>
         </b-row>
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="books.length"
-          :per-page="perPage"
-          aria-controls="my-table"
-        ></b-pagination>
+        <b-pagination v-model="currentPage" :total-rows="books.length" :per-page="perPage"
+          aria-controls="my-table"></b-pagination>
       </div>
     </div>
 
@@ -101,9 +87,10 @@ import SachService from "../../services/api/SachService";
 import Swal from "sweetalert2";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import HeroSection from "../../components/HeroSection";
 export default {
   name: "ProductDetails",
-  components: { ProductCard, Footer, Header },
+  components: { ProductCard, Footer, Header, HeroSection },
   data() {
     return {
       data: {},
@@ -210,7 +197,14 @@ export default {
           this.$route.params.id
         );
         this.data = response.data;
-        console.log(this.data);
+
+
+        const book = await SachService.getDataByTheLoai(
+          this.$axios,
+          this.data.idTheLoai
+        );
+        this.books = book.data;
+
       } catch {
         console.log("Lỗi load dữ liệu fetch.");
       }
@@ -241,9 +235,11 @@ export default {
 body {
   padding: 0 !important;
 }
+
 .ml-5 {
   margin-left: 50px;
 }
+
 .price-details {
   padding: 18px 15px;
   border-radius: 5px;
@@ -253,9 +249,11 @@ body {
   font-size: 30px;
   color: #f37d21;
 }
-.mg-top-40{
+
+.mg-top-40 {
   margin-top: 40px;
 }
+
 .product-other {
   padding: 18px 15px;
   border-radius: 5px;
@@ -265,11 +263,13 @@ body {
   color: #f37d21;
   text-align: center;
 }
+
 .pagination {
   margin-top: 20px;
   margin-bottom: 20px;
   justify-content: center;
 }
+
 .product-details-container {
   margin-top: 1%;
   margin-right: 5%;
@@ -282,14 +282,17 @@ body {
   font-weight: 400;
   line-height: normal;
 }
+
 .paginate-product {
   justify-content: center;
   margin-right: auto;
   margin-left: auto;
 }
+
 .body-container {
   background-color: #f1f1f1;
 }
+
 .borderadius-organe {
   border-radius: 5px;
   background: #ff6b00;
@@ -338,5 +341,38 @@ body {
 .container-place-product {
   max-height: fit-content;
 }
+
+.body-container {
+  /* Thiết lập display flex để sắp xếp các phần tử theo hàng */
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hero-section-container {
+  /* Đặt độ rộng và padding cho phần HeroSection */
+  width: 100%;
+  padding-right: 15px;
+  /* Padding phải để giữ khoảng trắng giữa HeroSection và sản phẩm */
+}
+
+.product-details-container {
+  /* Thiết lập độ rộng cho phần sản phẩm và các phần khác */
+  width: 100%;
+}
+/* Trong tệp CSS của bạn */
+
+.hero-section-container-left {
+  float: left; /* Chuyển container về bên trái */
+  width: 100%; /* Chiếm toàn bộ chiều rộng của body-container */
+}
+
+/* Các quy tắc CSS khác cho trang web của bạn */
+/* Trong tệp CSS của bạn */
+
+.carousel-image {
+  width: 100%; /* Hình ảnh không vượt quá chiều rộng của container */
+  height: auto;    /* Tự động điều chỉnh chiều cao theo tỷ lệ chiều rộng */
+}
+
 </style>
     

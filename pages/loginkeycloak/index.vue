@@ -90,7 +90,10 @@ export default {
           else
           {
             this.$login.addToLogin(NguoiDung.data);
-            this.$router.push('/');
+            if(NguoiDung.data.idChucVu === 2)
+              this.$router.push('/');
+            else
+              this.$router.push('/admin');
           }
         }
         else
