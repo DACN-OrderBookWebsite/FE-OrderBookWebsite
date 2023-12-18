@@ -13,7 +13,7 @@
               class="nav-link nav-link-ul d-flex mt-3"
               @click="toggleDropdown(i)"
             >
-              <i :class="route.icon"></i>
+              <i class="icon-container" :class="route.icon"></i>
               <span class="hide-text">{{ route.title }}</span>
               <i :class="route.iconsecond"></i>
             </a>
@@ -70,33 +70,39 @@ export default {
 };
 </script>
 <style scoped>
-.nav-children-item {
-  margin-left: 15px;
+.icon-container {
+  width: 20px; /* Đặt kích thước mong muốn */
+  height: 20px; /* Đặt kích thước mong muốn */
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
+
 .nav-link-ul {
+  margin: 0;
+  padding: 10px; /* Điều chỉnh giá trị padding nếu cần thiết */
   background: linear-gradient(
     92deg,
     rgba(44, 126, 202, 0.3) 32.43%,
     rgba(44, 126, 202, 0) 97.38%
   ) !important;
 }
-.fas {
-  font-size: 20px;
-  text-align: center;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 5px;
-  color: #0D6EFD;
-}
+
+.fas,
 .far {
   font-size: 20px;
   text-align: center;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 5px;
-  color: #0D6EFD;
+  margin-right: 10px;
+  padding: 0;
+  color: #0d6efd;
 }
+
 .second {
-  margin-left: 25px;
+  margin-left: auto; /* Đặt mũi tên về bên phải */
+}
+
+.nav-children-item {
+  margin-left: 15px;
 }
 </style>

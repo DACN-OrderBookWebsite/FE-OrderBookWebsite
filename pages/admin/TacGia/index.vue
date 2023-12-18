@@ -3,7 +3,7 @@
     <Header></Header>
     <SectionBar></SectionBar>
     <b-row>
-      <b-col cols="12" md="2" class="p-1 sidebar-nav">
+      <b-col cols="12" md="2" class="sidebar-nav">
         <div class="position-sticky top-0">
           <VerticalSidebar />
         </div>
