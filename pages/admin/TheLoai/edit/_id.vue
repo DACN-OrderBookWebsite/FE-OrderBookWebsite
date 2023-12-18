@@ -3,7 +3,7 @@
     <Header></Header>
     <SectionBar></SectionBar>
     <b-row>
-      <b-col cols="12" md="2" class="p-1 sidebar-nav">
+      <b-col cols="12" md="2" class="sidebar-nav">
         <div class="position-sticky top-0">
           <VerticalSidebar />
         </div>
@@ -14,7 +14,7 @@
             <b-col md="6">
               <b-card class="mt-5">
                 <b-card-title class="text-center"
-                  >Chỉnh Sửa chức vụ</b-card-title
+                  >Chỉnh Sửa Thể Loại</b-card-title
                 >
                 <b-form @submit.prevent="confirmUpdate">
                   <!-- Form fields -->
