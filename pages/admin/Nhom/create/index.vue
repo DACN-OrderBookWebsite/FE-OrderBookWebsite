@@ -10,7 +10,7 @@
       </b-col>
       <b-col cols="12" md="10">
         <div class="user-create-container container-fluid">
-          <h1 class="text-center">Thêm Chức vụ mới</h1>
+          <h1 class="text-center">Thêm nhóm mới</h1>
           <b-form @submit.prevent="confirmAndCreate">
             <!-- Tên Người Dùng -->
             <b-form-group label="Tên:" label-for="input-name">
