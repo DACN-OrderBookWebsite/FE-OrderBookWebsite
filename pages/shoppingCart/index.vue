@@ -53,7 +53,7 @@
             }}</small>
           </b-form-group>
         </div>
-        <label class="p-2">Nơi Lấy Sách<span style="color:red">*</span>:</label>
+        <label class="p-2">Địa chỉ nhận hàng<span style="color:red">*</span>:</label>
         <b-form-group class="p-2">
           <b-form-input v-model="dataHoaDon.DiaChiNhanHang"></b-form-input>
           <small v-if="dataerror.DiaChiNhanHang" class="text-danger">{{

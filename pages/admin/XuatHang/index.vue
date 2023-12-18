@@ -302,7 +302,6 @@ export default {
     async update(item) {
       try {
         item.idTrangThai += 1;
-        await HoaDonService.update(this.$axios, item.id, item);
 
         // Cờ để kiểm soát việc tiếp tục thực thi
         let continueExecution = true;
@@ -343,6 +342,8 @@ export default {
         if (!continueExecution) {
           return;
         }
+
+        await HoaDonService.update(this.$axios, item.id, item);
 
         // Các bước tiếp theo nếu cờ không bị dừng
         if (item.idTrangThai === 2) {

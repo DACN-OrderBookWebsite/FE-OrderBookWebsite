@@ -155,26 +155,26 @@ export default [
       // Thêm các mục con khác tại đây
     ],
   },
-  {
-    id: "10",
-    icon: "	fas fa-user-edit",
-    iconsecond: "fas fa-chevron-down second",
-    title: "Quản Lý Quyền",
-    to: "/admin/quyen",
-    children: [
-      {
-        id: "10-1",
-        title: "Thêm Nhóm Quyền",
-        to: "/admin/quyen/create",
-      },
-      {
-        id: "10-2",
-        title: "Danh Sách Nhóm Quyền",
-        to: "/admin/quyen",
-      },
-      // Thêm các mục con khác tại đây
-    ],
-  },
+  // {
+  //   id: "10",
+  //   icon: "	fas fa-user-edit",
+  //   iconsecond: "fas fa-chevron-down second",
+  //   title: "Quản Lý Quyền",
+  //   to: "/admin/quyen",
+  //   children: [
+  //     {
+  //       id: "10-1",
+  //       title: "Thêm Nhóm Quyền",
+  //       to: "/admin/quyen/create",
+  //     },
+  //     {
+  //       id: "10-2",
+  //       title: "Danh Sách Nhóm Quyền",
+  //       to: "/admin/quyen",
+  //     },
+  //     // Thêm các mục con khác tại đây
+  //   ],
+  // },
   {
     id: "11",
     icon: "	fas fa-user-edit",
