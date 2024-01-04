@@ -1,69 +1,42 @@
-# FE-OrderBookWebsite
+## Giới thiệu về dự án
 
-## Build Setup
+Dự án quản lý bán sách, tài liệu là dự án được tạo ra từ 3 thành viên của nhóm với các nghiệp vụ chính là quản lý bán hàng và nhập hàng.
 
-```bash
-# install dependencies
-$ npm install
+Song với đó còn hỗ trợ khả năng phân quyền mạnh mẽ cho người dùng có thể phân quyền theo ý muốn
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+## Thành viên tham gia thực hiện
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+Trương Cảnh Trường: Thiết kế giao diện từ phần mềm thứ 3.
 
-# generate static project
-$ npm run generate
-```
+Võ Văn Huy: Cài đặt UI toàn bộ dự án, cài đặt source API
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+Hoàng Minh Long: Thực hiện thiết kế database, Cài đặt UX các chức năng trong dự án, cài đặt source API
 
-## Special Directories
+## Quy trình nghiệp vụ
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+Bước 1: Sinh viên sẽ thực hiện việc đặt hàng thông qua website, khi đặt hàng sinh viên không cần phải tạo tài khoản nhưng cần cung cấp các thông tin như số điện thoại,...
 
-### `assets`
+Bước 2: Nhân viên sẽ tiến hành xác nhận đơn hàng thông qua trang admin.
 
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
+Bước 3: Sinh viên sẽ đến văn phòng khoa để thanh toán và nhận sản phẩm hoặc nhân viên sẽ đem sản phẩm lên lớp học theo yêu cầu của sinh viên
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+## Hướng dẫn cài đặt
 
-### `components`
+Bước 1: Truy cập vào đường dẫn ở phần liên kết tên là "BE-OrderBookWebsite" nếu chưa cài đặt source BE.
 
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
+Bước 2: Clone repository về máy của bạn: `git clone https://github.com/DACN-OrderBookWebsite/FE-OrderBookWebsite.git`.
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
+Bước 3: Chạy lệnh "npm install".
 
-### `layouts`
+Bước 4: Chạy lệnh "npm run dev".
 
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
+Bước 5: Truy cập vào đường dẫn "http://localhost:3000/".
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
+Bước 6: Đăng nhập tài khoản có quyền cao nhất:
+    
+    Tên đăng nhập: "administrator"
+    
+    Mật khẩu: "123"
 
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+## Liên Kết
+- [BE-OrderBookWebsite](https://github.com/DACN-OrderBookWebsite/BE-OrderBookWebsite.git)

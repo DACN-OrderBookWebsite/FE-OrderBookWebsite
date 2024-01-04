@@ -58,13 +58,14 @@
 <script>
 import Swal from "sweetalert2";
 import PhanQuyenService from "~/services/api/PhanQuyenService";
+import VerticalSidebar from "~/layouts/full-layout/vertical-sidebar/VerticalSidebar.vue";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
 import moment from "moment";
 import AdminSection from "../../../../components/AdminSection.vue";
 
 export default {
-  components: { Footer, Header, AdminSection },
+  components: { Footer, Header, VerticalSidebar },
   data() {
     return {
       data: {

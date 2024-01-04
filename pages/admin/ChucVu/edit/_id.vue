@@ -1,10 +1,15 @@
 <template>
   <div>
     <Header></Header>
-    <AdminSection></AdminSection>
-    <b-container>
-      <b-row class="justify-content-md-center">
-        <b-col md="6">
+    <SectionBar></SectionBar>
+    <b-row class="justify-content-md-center">
+      <b-col cols="12" md="2" class="sidebar-nav">
+        <div class="position-sticky top-0">
+          <VerticalSidebar />
+        </div>
+      </b-col>
+      <b-col cols="12" md="10">
+        <b-container>
           <b-card class="mt-5">
             <b-card-title class="text-center">Chỉnh Sửa chức vụ</b-card-title>
             <b-form @submit.prevent="confirmUpdate">
@@ -18,9 +23,9 @@
               <b-button type="submit" variant="primary" block>Cập Nhật</b-button>
             </b-form>
           </b-card>
-        </b-col>
-      </b-row>
-    </b-container>
+        </b-container>
+      </b-col>
+    </b-row>
     <Footer></Footer>
   </div>
 </template>
@@ -29,13 +34,13 @@
 import Swal from 'sweetalert2';
 import ChucVuService from '~/services/api/ChucVuService';
 import PhanQuyenService from '~/services/api/PhanQuyenService';
-import AdminSection from '../../../../components/AdminSection.vue';
+import VerticalSidebar from "~/layouts/full-layout/vertical-sidebar/VerticalSidebar.vue";
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
 import moment from 'moment';
 
 export default {
-  components: { Footer, Header, AdminSection },
+  components: { Footer, Header, VerticalSidebar },
   data() {
     return {
       data: {
