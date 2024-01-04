@@ -139,7 +139,7 @@ export default {
       }
     },
   },
-  components: { AdminSection },
+
 };
 </script>
 
